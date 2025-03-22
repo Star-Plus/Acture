@@ -9,7 +9,7 @@ namespace SPI {
     void MediaStore::addMedia(const std::string &mediaPath) {
         fs::path path(mediaPath);
         validateMediaType(path);
-        media.push_back(path);
+        this->media.push_back(path);
     }
 
     void MediaStore::removeMedia(int index) {
@@ -20,10 +20,31 @@ namespace SPI {
         return media[index];
     }
 
+    const std::vector<std::string> MediaStore::listAllMedia_string() const
+    {
+        std::vector<std::string> result;
+
+        for (const auto& p : media) {
+            result.push_back(p.string());
+        }
+
+        return result;
+    }
+
+    const std::string MediaStore::getMedia_string(int index) const
+    {
+        return media[index].string();
+    }
+
     void MediaStore::validateMediaType(const fs::path &path) {
         if (path.extension() != ".mp4") {
             throw std::invalid_argument("Invalid media type");
         }
     }
+
+    const std::vector<fs::path> MediaStore::listAllMedia() const {
+        return this->media;
+    }
+
 
 }

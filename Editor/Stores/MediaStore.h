@@ -22,7 +22,11 @@ namespace SPI {
 
         void removeMedia(int index);
 
+        const std::vector<fs::path> listAllMedia() const;
         const std::filesystem::path& getMedia(int index) const;
+
+        const std::vector<std::string> listAllMedia_string() const;
+        const std::string getMedia_string(int index) const;
 
     private:
         void validateMediaType(const fs::path &path);
