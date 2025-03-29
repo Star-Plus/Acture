@@ -11,16 +11,17 @@ namespace SPI {
     StationManager::StationManager() {
         instance = this;
         nextStation = nullptr;
+        this->InitializeStation();
     }
 
-    void StationManager::InitializeStation(STATION_TYPE type, double timelapse){
+    void StationManager::InitializeStation(){
         if (root != nullptr) return;
-        root = new Station(type, timelapse);
-        nextStation = root;
+        root = std::make_shared<RootStation>(RootStation());
     }
 
-    void StationManager::CreateStation(Station *station, STATION_TYPE type, double timelapse, unsigned int thread) {
-        station = new Station(type, timelapse);
-        station->connectStation(thread, station);
+    void StationManager::Travel(unsigned int thread)
+    {
+        if (nextStation == nullptr) return;
+        nextStation = nextStation->GetConnectedStation(thread);
     }
 }

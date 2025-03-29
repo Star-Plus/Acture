@@ -5,7 +5,7 @@
 #ifndef INTRASTATION_VERSETIMELINE_H
 #define INTRASTATION_VERSETIMELINE_H
 
-#include "Core/Editor/Units/Verse.h"
+#include "../Units/Verse.h"
 
 namespace SPI {
 

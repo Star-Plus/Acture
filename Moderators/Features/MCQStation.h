@@ -5,7 +5,7 @@
 #ifndef MCQSTATION_H
 #define MCQSTATION_H
 
-#include "Core/Moderators/Station.h"
+#include "../Station.h"
 
 using str = std::string;
 
@@ -15,19 +15,22 @@ namespace SPI {
 
         str question;
         std::vector<str> options;
-        std::vector<unsigned int> links;
 
     public:
         explicit MCQStation(const double timelapse) : Station(STATION_TYPE::MCQ, timelapse) {}
+
+        std::shared_ptr<Station> self() override { 
+            return std::static_pointer_cast<Station>(shared_from_this()); 
+        }
 
         str getQuestion() const { return question; }
         void setQuestion(const str &question) { this->question = question; }
 
         std::vector<str> getOptions() { return options; }
-        void setOption(const size_t idx, const str& newOption) { this->options[idx] = newOption; }
-
-        std::vector<unsigned int> getLinks() { return links; }
-        void setLink(const size_t idx, const unsigned int link) { this->links[idx] = link; }
+        void setOption(const size_t idx, const str& newOption) { 
+            if (idx >= options.size()) options.push_back(newOption);
+            this->options[idx] = newOption; 
+        }
     };
 
 }

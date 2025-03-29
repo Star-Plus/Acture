@@ -5,8 +5,14 @@
 #ifndef STATION_TYPE_H
 #define STATION_TYPE_H
 
-enum class STATION_TYPE {
-    MCQ = 0,
-};
+namespace SPI {
+
+    enum class STATION_TYPE {
+        ROOT = 0,
+        MCQ = 1,
+        LEAF = 255
+    };
+
+}
 
 #endif //STATION_TYPE_H

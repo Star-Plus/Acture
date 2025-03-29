@@ -7,12 +7,10 @@
 
 #include <filesystem>
 
-namespace fs = std::filesystem;
-
 namespace SPI {
 
     struct Clip {
-        fs::path media;
+        std::string path;
         double start;
         double end;
     };

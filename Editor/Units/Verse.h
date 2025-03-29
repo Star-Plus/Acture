@@ -19,9 +19,9 @@ namespace SPI {
         ~Verse();
 
         void AddTrack(Track* track);
-        void deleteTrack(Track* track);
+        void deleteTrack(unsigned int idx);
 
-        const Track& getTrack(int idx) const;
+        const Track& getTrack(unsigned int idx) const;
     };
 
 }

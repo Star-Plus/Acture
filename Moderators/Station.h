@@ -6,31 +6,38 @@
 #define INTRASTATION_STATION_H
 
 #include "STATION_TYPE.h"
-#include "Core/Editor/Units/Verse.h"
+#include "../Editor/Units/Verse.h"
 
 namespace SPI {
 
-    class Station {
+    class Station : public std::enable_shared_from_this<Station> {
     protected:
         STATION_TYPE type;
         double timelapse;
         std::vector<Verse*> verses;
-        std::vector<Station*> stations;
+        std::vector<std::shared_ptr<Station>> stations;
 
     public:
         Station(STATION_TYPE type, double timelapse);
         ~Station();
 
-        double getTimelapse() const { return timelapse; }
+        virtual std::shared_ptr<Station> self() { return shared_from_this(); }
 
-        void addVerse();
-        void connectVerse(int idx, Verse* Verse);
-        void removeVerse(int idx);
-        Verse& moveVerse(int idx);
+        double GetTimelapse() const { return timelapse; }
+        STATION_TYPE GetType() const { return type; }
 
-        void connectStation(unsigned int thread, Station* station);
-        void disconnectStation(int thread);
-        Station& getConnectedStation(unsigned int thread);
+        void AddVerse();
+        void ConnectVerse(int idx, Verse* Verse);
+        void RemoveVerse(int idx);
+        Verse& MoveVerse(int idx);
+        Verse* GetVerse(int idx);
+
+        unsigned int getStationCount() const { return stations.size(); }
+        unsigned int getVerseCount() const { return verses.size(); }
+
+        void ConnectStation(unsigned int thread, std::shared_ptr<Station> station);
+        void DisconnectStation(int thread);
+        std::shared_ptr<Station> GetConnectedStation(unsigned int thread);
     };
 
 }

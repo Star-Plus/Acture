@@ -11,10 +11,10 @@
 namespace SPI {
 
     class Track {
+    public:
 
         std::vector<Clip> clips;
 
-    public:
         unsigned short addClip(const Clip& clip);
         void removeClip(int idx);
         void clearClips();

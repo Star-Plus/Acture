@@ -5,6 +5,7 @@
 #ifndef STATIONMANAGER_H
 #define STATIONMANAGER_H
 #include "Station.h"
+#include "Features/RootStation.h"
 
 
 namespace SPI {
@@ -13,17 +14,20 @@ namespace SPI {
 
         static StationManager* instance;
 
-        Station* root;
-        Station* nextStation;
+        std::shared_ptr<RootStation> root;
+        std::shared_ptr<Station> nextStation;
 
     public:
         StationManager();
 
         StationManager& Get() { return *instance; }
+        
+        std::shared_ptr<RootStation> getRoot() { return root; }
+        std::shared_ptr<Station> getNextStation() { return nextStation; }
 
-        void InitializeStation(STATION_TYPE type, double timelapse);
+        void InitializeStation();
 
-        void CreateStation(Station* station, STATION_TYPE type, double timelapse, unsigned int thread);
+        void Travel(unsigned int thread);
 
     };
 

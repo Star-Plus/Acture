@@ -3,7 +3,7 @@
 //
 
 #include "VerseStore.h"
-#include "Utils/LabelGenerator.h"
+#include "../../Utils/LabelGenerator.h"
 
 
 namespace SPI {
@@ -20,29 +20,33 @@ namespace SPI {
         }
     }
 
-    Verse* VerseStore::createNewVerse() {
+    Verse* VerseStore::CreateNewVerse() {
         const auto verse = new Verse();
         verses[LabelGenerator::generateLabel("Untitled_Verse#")] = verse;
         return verse;
     }
 
-    void VerseStore::removeVerse(const std::string &VerseName) {
+    void VerseStore::RemoveVerse(const std::string &VerseName) {
         delete verses[VerseName];
         verses.erase(VerseName);
     }
 
-    Verse &VerseStore::getVerse(const std::string &VerseName) {
-        return *verses[VerseName];
+    Verse *VerseStore::GetVerse(const std::string &VerseName) {
+        auto it = verses.find(VerseName);
+        if (it == verses.end()) {
+            throw std::invalid_argument("Verse not found");
+        }
+        return it->second;
     }
 
-    void VerseStore::clearVerses() {
+    void VerseStore::ClearVerses() {
         for (auto &Verse : verses) {
             delete Verse.second;
         }
         verses.clear();
     }
 
-    void VerseStore::editVerseName(const std::string &oldName, const std::string &newName) {
+    void VerseStore::EditVerseName(const std::string &oldName, const std::string &newName) {
         verses[newName] = verses[oldName];
         verses.erase(oldName);
     }

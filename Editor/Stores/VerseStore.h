@@ -6,7 +6,7 @@
 #define INTRASTATION_VERSESTORE_H
 
 #include <map>
-#include "Core/Editor/Units/Verse.h"
+#include "../Units/Verse.h"
 
 namespace SPI {
 
@@ -21,11 +21,11 @@ namespace SPI {
         VerseStore();
         ~VerseStore();
 
-        Verse* createNewVerse();
-        void removeVerse(const std::string &VerseName);
-        Verse& getVerse(const std::string &VerseName);
-        void clearVerses();
-        void editVerseName(const std::string &oldName, const std::string &newName);
+        Verse* CreateNewVerse();
+        void RemoveVerse(const std::string &VerseName);
+        Verse* GetVerse(const std::string &VerseName);
+        void ClearVerses();
+        void EditVerseName(const std::string &oldName, const std::string &newName);
 
     };
 
