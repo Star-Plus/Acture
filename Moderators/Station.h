@@ -24,6 +24,8 @@ namespace SPI {
         virtual std::shared_ptr<Station> self() { return shared_from_this(); }
 
         double GetTimelapse() const { return timelapse; }
+        void SetTimelapse(double timelapse) { this->timelapse = timelapse; }
+
         STATION_TYPE GetType() const { return type; }
 
         void AddVerse();

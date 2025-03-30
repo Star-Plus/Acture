@@ -6,7 +6,7 @@
 #define STATIONMANAGER_H
 #include "Station.h"
 #include "Features/RootStation.h"
-
+#include <map>
 
 namespace SPI {
 
@@ -16,6 +16,8 @@ namespace SPI {
 
         std::shared_ptr<RootStation> root;
         std::shared_ptr<Station> nextStation;
+
+        std::map<unsigned int, std::shared_ptr<Station>> idCache;
 
     public:
         StationManager();
@@ -28,6 +30,11 @@ namespace SPI {
         void InitializeStation();
 
         void Travel(unsigned int thread);
+
+        std::shared_ptr<Station> getStationById(unsigned int id);
+
+    private:
+        std::shared_ptr<Station> recursiveSearch(unsigned int id, std::shared_ptr<Station> station, unsigned int& drillCounter);
 
     };
 
