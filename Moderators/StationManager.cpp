@@ -17,12 +17,26 @@ namespace SPI {
     void StationManager::InitializeStation(){
         if (root != nullptr) return;
         root = std::make_shared<RootStation>(RootStation());
+        nextStation = root;
+        prevStation = root;
     }
 
     void StationManager::Travel(unsigned int thread)
     {
         if (nextStation == nullptr) return;
+        history.push(prevStation);
+        prevStation = nextStation;
         nextStation = nextStation->GetConnectedStation(thread);
+        threadHistory.push(thread);
+    }
+
+    void StationManager::ReverseTravel()
+    {
+        if (history.empty()) return;
+        nextStation = prevStation;
+        prevStation = history.top();
+        history.pop();
+        threadHistory.pop();
     }
 
     std::shared_ptr<Station> StationManager::getStationById(unsigned int id){

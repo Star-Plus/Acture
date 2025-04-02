@@ -7,6 +7,7 @@
 #include "Station.h"
 #include "Features/RootStation.h"
 #include <map>
+#include <stack>
 
 namespace SPI {
 
@@ -16,6 +17,9 @@ namespace SPI {
 
         std::shared_ptr<RootStation> root;
         std::shared_ptr<Station> nextStation;
+        std::shared_ptr<Station> prevStation;
+        std::stack<std::shared_ptr<Station>> history;
+        std::stack<unsigned int> threadHistory;
 
         std::map<unsigned int, std::shared_ptr<Station>> idCache;
 
@@ -25,11 +29,14 @@ namespace SPI {
         StationManager& Get() { return *instance; }
         
         std::shared_ptr<RootStation> getRoot() { return root; }
+        std::shared_ptr<Station> getPrevStation() { return prevStation; }
         std::shared_ptr<Station> getNextStation() { return nextStation; }
+        unsigned int getLastThread() { return threadHistory.top(); }
 
         void InitializeStation();
 
         void Travel(unsigned int thread);
+        void ReverseTravel();
 
         std::shared_ptr<Station> getStationById(unsigned int id);
 

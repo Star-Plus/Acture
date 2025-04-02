@@ -14,7 +14,7 @@ namespace SPI {
     class RootStation : public Station {
 
     public:
-        explicit RootStation() : Station(STATION_TYPE::MCQ, 0) {}
+        explicit RootStation() : Station(STATION_TYPE::ROOT, 0) {}
     };
 
 }
