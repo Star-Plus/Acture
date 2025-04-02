@@ -14,8 +14,6 @@ namespace SPI {
 
         VersePlayer() {}
             
-        VersePlayer(Verse* initialVerse);
-    
         void BindVerse(Verse* verse);
         Verse* getPlayingVerse() const { return playingVerse; }
 
