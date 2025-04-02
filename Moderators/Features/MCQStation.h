@@ -29,7 +29,7 @@ namespace SPI {
         std::vector<str> getOptions() { return options; }
         void setOption(const size_t idx, const str& newOption) { 
             if (idx >= options.size()) options.push_back(newOption);
-            this->options[idx] = newOption; 
+            this->options[idx] = newOption;
         }
     };
 

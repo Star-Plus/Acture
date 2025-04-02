@@ -27,21 +27,31 @@ namespace SPI {
 
     std::shared_ptr<Station> StationManager::getStationById(unsigned int id){
         unsigned int rootId = 0;
-        return recursiveSearch(id, root, rootId);
+        std::shared_ptr<Station> target;
+        recursiveSearch(target, id, root, rootId);
+        return target;
     }
 
-    std::shared_ptr<Station> StationManager::recursiveSearch(unsigned int id, std::shared_ptr<Station> station, unsigned int& drillCounter) {
-        if (id != drillCounter){
-            for (int i = 0; i < station->getStationCount(); i++){
-                drillCounter++;
-                return recursiveSearch(id, station->GetConnectedStation(i), drillCounter);
-            }
+    void StationManager::recursiveSearch(std::shared_ptr<Station>& target, unsigned int id, std::shared_ptr<Station> station, unsigned int& drillCounter) {
+
+        if (idCache.find(id) != idCache.end()){
+            target = idCache[id];
+            return;
         }
 
-        if (idCache.find(id) == idCache.end())
+        if (id == drillCounter){
+            target = station;
             idCache[id] = station;
+            return;
+        }
 
-        return idCache[id];
+        for (int i = 0; i < station->getStationCount(); i++){
+            drillCounter++;
+            
+            if (!target)
+                recursiveSearch(target, id, station->GetConnectedStation(i), drillCounter);
+        }
+
     }
     
 }

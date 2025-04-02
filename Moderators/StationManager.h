@@ -34,7 +34,7 @@ namespace SPI {
         std::shared_ptr<Station> getStationById(unsigned int id);
 
     private:
-        std::shared_ptr<Station> recursiveSearch(unsigned int id, std::shared_ptr<Station> station, unsigned int& drillCounter);
+        void recursiveSearch(std::shared_ptr<Station>& target, unsigned int id, std::shared_ptr<Station> station, unsigned int& drillCounter);
 
     };
 
