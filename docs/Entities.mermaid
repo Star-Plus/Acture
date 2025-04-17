@@ -1,0 +1,22 @@
+erDiagram
+    Application
+    StationManager
+    MetaManager
+    Station
+    Serializer
+    Network
+    Verse
+    Track
+    Clip
+    DataPool
+
+    Application ||--|| StationManager : accesses
+    Application ||--|| MetaManager : accesses
+    Application ||--|| Serializer : accesses
+    StationManager || -- || Network : uses
+    Network || -- o{ Station : connects
+    Station || -- o{ Verse : contains
+    Verse || -- o{ Track : contains
+    Track || -- o{ Clip : contains
+
+    MetaManager || -- || Verse : manages

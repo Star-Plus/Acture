@@ -1,0 +1,52 @@
+classDiagram
+    class Application {
+
+    }
+
+    class StationManager {
+
+    }
+
+    class MetaManager {
+
+    }
+
+    class Network {
+        - root: Station
+        - idCache: Map<Number, Station>
+
+        + getRoot() Station
+        + getStationById(id: Number) Station
+        + getStationsWithinTimeRange(start: Number, end: Number): Station[]
+    }
+
+    class Station {
+        - timelapse: Number
+        - lifetime: Number
+        - stationsConnected: Station[]
+        - versesConnected: Verse[]
+        - pause: Boolean
+
+        + willPause() Boolean
+        + getTimelapse() Number
+        + setTimelapse(timelapse: Number) void
+        + getLifetime() Number
+        + setLifetime(lifetime: Number) void
+        + getStationsConnected() Station[]
+        + getVersesConnected() Verse[]
+        + connectStation(thread: Number, station: Station) void
+        + connectVerse(thread: Number, verse: Verse) void
+        + disconnectStation(thread: Number, station: Station) void
+    }
+
+    class Verse {
+
+    }
+
+    class Track {
+
+    }
+
+    class Clip {
+
+    }
