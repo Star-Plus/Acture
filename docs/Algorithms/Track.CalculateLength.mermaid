@@ -1,0 +1,12 @@
+---
+title: Track.CalculateLength
+---
+flowchart
+    Start((Begin))
+    Start --> length[length = 0]
+    length --> i[i = 0, n = length of clips]
+    i --> loopCondition{i < n}
+    loopCondition -->|F| End((End))
+    loopCondition -->|T| point1["length += (clips[i].end - clips[i].start)"]
+    point1 --> iIncrement[i++]
+    iIncrement --> loopCondition

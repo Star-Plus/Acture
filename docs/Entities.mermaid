@@ -1,22 +1,25 @@
 erDiagram
     Application
     StationManager
-    MetaManager
+    TimeService
     Station
     Serializer
     Network
     Verse
+    DEI
+    DEO
     Track
     Clip
     DataPool
 
     Application ||--|| StationManager : accesses
-    Application ||--|| MetaManager : accesses
+    Application ||--|| TimeService : accesses
     Application ||--|| Serializer : accesses
     StationManager || -- || Network : uses
-    Network || -- o{ Station : connects
+    Network || -- |{ Station : connects
     Station || -- o{ Verse : contains
     Verse || -- o{ Track : contains
     Track || -- o{ Clip : contains
-
-    MetaManager || -- || Verse : manages
+    DEI || -- || DataPool : stores
+    DEO || -- || DataPool : fetches
+    TimeService || -- || Verse : manages
