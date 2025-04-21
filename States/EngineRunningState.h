@@ -1,0 +1,33 @@
+//
+// Created by am180 on 4/21/2025.
+//
+
+#ifndef INTRASTATIONENGINEWORKSPACE_ENGINERUNNINGSTATE_H
+#define INTRASTATIONENGINEWORKSPACE_ENGINERUNNINGSTATE_H
+
+#include "EngineStateBase.h"
+
+namespace SPI {
+    class EngineRunningState final : public EngineStateBase {
+    public:
+        ~EngineRunningState() override = default;
+
+        void OnEnter(Application& app) override {
+            std::cout << "EngineState: Entering running state." << std::endl;
+        }
+
+        void OnUpdate(Application& app, const float deltaTime) override {
+            TimeService::Get().StepTime(deltaTime);
+            auto clips = MediaBinder::Get().DataToBind();
+
+            if (StationManager::Get().CheckTimelapse(TimeService::Get().GetMainTime())) {
+                if (StationManager::Get().getNextStation()->WillPause())
+                    app.TranslateState(EngineState::STATIONED_PAUSE);
+                else
+                    app.TranslateState(EngineState::STATIONED_RUN);
+            }
+        }
+    };
+}
+
+#endif //INTRASTATIONENGINEWORKSPACE_ENGINERUNNINGSTATE_H
