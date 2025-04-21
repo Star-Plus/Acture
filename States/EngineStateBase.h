@@ -13,7 +13,9 @@ namespace SPI {
     public:
         virtual ~EngineStateBase() = default;
 
+        virtual void OnEnter(Application&) = 0;
         virtual void OnUpdate(Application&, float) = 0;
+
     };
 
 }

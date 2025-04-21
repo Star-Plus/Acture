@@ -8,11 +8,15 @@
 #include "EngineStateBase.h"
 
 namespace SPI {
-    class EnginePausedState : public EngineStateBase {
+    class EnginePausedState final : public EngineStateBase {
     public:
-        virtual ~EnginePausedState() = default;
+        ~EnginePausedState() override = default;
 
-        virtual void OnUpdate(Application& app, float deltaTime) override {
+        void OnEnter(Application& app) override {
+            std::cout << "EngineState: Entering paused state." << std::endl;
+        }
+
+        void OnUpdate(Application& app, float deltaTime) override {
             // Paused state does not perform any updates
         }
     };

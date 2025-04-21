@@ -5,6 +5,8 @@
 #ifndef INTRASTATIONENGINEWORKSPACE_ENGINEEMPTYSTATE_H
 #define INTRASTATIONENGINEWORKSPACE_ENGINEEMPTYSTATE_H
 
+#include <iostream>
+
 #include "EngineStateBase.h"
 
 namespace SPI {
@@ -12,7 +14,11 @@ namespace SPI {
     public:
         virtual ~EngineEmptyState() = default;
 
-        virtual void OnUpdate(Application& app, float deltaTime) override {
+        void OnEnter(Application& app) override {
+            std::cout << "EngineState: Entering empty state." << std::endl;
+        }
+
+        void OnUpdate(Application& app, float deltaTime) override {
             // Empty state does not perform any updates
         }
     };

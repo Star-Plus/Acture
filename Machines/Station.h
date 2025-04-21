@@ -39,10 +39,10 @@ namespace SPI {
         bool WillPause() const { return pause; }
 
         double GetTimelapse() const { return timelapse; }
-        void SetTimelapse(double timelapse) { this->timelapse = timelapse; }
+        void SetTimelapse(const double timelapse) { this->timelapse = timelapse; }
 
         double GetLifetime() const { return lifetime; }
-        void SetLifetime(double lifetime) { this->lifetime = lifetime; }
+        void SetLifetime(const double lifetime) { this->lifetime = lifetime; }
 
         std::vector<std::shared_ptr<Station>> GetAllConnectedStations() const { return stations; }
         std::vector<Verse*> GetAllConnectedVerses() const { return verses; }

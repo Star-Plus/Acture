@@ -4,6 +4,16 @@
 
 namespace SPI {
 
+    MediaBinder* MediaBinder::instance = nullptr;
+
+    MediaBinder::MediaBinder() {
+        instance = this;
+    }
+
+    MediaBinder::~MediaBinder() {
+        instance = nullptr;
+    }
+
     void MediaBinder::BindVerse(Verse* verse) {
         this->verse = verse;
         this->clipIndices.clear();

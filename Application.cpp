@@ -1,16 +1,49 @@
 #include "Application.h"
 
+#include "States/EngineEmptyState.h"
+#include "Utils/EngineStateMapping.h"
+
 namespace SPI {
 
-    Application::Application() {
-        state = EngineState::EMPTY;
+    Application::Application()
+    : appState(std::make_unique<EngineEmptyState>()),
+      stateType(EngineState::EMPTY)
+    {}
+
+    Application::~Application() = default;
+
+    void Application::TranslateState(const EngineState newState) {
+
+        appState = CreateEngineState(newState);
+        stateType = newState;
+        appState->OnEnter(*this);
     }
 
-    void Application::OnUpdate(float deltaTime) {
-        if (state == EngineState::RUNNING) {
-            timeService.StepTime(deltaTime);
-            auto clips = mediaBinder.DataToBind();
-        }
+    void Application::OnUpdate(const float deltaTime) {
+        appState->OnUpdate(*this, deltaTime);
     }
 
+    void Application::Play() {
+        if (stateType == EngineState::PAUSED)
+            TranslateState(EngineState::RUNNING);
+    }
+
+    void Application::Pause() {
+        if (stateType == EngineState::RUNNING)
+            TranslateState(EngineState::PAUSED);
+    }
+
+    void Application::Travel(const unsigned int thread) {
+        currentThread = thread;
+        TranslateState(EngineState::FORWARDING);
+    }
+
+    void Application::Rewind() {
+    }
+
+    void Application::Serialize() {
+    }
+
+    void Application::Deserialize() {
+    }
 }

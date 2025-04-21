@@ -11,10 +11,13 @@ using str = std::string;
 
 namespace SPI {
 
-    class RootStation : public Station {
+    class RootStation final : public Station {
+
 
     public:
-        explicit RootStation() : Station(STATION_TYPE::ROOT, 0) {}
+        explicit RootStation() : Station(STATION_TYPE::ROOT, 0) {
+            pause = false;
+        }
     };
 
 }

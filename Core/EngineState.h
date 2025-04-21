@@ -8,6 +8,8 @@
 namespace SPI {
 
     enum class EngineState {
+        SERIALIZING,
+        DESERIALIZING,
         EMPTY,
         PAUSED,
         RUNNING,

@@ -8,12 +8,24 @@
 #include "EngineStateBase.h"
 
 namespace SPI {
-    class EngineRunningState : public EngineStateBase {
+    class EngineRunningState final : public EngineStateBase {
     public:
-        virtual ~EngineRunningState() = default;
+        ~EngineRunningState() override = default;
 
-        virtual void OnUpdate(Application& app, float deltaTime) override {
+        void OnEnter(Application& app) override {
+            std::cout << "EngineState: Entering running state." << std::endl;
+        }
 
+        void OnUpdate(Application& app, const float deltaTime) override {
+            TimeService::Get().StepTime(deltaTime);
+            auto clips = MediaBinder::Get().DataToBind();
+
+            if (StationManager::Get().CheckTimelapse(TimeService::Get().GetMainTime())) {
+                if (StationManager::Get().getNextStation()->WillPause())
+                    app.TranslateState(EngineState::STATIONED_PAUSE);
+                else
+                    app.TranslateState(EngineState::STATIONED_RUN);
+            }
         }
     };
 }
