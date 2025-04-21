@@ -1,0 +1,219 @@
+classDiagram
+    class Application {
+
+        - playing: Boolean
+
+        + OnUpdate(delta: Number) void
+        + Travel(thread: Number) void
+        + ReverseTravel() void
+        + Serialize() void
+        + Deserialize(filepath: String) void
+    }
+
+    class MediaBinder {
+        - verse: Verse
+        - clipsIdx: Number[]
+
+        + BindVerse(verse: Verse) void
+        + UnbindVerse() void
+        + GetVerse() Verse
+
+        + DataToBind() Clip[]
+    }
+
+    class StationManager {
+        - prevStation: Station
+        - nextStation: Station
+        - history: Station[]
+
+        + CheckTimelapse() Boolean
+        + GetNextStation() Station
+        + GetPrevStation() Station
+        + Travel(thread: Number) void
+        + ReverseTravel() void
+    }
+
+    class TimeService {
+        - metaTimer: Number
+
+        + GetTimer() Number
+        + SetTime(newTime: Number) void
+        + StepTime(delta: Number) void
+    }
+
+    class DataPool {
+        - dataUnit: Map<Number, DataUnit>
+        - dataUnitCounter: Number
+
+        + GetDataUnitCount() Number
+        + GetDataUnitById(id: Number) DataUnit
+        + GetDataUnitByPath(path: String) DataUnit
+    }
+
+    class DataUnit {
+        + id: Number
+        + path: String
+        + type: MEDIA_TYPE
+    }
+
+    class Network {
+        - root: Station
+        - idCache: Map<Number, Station>
+        - counter: Number
+
+        + constructor(root: RootStation)
+        - RecursiveSearchById(id: Number, currentStation: Station, count: Number, stationFound: Station) void
+        - RecursiveSearchWithinTimeRange(start: Number, end: Number, currentStation: Station, stationsFound: Station[]) void
+        + Network(root: RootStation)
+        + GetStationCount() Number
+        + GetRoot() Station
+        + GetStationById(id: Number) Station
+        + GetStationsWithinTimeRange(start: Number, end: Number): Station[]
+        + PushStation(stationId: Number, stationToConnect: Station) void
+        + RemoveStation(stationID: Number) void
+    }
+
+    class STATION_TYPE {
+        <<enumeration>>
+        + ROOT
+        + MCQ
+        + LEAF
+    }
+
+    class Station {
+        - type: STATION_TYPE
+        - timelapse: Number
+        - lifetime: Number
+        - stationsConnected: Station[]
+        - versesConnected: Verse[]
+        - pause: Boolean
+
+        + constructor(type: STATION_TYPE, timelapse: Number, lifetime: Number)
+        + Destruct() void
+        + WillPause() Boolean
+        + GetType() STATION_TYPE
+        + GetTimelapse() Number
+        + SetTimelapse(timelapse: Number) void
+        + GetLifetime() Number
+        + SetLifetime(lifetime: Number) void
+        + GetAllConnectedStations() Station[]
+        + GetAllConnectedVerses() Verse[]
+        + GetConnectedStation(thread: Number) Station
+        + GetConnectedVerse(thread: Number) Verse
+        + ConnectStation(thread: Number, station: Station) void
+        + ConnectVerse(thread: Number, verse: Verse) void
+        + DisconnectStation(thread: Number, station: Station) void
+        + PushStation(stationToConnect: Station) void
+    }
+
+    class RootStation { }
+    class LeafStation { }
+
+    class Verse {
+        - length: Number
+        + tracks: Track[]
+
+        + CreateTrack() Track
+        + RemoveTrack(idx: Number) void
+        + CalculateLength() Number
+        + GetLength() Number
+    }
+
+    class MEDIA_TYPE {
+        <<enumeration>>
+        + AUDIO
+        + VIDEO
+    }
+
+    class Track {
+        - mediaType: MEDIA_TYPE
+        + clips: TrackClip[]
+        + length: Number
+
+        - SortClips() void
+        + CalculateLength() Number
+        + AddClip(position: Number, clip: Clip) void
+        + RemoveClip(position: Number) void
+    }
+
+    class TrackClip {
+        + position: Number
+        + clip: Clip
+    }
+
+    class Clip {
+        + mediapath: String
+        + start: Number
+        + end: Number
+    }
+
+    class VideoClip {
+
+    }
+
+    class AudioClip {
+
+    }
+
+    class ImageClip {
+        + xOffset: Number
+        + yOffset: Number
+        + width: Number
+        + height: Number
+    }
+
+    class TextClip {
+        + text: String
+        + font: String
+        + fontSize: Number
+        + color: String
+        + xOffset: Number
+        + yOffset: Number
+    }
+
+    class DEI {
+        - id: Number
+        - time: Number
+        - mediaType: MEDIA_TYPE
+        - verse: Verse
+
+        + GetId() Number
+        + GetTime() Number
+        + GetMediaType() MEDIA_TYPE
+
+        + SaveToDataPool(path: String) void
+    }
+
+    class DEO {
+        - id: Number
+        - time: Number
+        - mediaType: MEDIA_TYPE
+        - verse: Verse
+
+        + GetId() Number
+        + GetTime() Number
+        + GetMediaType() MEDIA_TYPE
+        + FetchData() void
+    }
+
+    Application "1" *-- "1" StationManager
+    Application "1" *-- "1" TimeService
+    Application "1" *-- "1" MediaBinder
+    Network "1" --o "1" StationManager
+    Verse "1" --o "1" MediaBinder
+    Track "*" --o "1" Verse
+    TrackClip "*" --o "1" Track
+    Clip "1" --o "1" TrackClip
+    VideoClip --|> Clip
+    AudioClip --|> Clip
+    ImageClip --|> Clip
+    TextClip --|> Clip
+    Station <|-- RootStation
+    Station <|-- LeafStation
+    Station "1" --o "*" Network
+    Verse "*" --o "1" Station
+    DataPool "1" --o "*" DataUnit
+    DataUnit "1" --o "1" DEI
+    DataUnit "1" --o "1" DEO
+    DEI "*" --o "*" Verse
+    DEO "*" --o "*" Verse
