@@ -15,6 +15,11 @@ namespace SPI {
     }
 
     std::vector<Clip> MediaBinder::DataToBind() const {
+
+        if (verse == nullptr) {
+            return {};
+        }
+
         auto tracks = verse->tracks;
         std::vector<Clip> clips;
 

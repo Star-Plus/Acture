@@ -1,0 +1,22 @@
+//
+// Created by am180 on 4/21/2025.
+//
+
+#ifndef INTRASTATIONENGINEWORKSPACE_ENGINESTATE_H
+#define INTRASTATIONENGINEWORKSPACE_ENGINESTATE_H
+
+namespace SPI {
+
+    enum class EngineState {
+        EMPTY,
+        PAUSED,
+        RUNNING,
+        STATIONED_PAUSE,
+        STATIONED_RUN,
+        REWINDING,
+        FORWARDING,
+    };
+
+}
+
+#endif //INTRASTATIONENGINEWORKSPACE_ENGINESTATE_H
