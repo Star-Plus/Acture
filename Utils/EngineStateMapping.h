@@ -13,9 +13,9 @@
 #include "../States/EngineEmptyState.h"
 #include "../States/EngineRunningState.h"
 #include "../States/EnginePausedState.h"
-#include "States/EngineStationedPauseState.h"
-#include "States/EngineStationedRunState.h"
-#include "States/EngineTravellingState.h"
+#include "../States/EngineStationedPauseState.h"
+#include "../States/EngineStationedRunState.h"
+#include "../States/EngineTravellingState.h"
 
 namespace SPI {
     inline std::unique_ptr<EngineStateBase> CreateEngineState(const EngineState state) {

@@ -5,9 +5,8 @@
 #ifndef ENGINETRAVELLINGSTATE_H
 #define ENGINETRAVELLINGSTATE_H
 
-#include "Application.h"
 #include "EngineStateBase.h"
-#include "Managers/StationManager.h"
+#include "../Managers/StationManager.h"
 
 namespace SPI {
     class EngineTravellingState final : public EngineStateBase {

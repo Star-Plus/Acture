@@ -28,10 +28,6 @@ namespace SPI {
 
     double Verse::CalculateLength()
     {
-        length = std::max_element(tracks.begin(), tracks.end(), [](const Track& a, const Track& b) {
-            return a.GetLength() < b.GetLength();
-        })->GetLength();
-
         return length;
     }
 }

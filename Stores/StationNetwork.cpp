@@ -20,7 +20,7 @@ namespace SPI {
     }
 
     void StationNetwork::RecursiveSearchById(unsigned int id, StationPtr currentStation, unsigned int& count, StationPtr& stationFound) {
-        if (idCache.contains(id)){
+        if (idCache.find(id) != idCache.end()) {
             stationFound = idCache[id];
             return;
         }

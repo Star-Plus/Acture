@@ -6,8 +6,8 @@
 #define ENGINESTATIONEDPAUSESTATE_H
 
 #include "EngineStateBase.h"
-#include "Managers/MediaBinder.h"
-#include "Managers/TimeService.h"
+#include "../Managers/MediaBinder.h"
+#include "../Managers/TimeService.h"
 
 namespace SPI {
     class EngineStationedPauseState final : public EngineStateBase {
