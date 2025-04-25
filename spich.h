@@ -15,3 +15,5 @@
 
 #include "Core/LeafStation.h"
 #include "Features/MCQStation.h"
+
+#include "Utils/SMath.cpp"
