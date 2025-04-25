@@ -15,7 +15,7 @@ namespace SPI {
     public:
         Editor(Application* app);
 
-        void AddStation(unsigned int id, STATION_TYPE type, double timelapse) const;
+        float AddStation(float id, STATION_TYPE type, double timelapse) const;
 
     };
 }

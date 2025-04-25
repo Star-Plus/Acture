@@ -15,26 +15,26 @@ namespace SPI {
     class StationNetwork {
 
         std::shared_ptr<RootStation> root;
-        std::map<unsigned int, StationPtr> idCache;
+        std::map<float, StationPtr> idCache;
         unsigned int count{};
 
-        void RecursiveSearchById(unsigned int id, StationPtr currentStation, unsigned int& count, StationPtr& stationFound);
-
+        void RecursiveSearchById(float id, const StationPtr& currentStation, float currentId, unsigned int level, StationPtr& stationFound);
         void RecursiveSearchWithinTimeRange(double start, double end, StationPtr currentStation, std::vector<StationPtr>& stationsFound);
+        float SearchForId(const StationPtr& station);
 
     public:
         StationNetwork();
-        StationNetwork(std::shared_ptr<RootStation> rootStation);
+        explicit StationNetwork(std::shared_ptr<RootStation> rootStation);
         ~StationNetwork();
 
         StationPtr GetRoot() { return root; }
-        unsigned int Size() { return count; }
+        unsigned int Size() const { return count; }
 
-        StationPtr GetStationById(unsigned int id);
+        StationPtr GetStationById(float id);
         std::vector<StationPtr> GetStationsWithinTimeRange(double start, double end);
 
-        void PushStation(unsigned int subRootId, const StationPtr& stationToPush);
-        void RemoveStation(unsigned int id);
+        float PushStation(float subRootId, const StationPtr& stationToPush);
+        void RemoveStation(float id);
 
     };
 }
