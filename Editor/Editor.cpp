@@ -4,7 +4,7 @@
 
 #include "Editor.h"
 
-#include "Mappers/StationTypeMapper.h"
+#include "../Mappers/StationTypeMapper.h"
 
 namespace SPI {
     Editor::Editor(Application* app) : app(app) {
