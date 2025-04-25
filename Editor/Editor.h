@@ -16,6 +16,7 @@ namespace SPI {
         Editor(Application* app);
 
         float AddStation(float id, STATION_TYPE type, double timelapse) const;
+        void InitializeVerse(Verse* verse, const std::string& mediaPath, float duration) const;
 
     };
 }

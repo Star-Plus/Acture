@@ -34,6 +34,10 @@ namespace SPI {
         MEDIA_TYPE GetMediaType() const {
             return mediaType;
         }
+        
+        void SetMediaType(const MEDIA_TYPE type) {
+            mediaType = type;
+        }
 
 
         std::map<double, Clip> clips;
