@@ -4,7 +4,7 @@
 
 #ifndef EDITOR_H
 #define EDITOR_H
-#include "Application.h"
+#include "../Application.h"
 
 
 namespace SPI {
