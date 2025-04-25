@@ -4,7 +4,7 @@
 
 #ifndef STATIONTYPEMAPPER_H
 #define STATIONTYPEMAPPER_H
-#include <Features/MCQStation.h>
+#include "../Features/MCQStation.h"
 
 #include "Core/LeafStation.h"
 #include "Machines/Station.h"
