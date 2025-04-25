@@ -1,4 +1,5 @@
 #include "Application.cpp"
+#include "Editor/Editor.cpp"
 
 #include "Machines/Station.cpp"
 

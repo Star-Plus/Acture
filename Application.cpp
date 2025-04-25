@@ -1,7 +1,7 @@
 #include "Application.h"
 
 #include "States/EngineEmptyState.h"
-#include "Utils/EngineStateMapping.h"
+#include "Mappers/EngineStateMapping.h"
 
 namespace SPI {
 

@@ -45,5 +45,7 @@ namespace SPI
         void Serialize();
         void Deserialize();
 
+        friend class Editor;
     };
+
 }

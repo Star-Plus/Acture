@@ -14,7 +14,7 @@ namespace SPI {
     class LeafStation final : public Station {
 
     public:
-        explicit LeafStation(const float timelapse) : Station(STATION_TYPE::LEAF, timelapse) {}
+        explicit LeafStation(const double timelapse) : Station(STATION_TYPE::LEAF, timelapse) {}
 
         std::shared_ptr<Station> self() override { 
             return std::static_pointer_cast<Station>(shared_from_this()); 
