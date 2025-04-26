@@ -4,6 +4,7 @@
 
 #include "StationNetwork.h"
 
+#include <iostream>
 #include <utility>
 
 #include "../Utils/SMath.h"
@@ -21,7 +22,7 @@ namespace SPI {
         root.reset();
     }
 
-    void StationNetwork::RecursiveSearchById(const float id, const StationPtr& currentStation, float currentId, const unsigned int level, StationPtr& stationFound) {
+    void StationNetwork::RecursiveSearchById(const ID_T id, const StationPtr& currentStation, const ID_T currentId, const unsigned int level, StationPtr& stationFound) {
         if (idCache.find(id) != idCache.end()) {
             stationFound = idCache[id];
             return;
@@ -34,7 +35,7 @@ namespace SPI {
         }
 
         for (int i = 0; i < currentStation->getThreadCount(); i++){
-            const float nextId = i + (level+1) * 0.1f;
+            const ID_T nextId = SMath::EncodeBitPack(level+1, currentStation->GetThreadId(), i);
 
             if (!stationFound)
                 RecursiveSearchById(id, currentStation->GetConnectedStation(i), nextId, level+1, stationFound);
@@ -42,11 +43,10 @@ namespace SPI {
         }
     }
 
-    StationPtr StationNetwork::GetStationById(float id) {
+    StationPtr StationNetwork::GetStationById(const ID_T id) {
         StationPtr stationFound = nullptr;
-        unsigned int count = 0;
 
-        RecursiveSearchById(id, root, 0.0, count, stationFound);
+        RecursiveSearchById(id, root, 0.0, 0, stationFound);
 
         return stationFound;
     }
@@ -70,7 +70,7 @@ namespace SPI {
         return stationsFound;
     }
 
-    float StationNetwork::PushStation(const float subRootId, const StationPtr& stationToPush) {
+    ID_T StationNetwork::PushStation(const ID_T subRootId, const StationPtr& stationToPush) {
         const auto subRootStation = GetStationById(subRootId);
 
         if (!subRootStation) {
@@ -80,14 +80,14 @@ namespace SPI {
         subRootStation->PushStation(stationToPush);
         count++;
 
-        const unsigned short level = SMath::GetFloatPart(subRootId)+1;
-        const unsigned short thread = stationToPush->GetThreadId();
-        const float id = thread + level * 0.1f;
+        const auto decoded = SMath::DecodeBitPack(subRootId);
+        std::cout << "Decoded ID: " << decoded[0]+1 << ", " << subRootStation->GetThreadId() << ", " << stationToPush->getThreadCount() << std::endl;
+        const auto id = SMath::EncodeBitPack(decoded[0] + 1, subRootStation->GetThreadId(), stationToPush->getThreadCount());
 
         return id;
     }
 
-    void StationNetwork::RemoveStation(const float id) {
+    void StationNetwork::RemoveStation(const ID_T id) {
 
         if (id <= 0) {
             throw std::invalid_argument("Cannot remove the root station");

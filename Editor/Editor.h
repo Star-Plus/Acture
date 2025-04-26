@@ -5,6 +5,7 @@
 #ifndef EDITOR_H
 #define EDITOR_H
 #include "../Application.h"
+#include "../Core/Core.h"
 
 
 namespace SPI {
@@ -15,7 +16,7 @@ namespace SPI {
     public:
         Editor(Application* app);
 
-        float AddStation(float id, STATION_TYPE type, double timelapse) const;
+        ID_T AddStation(ID_T id, STATION_TYPE type, double timelapse) const;
         void InitializeVerse(Verse* verse, const std::string& mediaPath, float duration) const;
 
     };

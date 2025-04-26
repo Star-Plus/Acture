@@ -11,8 +11,8 @@ namespace SPI {
         // Constructor implementation
     }
 
-    float Editor::AddStation(const float id, const STATION_TYPE type, const double timelapse) const {
-        const float createdId = app->stationManager.getNetwork().PushStation(id, CreateStation(type, timelapse));
+    ID_T Editor::AddStation(const ID_T id, const STATION_TYPE type, const double timelapse) const {
+        const ID_T createdId = app->stationManager.getNetwork().PushStation(id, CreateStation(type, timelapse));
         return createdId;
     }
 

@@ -5,6 +5,7 @@
 #ifndef INTRASTATION_STATIONSTORE_H
 #define INTRASTATION_STATIONSTORE_H
 
+#include "../Core/Core.h"
 #include "../Machines/Station.h"
 #include "../Core/RootStation.h"
 
@@ -15,10 +16,10 @@ namespace SPI {
     class StationNetwork {
 
         std::shared_ptr<RootStation> root;
-        std::map<float, StationPtr> idCache;
+        std::map<ID_T, StationPtr> idCache;
         unsigned int count{};
 
-        void RecursiveSearchById(float id, const StationPtr& currentStation, float currentId, unsigned int level, StationPtr& stationFound);
+        void RecursiveSearchById(ID_T id, const StationPtr& currentStation, ID_T currentId, unsigned int level, StationPtr& stationFound);
         void RecursiveSearchWithinTimeRange(double start, double end, StationPtr currentStation, std::vector<StationPtr>& stationsFound);
         float SearchForId(const StationPtr& station);
 
@@ -30,11 +31,11 @@ namespace SPI {
         StationPtr GetRoot() { return root; }
         unsigned int Size() const { return count; }
 
-        StationPtr GetStationById(float id);
+        StationPtr GetStationById(ID_T id);
         std::vector<StationPtr> GetStationsWithinTimeRange(double start, double end);
 
-        float PushStation(float subRootId, const StationPtr& stationToPush);
-        void RemoveStation(float id);
+        ID_T PushStation(ID_T subRootId, const StationPtr& stationToPush);
+        void RemoveStation(ID_T id);
 
     };
 }
