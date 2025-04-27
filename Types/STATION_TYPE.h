@@ -7,7 +7,7 @@
 
 namespace SPI {
 
-    enum class STATION_TYPE {
+    enum class STATION_TYPE : int {
         ROOT = 0,
         MCQ = 1,
         LEAF = 255
