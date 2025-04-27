@@ -4,6 +4,8 @@
 
 #include "Editor.h"
 
+#include <iostream>
+
 #include "../Mappers/StationTypeMapper.h"
 
 namespace SPI {
@@ -12,6 +14,9 @@ namespace SPI {
     }
 
     ID_T Editor::AddStation(const ID_T id, const STATION_TYPE type, const double timelapse) const {
+        const auto createdStation = CreateStation(type, timelapse);
+        std::cout << "Pushing station: " << createdStation << std::endl;
+
         const ID_T createdId = app.stationManager.getNetwork()->PushStation(id, CreateStation(type, timelapse));
 
         if (app.GetCurrentState() == EngineState::EMPTY){
