@@ -22,6 +22,7 @@ namespace SPI {
         std::vector<Verse*> verses;
         std::vector<std::shared_ptr<Station>> stations;
         std::shared_ptr<Station> parent = nullptr;
+        ID_T id = 0;
         unsigned int threadId = 0;
 
         bool pause = true;
@@ -32,6 +33,10 @@ namespace SPI {
 
         virtual std::shared_ptr<Station> self() { return shared_from_this(); }
         std::shared_ptr<Station> GetParent() const { return parent; }
+
+        ID_T GetId() const { return id; }
+        void SetId(ID_T id) { this->id = id; }
+
         unsigned int GetThreadId() const { return threadId; }
 
         STATION_TYPE GetType() const { return type; }
