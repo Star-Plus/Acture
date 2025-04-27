@@ -11,10 +11,10 @@
 namespace SPI {
     class Editor {
 
-        Application* app;
+        Application& app;
 
     public:
-        Editor(Application* app);
+        Editor(Application& app);
 
         ID_T AddStation(ID_T id, STATION_TYPE type, double timelapse) const;
         void InitializeVerse(Verse* verse, const std::string& mediaPath, float duration) const;

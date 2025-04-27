@@ -7,15 +7,15 @@
 #include "../Mappers/StationTypeMapper.h"
 
 namespace SPI {
-    Editor::Editor(Application* app) : app(app) {
+    Editor::Editor(Application& app) : app(app) {
         // Constructor implementation
     }
 
     ID_T Editor::AddStation(const ID_T id, const STATION_TYPE type, const double timelapse) const {
-        const ID_T createdId = app->stationManager.getNetwork()->PushStation(id, CreateStation(type, timelapse));
+        const ID_T createdId = app.stationManager.getNetwork()->PushStation(id, CreateStation(type, timelapse));
 
-        if (app->GetCurrentState() == EngineState::EMPTY){
-            app->TranslateState(EngineState::PAUSED);
+        if (app.GetCurrentState() == EngineState::EMPTY){
+            app.TranslateState(EngineState::PAUSED);
         }
 
         return createdId;
