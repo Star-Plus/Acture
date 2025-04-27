@@ -14,6 +14,7 @@ namespace SPI {
     }
 
     ID_T Editor::AddStation(const ID_T id, const STATION_TYPE type, const double timelapse) const {
+        std::cout << "Station type: " << static_cast<int>(type) << std::endl;
         const auto createdStation = CreateStation(type, timelapse);
         std::cout << "Pushing station: " << createdStation << std::endl;
 
