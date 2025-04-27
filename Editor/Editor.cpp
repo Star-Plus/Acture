@@ -13,6 +13,11 @@ namespace SPI {
 
     ID_T Editor::AddStation(const ID_T id, const STATION_TYPE type, const double timelapse) const {
         const ID_T createdId = app->stationManager.getNetwork().PushStation(id, CreateStation(type, timelapse));
+
+        if (app->GetCurrentState() == EngineState::EMPTY){
+            app->TranslateState(EngineState::PAUSED);
+        }
+
         return createdId;
     }
 
