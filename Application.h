@@ -36,7 +36,7 @@ namespace SPI
             return timeService.GetMainTime();
         }
 
-        StationNetwork& GetStationNetwork()
+        StationNetwork* GetStationNetwork()
         {
             return stationManager.getNetwork();
         }
