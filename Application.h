@@ -36,6 +36,11 @@ namespace SPI
             return timeService.GetMainTime();
         }
 
+        StationNetwork& GetStationNetwork()
+        {
+            return stationManager.getNetwork();
+        }
+
         void OnUpdate(float deltaTime);
 
         void Play();
