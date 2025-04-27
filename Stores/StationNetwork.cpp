@@ -11,7 +11,6 @@
 
 namespace SPI {
 
-
     StationNetwork::StationNetwork() = default;
 
     StationNetwork::StationNetwork(std::shared_ptr<RootStation> rootStation) : count(1) {
@@ -72,6 +71,8 @@ namespace SPI {
 
     ID_T StationNetwork::PushStation(const ID_T subRootId, const StationPtr& stationToPush) {
         const auto subRootStation = GetStationById(subRootId);
+
+        std::cout << "Pushing station: " << stationToPush << std::endl;
 
         if (!subRootStation) {
             throw std::invalid_argument("Cannot push to a non-existing station");
