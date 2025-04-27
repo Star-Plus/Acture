@@ -10,6 +10,7 @@
 
 #include "../Types/STATION_TYPE.h"
 #include "../Units/Verse.h"
+#include "../Core/Core.h"
 
 namespace SPI {
 
