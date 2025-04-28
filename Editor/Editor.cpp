@@ -15,12 +15,7 @@ namespace SPI {
 
     ID_T Editor::AddStation(const ID_T id, const STATION_TYPE type, const double timelapse) const {
         const auto createdStation = CreateStation(type, timelapse);
-
         const ID_T createdId = this->AddStationInstance(id, createdStation);
-
-        if (app.GetCurrentState() == EngineState::EMPTY){
-            app.TranslateState(EngineState::PAUSED);
-        }
 
         return createdId;
     }
@@ -32,6 +27,12 @@ namespace SPI {
     }
 
     ID_T Editor::AddStationInstance(const ID_T parentId, const std::shared_ptr<Station>& station) const {
-        return app.stationManager.getNetwork()->PushStation(parentId, station);
+        const auto csId = app.stationManager.getNetwork()->PushStation(parentId, station);
+
+        if (app.GetCurrentState() == EngineState::EMPTY){
+            app.TranslateState(EngineState::PAUSED);
+        }
+
+        return csId;
     }
 }
