@@ -14,11 +14,9 @@ namespace SPI {
     }
 
     ID_T Editor::AddStation(const ID_T id, const STATION_TYPE type, const double timelapse) const {
-        std::cout << "Station type: " << static_cast<int>(type) << std::endl;
         const auto createdStation = CreateStation(type, timelapse);
-        std::cout << "Pushing station: " << createdStation << std::endl;
 
-        const ID_T createdId = app.stationManager.getNetwork()->PushStation(id, CreateStation(type, timelapse));
+        const ID_T createdId = this->AddStationInstance(id, createdStation);
 
         if (app.GetCurrentState() == EngineState::EMPTY){
             app.TranslateState(EngineState::PAUSED);
@@ -31,5 +29,9 @@ namespace SPI {
         verse->CreateTrack();
         const Clip clip{mediaPath, 0, duration};
         verse->tracks[0].AddClip(0, clip);
+    }
+
+    ID_T Editor::AddStationInstance(const ID_T parentId, const std::shared_ptr<Station>& station) const {
+        return app.stationManager.getNetwork()->PushStation(parentId, station);
     }
 }
