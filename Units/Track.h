@@ -39,6 +39,10 @@ namespace SPI {
             mediaType = type;
         }
 
+        size_t GetClipCount() const {
+            return clips.size();
+        }
+
 
         std::map<double, Clip> clips;
     };
