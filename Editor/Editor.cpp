@@ -5,6 +5,7 @@
 #include "Editor.h"
 
 #include <iostream>
+#include <utility>
 
 #include "../Mappers/StationTypeMapper.h"
 
@@ -34,5 +35,10 @@ namespace SPI {
         }
 
         return csId;
+    }
+
+    Clip* Editor::CreateClip(std::string mediaPath, const double start, const double end) {
+        const auto clip = new Clip{std::move(mediaPath), start, end};
+        return clip;
     }
 }

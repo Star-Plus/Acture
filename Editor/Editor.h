@@ -21,6 +21,8 @@ namespace SPI {
 
         ID_T AddStationInstance(ID_T parentId, const std::shared_ptr<Station>& station) const;
 
+        Clip* CreateClip(std::string mediaPath, double start, double end);
+
     };
 }
 
