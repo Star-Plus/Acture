@@ -16,6 +16,8 @@ namespace SPI {
 
         std::cout << "Clip added at position: " << position << std::endl;
 
+        std::cout << "Clip count after addition: " << clips.size() << std::endl;
+
         CalculateLength();
     }
 
