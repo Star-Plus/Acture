@@ -19,8 +19,7 @@ namespace SPI {
         }
 
         void OnUpdate(Application& app, const float deltaTime) override {
-            TimeService::Get().StepTime(deltaTime);
-            auto clips = MediaBinder::Get().DataToBind();
+            app.GetTimeService()->StepTime(deltaTime);
 
             if (app.GetCurrentThread() != -1)
                 app.TranslateState(EngineState::FORWARDING);

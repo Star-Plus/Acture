@@ -40,8 +40,21 @@ namespace SPI
         {
             return stationManager.getNetwork();
         }
+        MediaBinder* GetMediaBinder()
+        {
+            return &mediaBinder;
+        }
+        TimeService* GetTimeService()
+        {
+            return &timeService;
+        }
+        StationManager* GetStationManager()
+        {
+            return &stationManager;
+        }
 
         void OnUpdate(float deltaTime);
+        std::vector<Clip> DataToBind();
 
         void Play();
         void Pause();

@@ -23,6 +23,10 @@ namespace SPI {
         appState->OnUpdate(*this, deltaTime);
     }
 
+    std::vector<Clip> Application::DataToBind() {
+        return mediaBinder.DataToBind(timeService.GetPlayerTime());
+    }
+
     void Application::Play() {
         if (stateType == EngineState::PAUSED)
             TranslateState(EngineState::RUNNING);

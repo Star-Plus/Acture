@@ -18,7 +18,10 @@ namespace SPI {
         }
 
         void OnUpdate(Application& app, const float deltaTime) override {
-            StationManager::Get().Travel(app.GetCurrentThread());
+            std::cout << "Engine thread: " << app.GetCurrentThread() << std::endl;
+            app.GetStationManager()->Travel(app.GetCurrentThread());
+            const auto verse = app.GetStationManager()->getPrevStation()->GetConnectedVerse(app.GetCurrentThread());
+            app.GetMediaBinder()->BindVerse(verse);
             app.TranslateState(EngineState::RUNNING);
             app.SetCurrentThread(-1);
         }
