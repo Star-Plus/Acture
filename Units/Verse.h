@@ -11,7 +11,7 @@ namespace SPI {
 
     class Verse {
 
-        double length;
+        double length{};
 
     public:
 

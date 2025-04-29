@@ -5,6 +5,7 @@
 #ifndef INTRASTATION_TRACK_H
 #define INTRASTATION_TRACK_H
 
+#include <iostream>
 #include <map>
 #include "Clip.h"
 #include "../Types/MEDIA_TYPE.h"
@@ -41,6 +42,7 @@ namespace SPI {
         }
 
         size_t GetClipCount() const {
+            std::cout << "Clip count: " << clips.size() << std::endl;
             return clips.size();
         }
 
