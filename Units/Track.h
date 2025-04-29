@@ -42,7 +42,6 @@ namespace SPI {
         }
 
         size_t GetClipCount() const {
-            std::cout << "Clip count: " << clips.size() << std::endl;
             return clips.size();
         }
 

@@ -13,9 +13,6 @@ namespace SPI {
 
     void Track::AddClip(double position, const Clip &clip) {
         clips.insert(std::pair(position, clip));
-
-        std::cout << "Clips after adding: " << clips.size() << std::endl;
-
         CalculateLength();
     }
 
