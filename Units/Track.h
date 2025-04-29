@@ -25,7 +25,8 @@ namespace SPI {
         void AddClip(double position, const Clip& clip);
         void RemoveClip(double position);
         void ClearClips();
-        const Clip& GetClip(double position) const;
+
+        Clip GetClip(double position) const;
 
         double GetLength() const {
             return length;

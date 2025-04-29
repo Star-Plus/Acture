@@ -14,14 +14,10 @@ namespace SPI {
     void Track::AddClip(double position, const Clip &clip) {
         clips.insert(std::pair(position, clip));
 
-        std::cout << "Clip added at position: " << position << std::endl;
-
-        std::cout << "Clip count after addition: " << clips.size() << std::endl;
-
         CalculateLength();
     }
 
-    void Track::RemoveClip(double position) {
+    void Track::RemoveClip(const double position) {
         if (auto it = clips.find(position); it != clips.end()) {
             clips.erase(it);
         }
@@ -35,7 +31,7 @@ namespace SPI {
         CalculateLength();
     }
 
-    const Clip &Track::GetClip(double position) const {
+    Clip Track::GetClip(const double position) const {
         auto it = clips.find(position);
         if (it != clips.end()) {
             return it->second;
