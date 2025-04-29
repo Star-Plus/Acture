@@ -4,6 +4,7 @@
 
 #include "Track.h"
 
+#include <iostream>
 #include <ranges>
 
 namespace SPI {
@@ -12,6 +13,8 @@ namespace SPI {
 
     void Track::AddClip(double position, const Clip &clip) {
         clips.insert(std::pair(position, clip));
+
+        std::cout << "Clip added at position: " << position << std::endl;
 
         CalculateLength();
     }
