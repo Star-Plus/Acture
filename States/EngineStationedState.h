@@ -6,7 +6,7 @@
 #define ENGINESTATIONEDSTATE_H
 
 #include "EngineStateBase.h"
-#include "Mappers/SchemaGenerator.h"
+#include "../Mappers/SchemaGenerator.h"
 
 namespace SPI {
     class EngineStationedState : public EngineStateBase {

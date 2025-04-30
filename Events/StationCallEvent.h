@@ -4,7 +4,7 @@
 
 #ifndef STATIONCALLEVENT_H
 #define STATIONCALLEVENT_H
-#include "Event.h"
+#include "../Events/Event.h"
 #include "../Schemas/StationChannelSchema.h"
 
 namespace SPI {
