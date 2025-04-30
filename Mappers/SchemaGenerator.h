@@ -4,7 +4,7 @@
 
 #ifndef SCHEMAGENERATOR_H
 #define SCHEMAGENERATOR_H
-#include <Features/MCQStation.h>
+#include "../Features/MCQStation.h"
 
 #include "../Schemas/StationChannelSchema.h"
 #include "../Machines/Station.h"
