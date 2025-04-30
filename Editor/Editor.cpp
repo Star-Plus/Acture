@@ -31,6 +31,7 @@ namespace SPI {
         const auto csId = app.stationManager.getNetwork()->PushStation(parentId, station);
 
         if (app.GetCurrentState() == EngineState::EMPTY){
+            app.Travel(0);
             app.TranslateState(EngineState::PAUSED);
         }
 
