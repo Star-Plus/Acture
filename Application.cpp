@@ -10,7 +10,11 @@ namespace SPI {
       stateType(EngineState::EMPTY)
     {}
 
-    Application::~Application() = default;
+    Application::~Application() {
+        delete timeService;
+        delete stationManager;
+        delete mediaBinder;
+    }
 
     void Application::TranslateState(const EngineState newState) {
 
@@ -24,7 +28,7 @@ namespace SPI {
     }
 
     std::vector<Clip> Application::DataToBind() {
-        return mediaBinder.DataToBind(timeService.GetPlayerTime());
+        return mediaBinder->DataToBind(timeService->GetPlayerTime());
     }
 
     void Application::Play() {

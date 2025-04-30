@@ -13,9 +13,9 @@ namespace SPI
         std::unique_ptr<EngineStateBase> appState;
         EngineState stateType;
 
-        TimeService timeService;
-        StationManager stationManager;
-        MediaBinder mediaBinder;
+        TimeService* timeService;
+        StationManager* stationManager;
+        MediaBinder* mediaBinder;
 
         unsigned int currentThread = 0;
 
@@ -33,24 +33,24 @@ namespace SPI
 
         double GetCurrentTime() const
         {
-            return timeService.GetMainTime();
+            return timeService->GetMainTime();
         }
 
         StationNetwork* GetStationNetwork()
         {
-            return stationManager.getNetwork();
+            return stationManager->getNetwork();
         }
         MediaBinder* GetMediaBinder()
         {
-            return &mediaBinder;
+            return mediaBinder;
         }
         TimeService* GetTimeService()
         {
-            return &timeService;
+            return timeService;
         }
         StationManager* GetStationManager()
         {
-            return &stationManager;
+            return stationManager;
         }
 
         void OnUpdate(float deltaTime);

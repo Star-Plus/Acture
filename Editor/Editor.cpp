@@ -28,7 +28,7 @@ namespace SPI {
     }
 
     ID_T Editor::AddStationInstance(const ID_T parentId, const std::shared_ptr<Station>& station) const {
-        const auto csId = app.stationManager.getNetwork()->PushStation(parentId, station);
+        const auto csId = app.stationManager->getNetwork()->PushStation(parentId, station);
 
         if (app.GetCurrentState() == EngineState::EMPTY){
             app.Travel(0);
