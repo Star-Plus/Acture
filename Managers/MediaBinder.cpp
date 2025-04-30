@@ -42,11 +42,14 @@ namespace SPI {
 
                 if (currentTime <= clip.first + clip.second.end - clip.second.start && currentTime >= clip.first + clip.second.start) {
                     if (currentClips[i] != clip.first) {
+                        std::cout << "Binding clip: " << clip.second.mediaPath << std::endl;
                         currentClips[i] = clip.first;
                         clipsToBind[i] = clip.second;
                     }
-                    else
+                    else {
+                        std::cout << "Clip already bound: " << clip.second.mediaPath << std::endl;
                         clipsToBind[i] = Clip();
+                    }
 
                     break;
                 }
