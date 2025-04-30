@@ -32,6 +32,7 @@ namespace SPI {
 
         if (app.GetCurrentState() == EngineState::EMPTY){
             app.Travel(0);
+            app.OnUpdate(0);
             app.TranslateState(EngineState::PAUSED);
         }
 
