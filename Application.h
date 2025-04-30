@@ -56,9 +56,9 @@ namespace SPI
             return stationManager;
         }
 
-        StationCallEvent& GetStationCallEvent()
+        StationCallEvent* GetStationCallEvent()
         {
-            return stationCallEvent;
+            return &stationCallEvent;
         }
 
         void OnUpdate(float deltaTime);
