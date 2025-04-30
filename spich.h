@@ -20,3 +20,7 @@
 #include "Events/StationCallEvent.h"
 
 #include "Utils/SMath.cpp"
+
+// Schemas
+#include "Schemas/StationChannelSchema.h"
+#include "Schemas/McqChannelSchema.h"
