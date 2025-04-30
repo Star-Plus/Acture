@@ -7,7 +7,10 @@ namespace SPI {
 
     Application::Application()
     : appState(std::make_unique<EngineEmptyState>()),
-      stateType(EngineState::EMPTY)
+      stateType(EngineState::EMPTY),
+      timeService(new TimeService()),
+      stationManager(new StationManager()),
+      mediaBinder(new MediaBinder())
     {}
 
     Application::~Application() {

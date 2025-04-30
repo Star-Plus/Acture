@@ -8,13 +8,14 @@ namespace SPI {
 
     StationManager* StationManager::instance = nullptr;
 
-    StationManager::StationManager() : network(rootStation) {
+    StationManager::StationManager() : network(new StationNetwork(rootStation)) {
         instance = this;
         nextStation = nullptr;
         this->InitializeStation();
     }
 
     StationManager::~StationManager() {
+        delete network;
         instance = nullptr;
         rootStation.reset();
         prevStation.reset();
