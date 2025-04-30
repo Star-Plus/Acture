@@ -29,6 +29,8 @@ namespace SPI {
             return {};
         }
 
+        std::cout << "Binding verse" << std::endl;
+
         const auto tracks = verse->tracks;
 
         std::vector<Clip> clipsToBind(tracks.size());
