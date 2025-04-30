@@ -23,8 +23,8 @@ namespace SPI {
 
     void Editor::InitializeVerse(Verse* verse, const std::string& mediaPath, const float duration) const {
         verse->CreateTrack();
-        const Clip clip{mediaPath, 0, duration};
-        verse->tracks[0].AddClip(0, clip);
+        Clip* clip = new Clip{mediaPath, 0, duration};
+        verse->tracks[0]->AddClip(0, clip);
     }
 
     ID_T Editor::AddStationInstance(const ID_T parentId, const std::shared_ptr<Station>& station) const {

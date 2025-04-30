@@ -29,8 +29,6 @@ namespace SPI {
             return {};
         }
 
-        std::cout << "Binding verse" << std::endl;
-
         const auto tracks = verse->tracks;
 
         std::vector<Clip> clipsToBind(tracks.size());
@@ -38,18 +36,14 @@ namespace SPI {
 
         for (size_t i = 0; i < tracks.size(); i++) {
             const auto& track = tracks[i];
-            for (auto clip: track.clips) {
+            for (auto clip: track->clips) {
 
-                std::cout << "Clip: " << clip.second.mediaPath << std::endl;
-
-                if (currentTime <= clip.first + clip.second.end - clip.second.start && currentTime >= clip.first + clip.second.start) {
+                if (currentTime <= clip.first + clip.second->end - clip.second->start && currentTime >= clip.first + clip.second->start) {
                     if (currentClips[i] != clip.first) {
-                        std::cout << "Binding clip: " << clip.second.mediaPath << std::endl;
                         currentClips[i] = clip.first;
-                        clipsToBind[i] = clip.second;
+                        clipsToBind[i] = *clip.second;
                     }
                     else {
-                        std::cout << "Clip already bound: " << clip.second.mediaPath << std::endl;
                         clipsToBind[i] = Clip();
                     }
 

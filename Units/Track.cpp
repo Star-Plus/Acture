@@ -6,13 +6,19 @@
 
 #include <iostream>
 #include <ranges>
+#include <functional>
 
 namespace SPI {
 
     Track::Track() : length(0.0) {}
+    Track::~Track() {
+        for (auto& clip : clips) {
+            delete clip.second;
+        }
+    }
 
-    void Track::AddClip(double position, const Clip &clip) {
-        clips.insert(std::pair(position, clip));
+    void Track::AddClip(double position, Clip *clip) {
+        clips.insert({position, clip});
         CalculateLength();
     }
 
@@ -30,7 +36,7 @@ namespace SPI {
         CalculateLength();
     }
 
-    Clip Track::GetClip(const double position) const {
+    Clip* Track::GetClip(const double position) const {
         auto it = clips.find(position);
         if (it != clips.end()) {
             return it->second;
@@ -41,7 +47,7 @@ namespace SPI {
     double Track::CalculateLength() {
         const auto lastClip = clips.rbegin();
 
-        length = lastClip->first + lastClip->second.end - lastClip->second.start;
+        length = lastClip->first + lastClip->second->end - lastClip->second->start;
 
         return length;
     }

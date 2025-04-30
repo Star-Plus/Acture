@@ -22,12 +22,13 @@ namespace SPI {
     public:
 
         Track();
+        ~Track();
 
-        void AddClip(double position, const Clip& clip);
+        void AddClip(double position, Clip* clip);
         void RemoveClip(double position);
         void ClearClips();
 
-        Clip GetClip(double position) const;
+        Clip* GetClip(double position) const;
 
         double GetLength() const {
             return length;
@@ -46,7 +47,7 @@ namespace SPI {
         }
 
 
-        std::map<double, Clip> clips;
+        std::map<double, Clip*> clips;
     };
 
 }
