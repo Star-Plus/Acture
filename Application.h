@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core/EngineState.h"
+#include "Events/StationCallEvent.h"
 #include "Managers/TimeService.h"
 #include "Managers/StationManager.h"
 #include "Managers/MediaBinder.h"
@@ -18,6 +19,8 @@ namespace SPI
         MediaBinder* mediaBinder;
 
         unsigned int currentThread = 0;
+
+        StationCallEvent stationCallEvent;
 
     public:
 
@@ -51,6 +54,11 @@ namespace SPI
         StationManager* GetStationManager()
         {
             return stationManager;
+        }
+
+        StationCallEvent& GetStationCallEvent()
+        {
+            return stationCallEvent;
         }
 
         void OnUpdate(float deltaTime);
