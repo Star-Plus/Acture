@@ -40,6 +40,8 @@ namespace SPI {
             const auto& track = tracks[i];
             for (auto clip: track.clips) {
 
+                std::cout << "Clip: " << clip.second.mediaPath << std::endl;
+
                 if (currentTime <= clip.first + clip.second.end - clip.second.start && currentTime >= clip.first + clip.second.start) {
                     if (currentClips[i] != clip.first) {
                         std::cout << "Binding clip: " << clip.second.mediaPath << std::endl;
