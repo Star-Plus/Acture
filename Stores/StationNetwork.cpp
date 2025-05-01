@@ -80,7 +80,7 @@ namespace SPI {
         count++;
 
         const auto decoded = SMath::DecodeBitPack(subRootId);
-        const auto id = SMath::EncodeBitPack(decoded[0] + 1, subRootStation->GetThreadId(), stationToPush->getThreadCount());
+        const auto id = SMath::EncodeBitPack(decoded[0] + 1, subRootStation->GetThreadId(), stationToPush->GetThreadId());
 
         stationToPush->SetId(id);
 
