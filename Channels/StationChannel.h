@@ -20,6 +20,7 @@ namespace SPI {
         explicit StationChannel(StationCallEvent & event) {
             event.Subscribe([&](std::shared_ptr<StationChannelSchema> data) {
                 this->data = std::move(data);
+                std::cout << "Event call: " << std::dynamic_pointer_cast<McqChannelSchema>(data)->question << std::endl;
                 notified = true;
             });
         }
