@@ -11,7 +11,7 @@
 #include "StationChannelSchema.h"
 
 namespace SPI {
-    struct McqChannelSchema : StationChannelSchema {
+    struct McqChannelSchema final : StationChannelSchema {
         std::string question;
         std::vector<std::string> options;
 
