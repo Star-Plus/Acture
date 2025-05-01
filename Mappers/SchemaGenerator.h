@@ -9,7 +9,7 @@
 #include "../Schemas/StationChannelSchema.h"
 #include "../Machines/Station.h"
 #include "../Schemas/McqChannelSchema.h"
-#include "Schemas/LeafChannelSchema.h"
+#include "../Schemas/LeafChannelSchema.h"
 
 namespace SPI {
     inline std::shared_ptr<StationChannelSchema> GenerateStationChannel(const std::shared_ptr<Station>& station) {
