@@ -11,6 +11,8 @@ namespace SPI {
     struct StationChannelSchema {
         STATION_TYPE stationType;
         bool willPause;
+
+        virtual ~StationChannelSchema() = default;
     };
 }
 

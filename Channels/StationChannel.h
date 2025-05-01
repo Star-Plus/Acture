@@ -5,6 +5,7 @@
 #ifndef STATIONCHANNEL_H
 #define STATIONCHANNEL_H
 #include <iostream>
+#include <utility>
 
 #include "Channel.h"
 #include "../Events/StationCallEvent.h"
@@ -17,14 +18,14 @@ namespace SPI {
     public:
         explicit StationChannel(StationCallEvent & event) {
             event.Subscribe([&](std::shared_ptr<StationChannelSchema> data) {
-                this->data = data;
+                this->data = std::move(data);
                 notified = true;
             });
         }
 
         ~StationChannel() override = default;
 
-        void Send(StationChannelSchema data) override {
+        void Send(std::shared_ptr<StationChannelSchema> data) override {
 
         }
 

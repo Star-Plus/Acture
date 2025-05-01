@@ -11,7 +11,7 @@
 namespace SPI {
 
     template<class T>
-    using Callback = std::function<void(T)>;
+    using Callback = std::function<void(std::shared_ptr<T>)>;
 
     template<class T>
     class Event {

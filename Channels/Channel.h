@@ -19,18 +19,12 @@ namespace SPI {
         virtual ~Channel() = default;
 
         std::shared_ptr<T> Receive() {
-            if (!notified) {
-                if (data != nullptr) {
-                    data.reset();
-                }
-                return nullptr;
-            }
-
+            if (!notified) return nullptr;
             notified = false;
             return data;
         }
 
-        virtual void Send(T data) = 0;
+        virtual void Send(std::shared_ptr<T> data) = 0;
     };
 }
 

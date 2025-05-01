@@ -15,7 +15,7 @@ namespace SPI {
         switch (station->GetType()) {
 
             case STATION_TYPE::MCQ: {
-                auto mcqStation = std::dynamic_pointer_cast<MCQStation>(station);
+                const auto mcqStation = std::dynamic_pointer_cast<MCQStation>(station);
 
                 return std::make_shared<McqChannelSchema>(
                     McqChannelSchema{

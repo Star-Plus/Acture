@@ -9,7 +9,7 @@
 
 namespace SPI {
 
-    class StationCallEvent : public Event<std::shared_ptr<StationChannelSchema>> {};
+    class StationCallEvent : public Event<StationChannelSchema> {};
 
 }
 
