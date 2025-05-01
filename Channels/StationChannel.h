@@ -9,7 +9,6 @@
 #include "Channel.h"
 #include "../Events/StationCallEvent.h"
 #include "../Schemas/StationChannelSchema.h"
-#include "Schemas/McqChannelSchema.h"
 
 namespace SPI {
 
