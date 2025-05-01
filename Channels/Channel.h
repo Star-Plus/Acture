@@ -11,13 +11,18 @@ namespace SPI {
     class Channel {
 
     protected:
-
+        std::shared_ptr<T> data = nullptr;
+        bool notified = false;
 
     public:
         Channel() = default;
         virtual ~Channel() = default;
 
-        virtual std::shared_ptr<T> Receive() = 0;
+        std::shared_ptr<T> Receive() {
+            if (!notified) return nullptr;
+            notified = false;
+            return data;
+        }
 
         virtual void Send(std::shared_ptr<T> data) = 0;
     };

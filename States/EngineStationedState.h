@@ -17,7 +17,6 @@ namespace SPI {
             std::cout << "EngineState: Entering station state." << std::endl;
 
             const auto channelData = GenerateStationChannel(app.GetStationManager()->getNextStation());
-            std::cout << "From state: " << std::dynamic_pointer_cast<McqChannelSchema>(channelData)->question << std::endl;
             app.GetStationCallEvent()->Dispatch(channelData);
         }
 
