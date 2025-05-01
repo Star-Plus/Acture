@@ -9,7 +9,7 @@
 
 namespace SPI {
 
-    class StationCallEvent : public Event<StationChannelSchema> {};
+    class StationCallEvent : public Event<StationChannelSchema*> {};
 
 }
 

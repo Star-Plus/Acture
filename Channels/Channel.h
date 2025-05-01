@@ -12,7 +12,7 @@ namespace SPI {
     class Channel {
 
     protected:
-        T* data;
+        T* data = nullptr;
         bool notified = false;
 
     public:
@@ -21,13 +21,17 @@ namespace SPI {
 
         T* Send() {
             if (!notified) {
+                if (data != nullptr) {
+                    delete data;
+                    data = nullptr;
+                }
                 return nullptr;
             }
+
             notified = false;
-            const auto copiedData = new T(*data);
-            delete data;
-            return copiedData;
+            return data;
         }
+
         virtual void Receive(T data) = 0;
     };
 }

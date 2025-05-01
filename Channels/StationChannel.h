@@ -4,9 +4,12 @@
 
 #ifndef STATIONCHANNEL_H
 #define STATIONCHANNEL_H
+#include <iostream>
+
 #include "Channel.h"
 #include "../Events/StationCallEvent.h"
 #include "../Schemas/StationChannelSchema.h"
+#include "Schemas/McqChannelSchema.h"
 
 namespace SPI {
 
@@ -14,23 +17,13 @@ namespace SPI {
 
     public:
         explicit StationChannel(StationCallEvent & event) {
-            event.Subscribe([&](const StationChannelSchema data) {
-                this->data = new StationChannelSchema(data);
+            event.Subscribe([&](StationChannelSchema* data) {
+                this->data = data;
                 notified = true;
             });
         }
 
         ~StationChannel() override = default;
-
-        // StationChannelSchema* Send() override {
-        //     if (!notified) {
-        //         return nullptr;
-        //     }
-        //     notified = false;
-        //     const auto copiedData = new StationChannelSchema(*data);
-        //     delete data;
-        //     return copiedData;
-        // }
 
         void Receive(StationChannelSchema data) override {
 

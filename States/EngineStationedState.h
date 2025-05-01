@@ -17,7 +17,7 @@ namespace SPI {
             std::cout << "EngineState: Entering station state." << std::endl;
 
             const auto channelData = GenerateStationChannel(app.GetStationManager()->getNextStation());
-            app.GetStationCallEvent()->Dispatch(*channelData);
+            app.GetStationCallEvent()->Dispatch(channelData);
         }
 
     };
