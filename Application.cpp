@@ -61,6 +61,9 @@ namespace SPI {
     }
 
     void Application::ScrubTime(const float time) const {
+        if (time < stationManager->getPrevStation()->GetTimelapse() || time > stationManager->getNextStation()->GetTimelapse()) {
+            throw std::out_of_range("Time is out of range");
+        }
         timeService->SetTime(time);
     }
 }
