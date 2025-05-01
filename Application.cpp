@@ -62,9 +62,9 @@ namespace SPI {
 
     void Application::ScrubTime(const float time) const {
         if (time < stationManager->getPrevStation()->GetTimelapse()) {
-            timeService->SetLastTime(stationManager->getPrevStation()->GetTimelapse());
+            timeService->SetTime(stationManager->getPrevStation()->GetTimelapse());
         } else if (time > stationManager->getNextStation()->GetTimelapse()) {
-            timeService->SetLastTime(stationManager->getNextStation()->GetTimelapse());
+            timeService->SetTime(stationManager->getNextStation()->GetTimelapse());
         }
         else
             timeService->SetTime(time);
