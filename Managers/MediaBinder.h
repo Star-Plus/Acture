@@ -10,7 +10,7 @@ namespace SPI {
 
         static MediaBinder* instance;
 
-        std::vector<double> currentClips;
+        std::vector<Clip*> currentClips;
 
         Verse* verse = nullptr;
 

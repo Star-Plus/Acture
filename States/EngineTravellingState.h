@@ -22,6 +22,10 @@ namespace SPI {
             app.GetStationManager()->Travel(app.GetCurrentThread());
             const auto verse = app.GetStationManager()->getPrevStation()->GetConnectedVerse(app.GetCurrentThread());
             app.GetMediaBinder()->BindVerse(verse);
+
+            app.GetTimeService()->ResetPlayingTime();
+            app.GetTimeService()->SetLastTime(app.GetStationManager()->getPrevStation()->GetTimelapse());
+
             app.TranslateState(EngineState::RUNNING);
             app.SetCurrentThread(-1);
         }

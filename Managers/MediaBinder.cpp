@@ -32,15 +32,15 @@ namespace SPI {
         const auto tracks = verse->tracks;
 
         std::vector<Clip> clipsToBind(tracks.size());
-        currentClips.resize(tracks.size(), -1);
+        currentClips.resize(tracks.size());
 
         for (size_t i = 0; i < tracks.size(); i++) {
             const auto& track = tracks[i];
             for (auto clip: track->clips) {
 
                 if (currentTime <= clip.first + clip.second->end - clip.second->start && currentTime >= clip.first + clip.second->start) {
-                    if (currentClips[i] != clip.first) {
-                        currentClips[i] = clip.first;
+                    if (currentClips[i] != clip.second) {
+                        currentClips[i] = clip.second;
                         clipsToBind[i] = *clip.second;
                     }
                     else {
