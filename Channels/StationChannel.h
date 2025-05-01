@@ -9,6 +9,7 @@
 #include "Channel.h"
 #include "../Events/StationCallEvent.h"
 #include "../Schemas/StationChannelSchema.h"
+#include "Mappers/SchemaTypeCasting.h"
 
 namespace SPI {
 
@@ -17,14 +18,14 @@ namespace SPI {
     public:
         explicit StationChannel(StationCallEvent & event) {
             event.Subscribe([&](StationChannelSchema* data) {
-                this->data = data;
+                this->data = CastToSchema(data);
                 notified = true;
             });
         }
 
         ~StationChannel() override = default;
 
-        void Receive(StationChannelSchema data) override {
+        void Send(StationChannelSchema data) override {
 
         }
 

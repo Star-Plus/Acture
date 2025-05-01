@@ -18,6 +18,7 @@ namespace SPI {
 
                 const auto mcqStation = std::dynamic_pointer_cast<MCQStation>(station);
                 const auto schema =  new McqChannelSchema{
+                    mcqStation->GetType(),
                     false,
                     mcqStation->getQuestion(),
                     mcqStation->getOptions()

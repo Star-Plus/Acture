@@ -5,8 +5,11 @@
 #ifndef STATIONCHANNELSCHEMA_H
 #define STATIONCHANNELSCHEMA_H
 
+#include "../Types/STATION_TYPE.h"
+
 namespace SPI {
     struct StationChannelSchema {
+        STATION_TYPE stationType;
         bool willPause;
     };
 }

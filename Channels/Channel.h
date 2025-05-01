@@ -18,7 +18,7 @@ namespace SPI {
         Channel() = default;
         virtual ~Channel() = default;
 
-        T* Send() {
+        T* Receive() {
             if (!notified) {
                 if (data != nullptr) {
                     delete data;
@@ -31,7 +31,7 @@ namespace SPI {
             return data;
         }
 
-        virtual void Receive(T data) = 0;
+        virtual void Send(T data) = 0;
     };
 }
 
