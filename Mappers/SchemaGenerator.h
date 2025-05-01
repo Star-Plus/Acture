@@ -11,27 +11,27 @@
 #include "../Schemas/McqChannelSchema.h"
 
 namespace SPI {
-    inline StationChannelSchema* GenerateStationChannel(const std::shared_ptr<Station>& station) {
+    inline std::shared_ptr<StationChannelSchema> GenerateStationChannel(const std::shared_ptr<Station>& station) {
         switch (station->GetType()) {
 
             case STATION_TYPE::MCQ: {
+                auto mcqStation = std::dynamic_pointer_cast<MCQStation>(station);
 
-                const auto mcqStation = std::dynamic_pointer_cast<MCQStation>(station);
-                const auto schema =  new McqChannelSchema{
-                    mcqStation->GetType(),
-                    false,
-                    mcqStation->getQuestion(),
-                    mcqStation->getOptions()
-                };
-
-                return schema;
-
+                return std::make_shared<McqChannelSchema>(
+                    McqChannelSchema{
+                        mcqStation->GetType(),
+                        false,
+                        mcqStation->getQuestion(),
+                        mcqStation->getOptions()
+                    }
+                );
             }
+
             default:
                 throw std::runtime_error("Unknown station type");
-
         }
     }
+
 }
 
 #endif //SCHEMAGENERATOR_H
