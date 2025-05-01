@@ -4,7 +4,7 @@
 
 #ifndef CHANNEL_H
 #define CHANNEL_H
-#include "Events/Event.h"
+#include "../Events/Event.h"
 
 namespace SPI {
 
