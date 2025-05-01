@@ -24,3 +24,6 @@
 // Schemas
 #include "Schemas/StationChannelSchema.h"
 #include "Schemas/McqChannelSchema.h"
+
+// Channels
+#include "Channels/StationChannel.h"
