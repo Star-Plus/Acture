@@ -40,8 +40,10 @@ namespace SPI {
     }
 
     void Station::DisconnectStation(const unsigned int thread) {
-        stations[thread].reset();
-        stations[thread] = nullptr;
+
+        if (thread >= stations.size()) return;
+
+        stations.erase(stations.begin() + thread);
 
         if (verses[thread] != nullptr) {
             delete verses[thread];
