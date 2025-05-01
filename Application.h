@@ -78,6 +78,7 @@ namespace SPI
         void Rewind();
         void Serialize();
         void Deserialize();
+        void ScrubTime(float time) const;
 
         friend class Editor;
     };

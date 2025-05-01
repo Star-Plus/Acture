@@ -59,4 +59,8 @@ namespace SPI {
 
     void Application::Deserialize() {
     }
+
+    void Application::ScrubTime(const float time) const {
+        timeService->SetTime(time);
+    }
 }
