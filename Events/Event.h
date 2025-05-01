@@ -28,7 +28,7 @@ namespace SPI {
             callbacks.erase(std::remove(callbacks.begin(), callbacks.end(), callback), callbacks.end());
         }
 
-        void Dispatch(T data) {
+        void Dispatch(std::shared_ptr<T> data) {
             for (const auto& callback : callbacks) {
                 callback(data);
             }

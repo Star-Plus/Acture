@@ -8,10 +8,12 @@
 #include "../Types/STATION_TYPE.h"
 
 namespace SPI {
-    struct StationChannelSchema {
+    struct StationChannelSchema : std::enable_shared_from_this<StationChannelSchema> {
         STATION_TYPE stationType;
         bool willPause;
 
+        StationChannelSchema(STATION_TYPE type, bool pause)
+            : stationType(type), willPause(pause) {}
         virtual ~StationChannelSchema() = default;
     };
 }
