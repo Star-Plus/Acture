@@ -18,11 +18,7 @@ namespace SPI {
         Channel() = default;
         virtual ~Channel() = default;
 
-        std::shared_ptr<T> Receive() {
-            if (!notified) return nullptr;
-            notified = false;
-            return data;
-        }
+        virtual std::shared_ptr<T> Receive() = 0;
 
         virtual void Send(std::shared_ptr<T> data) = 0;
     };
