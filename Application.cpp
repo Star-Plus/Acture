@@ -6,11 +6,13 @@
 namespace SPI {
 
     Application::Application()
-    : appState(std::make_unique<EngineEmptyState>()),
-      stateType(EngineState::EMPTY),
-      timeService(new TimeService()),
-      stationManager(new StationManager()),
-      mediaBinder(new MediaBinder())
+    :
+        appState(std::make_unique<EngineEmptyState>()),
+        stateType(EngineState::EMPTY),
+        timeService(new TimeService()),
+        stationManager(new StationManager()),
+        mediaBinder(new MediaBinder()),
+        stationChannel(this->stationCallEvent)
     {}
 
     Application::~Application() {

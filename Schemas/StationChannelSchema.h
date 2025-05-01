@@ -2,8 +2,8 @@
 // Created by Ahmed Mustafa on 4/30/2025.
 //
 
-#ifndef MCQCHANNEL_H
-#define MCQCHANNEL_H
+#ifndef STATIONCHANNELSCHEMA_H
+#define STATIONCHANNELSCHEMA_H
 
 namespace SPI {
     struct StationChannelSchema {
@@ -11,4 +11,4 @@ namespace SPI {
     };
 }
 
-#endif //MCQCHANNEL_H
+#endif //STATIONCHANNELSCHEMA_H

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Channels/StationChannel.h"
 #include "Core/EngineState.h"
 #include "Events/StationCallEvent.h"
 #include "Managers/TimeService.h"
@@ -20,7 +21,11 @@ namespace SPI
 
         unsigned int currentThread = 0;
 
+        // Events
         StationCallEvent stationCallEvent;
+
+        // Pipeline
+        StationChannel stationChannel;
 
     public:
 
@@ -55,10 +60,13 @@ namespace SPI
         {
             return stationManager;
         }
-
         StationCallEvent* GetStationCallEvent()
         {
             return &stationCallEvent;
+        }
+        StationChannel* GetStationChannel()
+        {
+            return &stationChannel;
         }
 
         void OnUpdate(float deltaTime);

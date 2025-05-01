@@ -16,7 +16,7 @@ namespace SPI {
         std::vector<std::string> options;
     };
 
-    std::ostream& operator<<(std::ostream& os, const McqChannelSchema& schema) {
+    inline std::ostream& operator<<(std::ostream& os, const McqChannelSchema& schema) {
         os << "Does pause: " << schema.willPause << std::endl;
         os << "Question: " << schema.question << "\nOptions: ";
         for (const auto& option : schema.options) {
