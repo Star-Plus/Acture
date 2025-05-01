@@ -23,6 +23,8 @@ namespace SPI {
 
         Clip* CreateClip(std::string mediaPath, double start, double end);
 
+        void RemoveStation(ID_T id) const;
+
     };
 }
 

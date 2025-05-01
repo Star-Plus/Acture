@@ -43,4 +43,8 @@ namespace SPI {
         const auto clip = new Clip{std::move(mediaPath), start, end};
         return clip;
     }
+
+    void Editor::RemoveStation(const ID_T id) const {
+        app.stationManager->getNetwork()->RemoveStation(id);
+    }
 }
