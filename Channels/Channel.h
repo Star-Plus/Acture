@@ -11,8 +11,7 @@ namespace SPI {
     class Channel {
 
     protected:
-        std::shared_ptr<T> data = nullptr;
-        bool notified = false;
+
 
     public:
         Channel() = default;

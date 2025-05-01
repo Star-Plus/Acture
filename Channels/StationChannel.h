@@ -14,20 +14,20 @@
 
 namespace SPI {
 
-    class StationChannel final : public Channel<StationChannelSchema> {
-
+    class StationChannel {
+        std::shared_ptr<StationChannelSchema> data = nullptr;
+        bool notified = false;
     public:
         explicit StationChannel(StationCallEvent & event) {
             event.Subscribe([&](std::shared_ptr<StationChannelSchema> data) {
-                this->data = data;
-                std::cout << "Event call: " << std::dynamic_pointer_cast<McqChannelSchema>(data)->question << std::endl;
+                this->data = std::move(data);
                 notified = true;
             });
         }
 
-        ~StationChannel() override = default;
+        ~StationChannel() = default;
 
-        std::shared_ptr<StationChannelSchema> Receive() override {
+        std::shared_ptr<StationChannelSchema> Receive() {
             if (!notified) return nullptr;
             notified = false;
 
@@ -36,7 +36,7 @@ namespace SPI {
             return this->data;
         }
 
-        void Send(std::shared_ptr<StationChannelSchema> data) override {
+        void Send(std::shared_ptr<StationChannelSchema> data) {
 
         }
 
