@@ -9,7 +9,7 @@
 #include "Channel.h"
 #include "../Events/StationCallEvent.h"
 #include "../Schemas/StationChannelSchema.h"
-#include "Mappers/SchemaTypeCasting.h"
+#include "../Mappers/SchemaTypeCasting.h"
 
 namespace SPI {
 
