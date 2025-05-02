@@ -27,7 +27,7 @@ namespace SPI {
 
             app.GetMediaBinder()->BindVerse(verse);
 
-            app.TranslateState(EngineState::PAUSED);
+            app.TranslateState(EngineState::RUNNING);
         }
 
         void OnUpdate(Application& app, const float deltaTime) override {
