@@ -7,7 +7,6 @@
 
 #include <iostream>
 
-#include "Application.h"
 #include "EngineStateBase.h"
 
 namespace SPI {
