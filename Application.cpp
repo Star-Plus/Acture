@@ -52,6 +52,10 @@ namespace SPI {
     }
 
     void Application::Rewind() {
+        if (stateType == EngineState::RUNNING || stateType == EngineState::PAUSED)
+            TranslateState(EngineState::REWINDING);
+        else
+            std::cout << "Cannot rewind in current state." << std::endl;
     }
 
     void Application::Serialize() {

@@ -15,9 +15,6 @@ namespace SPI {
 
         void OnEnter(Application& app) override {
             std::cout << "EngineState: Entering travelling state." << std::endl;
-        }
-
-        void OnUpdate(Application& app, const float deltaTime) override {
             std::cout << "Engine thread: " << app.GetCurrentThread() << std::endl;
             app.GetStationManager()->Travel(app.GetCurrentThread());
             const auto verse = app.GetStationManager()->getPrevStation()->GetConnectedVerse(app.GetCurrentThread());
@@ -28,6 +25,10 @@ namespace SPI {
 
             app.TranslateState(EngineState::RUNNING);
             app.SetCurrentThread(-1);
+        }
+
+        void OnUpdate(Application& app, const float deltaTime) override {
+
         }
     };
 }
