@@ -17,11 +17,11 @@ namespace SPI {
 
         std::shared_ptr<RootStation> root;
         std::map<ID_T, StationPtr> idCache;
-        unsigned int count{};
+        stations_size_t count = 0;
 
         void RecursiveSearchById(ID_T id, const StationPtr& currentStation, ID_T currentId, unsigned int level, StationPtr& stationFound);
         void RecursiveSearchWithinTimeRange(double start, double end, StationPtr currentStation, std::vector<StationPtr>& stationsFound);
-        float SearchForId(const StationPtr& station);
+        ID_T SearchForId(const StationPtr& station);
 
     public:
         StationNetwork();

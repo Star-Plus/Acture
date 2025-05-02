@@ -103,7 +103,7 @@ namespace SPI {
         count--;
     }
 
-    float StationNetwork::SearchForId(const StationPtr& station) {
+    ID_T StationNetwork::SearchForId(const StationPtr& station) {
         for (const auto& [key, value] : idCache) {
             if (value == station) {
                 return key;

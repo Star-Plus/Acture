@@ -5,7 +5,7 @@ classDiagram
 
         + OnUpdate(delta: Number) void
         + Travel(thread: Number) void
-        + ReverseTravel() void
+        + Rewind() void
         + Serialize() void
         + Deserialize(filepath: String) void
     }
@@ -196,9 +196,23 @@ classDiagram
         + FetchData() void
     }
 
+    class Serializer {
+        - app: Application
+        - file: FileStream
+
+        - SerializeStation(station: Station) void
+        - SerializeVerse(verse: Verse) void
+
+        - SerializeStationNetwork()
+
+        + ExportSpiFile(savePath: String) void
+        + ImportSpiFile(filepath: String) void
+    }
+
     Application "1" *-- "1" StationManager
     Application "1" *-- "1" TimeService
     Application "1" *-- "1" MediaBinder
+    Application "1" --* "1" Serializer
     Network "1" --o "1" StationManager
     Verse "1" --o "1" MediaBinder
     Track "*" --o "1" Verse
