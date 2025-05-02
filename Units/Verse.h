@@ -11,11 +11,11 @@ namespace SPI {
 
     class Verse {
 
-        double length;
+        double length{};
 
     public:
 
-        std::vector<Track> tracks;
+        std::vector<Track*> tracks;
 
         Verse();
         ~Verse();

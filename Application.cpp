@@ -6,11 +6,20 @@
 namespace SPI {
 
     Application::Application()
-    : appState(std::make_unique<EngineEmptyState>()),
-      stateType(EngineState::EMPTY)
+    :
+        appState(std::make_unique<EngineEmptyState>()),
+        stateType(EngineState::EMPTY),
+        timeService(new TimeService()),
+        stationManager(new StationManager()),
+        mediaBinder(new MediaBinder()),
+        stationChannel(this->stationCallEvent)
     {}
 
-    Application::~Application() = default;
+    Application::~Application() {
+        delete timeService;
+        delete stationManager;
+        delete mediaBinder;
+    }
 
     void Application::TranslateState(const EngineState newState) {
 
@@ -21,6 +30,10 @@ namespace SPI {
 
     void Application::OnUpdate(const float deltaTime) {
         appState->OnUpdate(*this, deltaTime);
+    }
+
+    std::vector<Clip> Application::DataToBind() {
+        return mediaBinder->DataToBind(timeService->GetPlayerTime());
     }
 
     void Application::Play() {
@@ -39,11 +52,25 @@ namespace SPI {
     }
 
     void Application::Rewind() {
+        if (stateType == EngineState::RUNNING || stateType == EngineState::PAUSED)
+            TranslateState(EngineState::REWINDING);
+        else
+            std::cout << "Cannot rewind in current state." << std::endl;
     }
 
     void Application::Serialize() {
     }
 
     void Application::Deserialize() {
+    }
+
+    void Application::ScrubTime(const float time) const {
+        if (time < stationManager->getPrevStation()->GetTimelapse()) {
+            timeService->SetTime(stationManager->getPrevStation()->GetTimelapse());
+        } else if (time > stationManager->getNextStation()->GetTimelapse()) {
+            timeService->SetTime(stationManager->getNextStation()->GetTimelapse());
+        }
+        else
+            timeService->SetTime(time);
     }
 }

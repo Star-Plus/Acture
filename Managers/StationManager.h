@@ -25,7 +25,7 @@ namespace SPI {
 
         bool stationed = false;
 
-        StationNetwork network;
+        StationNetwork* network;
 
     public:
         StationManager();
@@ -35,7 +35,7 @@ namespace SPI {
         
         StationPtr getPrevStation() { return prevStation; }
         StationPtr getNextStation() { return nextStation; }
-        StationNetwork& getNetwork() { return network; }
+        StationNetwork* getNetwork() { return network; }
         unsigned int getLastThread() { return threadHistory.top(); }
 
         void InitializeStation();

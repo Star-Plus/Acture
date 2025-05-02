@@ -7,23 +7,25 @@
 namespace SPI {
 
     Verse::Verse()
-    {
-    }
+    = default;
 
-    Verse::~Verse()
-    {
+    Verse::~Verse() {
+        for (auto* track : tracks) {
+            delete track;
+        }
     }
 
     void Verse::CreateTrack()
     {
-        Track newTrack;
-        tracks.push_back(newTrack);
+        auto* newTrack = new Track();
+        tracks.emplace_back(newTrack);
     }
 
-    void Verse::DeleteTrack(unsigned int track){
+    void Verse::DeleteTrack(unsigned int idx){
 
-        if (track >= tracks.size()) return;
-        tracks.erase(tracks.begin() + track);
+        if (idx >= tracks.size()) return;
+        delete tracks[idx];
+        tracks.erase(tracks.begin() + idx);
     }
 
     double Verse::CalculateLength()

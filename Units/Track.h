@@ -5,6 +5,7 @@
 #ifndef INTRASTATION_TRACK_H
 #define INTRASTATION_TRACK_H
 
+#include <iostream>
 #include <map>
 #include "Clip.h"
 #include "../Types/MEDIA_TYPE.h"
@@ -21,11 +22,13 @@ namespace SPI {
     public:
 
         Track();
+        ~Track();
 
-        void AddClip(double position, const Clip& clip);
+        void AddClip(double position, Clip* clip);
         void RemoveClip(double position);
         void ClearClips();
-        const Clip& GetClip(double position) const;
+
+        Clip* GetClip(double position) const;
 
         double GetLength() const {
             return length;
@@ -34,9 +37,17 @@ namespace SPI {
         MEDIA_TYPE GetMediaType() const {
             return mediaType;
         }
+        
+        void SetMediaType(const MEDIA_TYPE type) {
+            mediaType = type;
+        }
+
+        size_t GetClipCount() const {
+            return clips.size();
+        }
 
 
-        std::map<double, Clip> clips;
+        std::map<double, Clip*> clips;
     };
 
 }

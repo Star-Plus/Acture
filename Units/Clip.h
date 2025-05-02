@@ -16,6 +16,7 @@ namespace SPI {
         double end = 0;
 
         bool operator>(const Clip &other) const;
+        bool operator!() const;
     };
 
 }

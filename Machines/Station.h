@@ -10,6 +10,7 @@
 
 #include "../Types/STATION_TYPE.h"
 #include "../Units/Verse.h"
+#include "../Core/Core.h"
 
 namespace SPI {
 
@@ -17,41 +18,46 @@ namespace SPI {
     protected:
 
         STATION_TYPE type;
-        double timelapse;
-        double lifetime = 0.0;
+        timelapse_t timelapse;
+        lifetime_t lifetime = 0.0;
         std::vector<Verse*> verses;
         std::vector<std::shared_ptr<Station>> stations;
         std::shared_ptr<Station> parent = nullptr;
-        unsigned int threadId = 0;
+        ID_T id = 0;
+        thread_t threadId = 0;
 
         bool pause = true;
 
     public:
-        Station(STATION_TYPE type, double timelapse);
+        Station(STATION_TYPE type, timelapse_t timelapse);
         virtual ~Station();
 
         virtual std::shared_ptr<Station> self() { return shared_from_this(); }
         std::shared_ptr<Station> GetParent() const { return parent; }
-        unsigned int GetThreadId() const { return threadId; }
+
+        ID_T GetId() const { return id; }
+        void SetId(const ID_T id) { this->id = id; }
+
+        thread_t GetThreadId() const { return threadId; }
 
         STATION_TYPE GetType() const { return type; }
 
         bool WillPause() const { return pause; }
 
-        double GetTimelapse() const { return timelapse; }
-        void SetTimelapse(const double timelapse) { this->timelapse = timelapse; }
+        timelapse_t GetTimelapse() const { return timelapse; }
+        void SetTimelapse(const timelapse_t timelapse) { this->timelapse = timelapse; }
 
-        double GetLifetime() const { return lifetime; }
-        void SetLifetime(const double lifetime) { this->lifetime = lifetime; }
+        lifetime_t GetLifetime() const { return lifetime; }
+        void SetLifetime(const lifetime_t lifetime) { this->lifetime = lifetime; }
 
         std::vector<std::shared_ptr<Station>> GetAllConnectedStations() const { return stations; }
         std::vector<Verse*> GetAllConnectedVerses() const { return verses; }
 
-        std::shared_ptr<Station> GetConnectedStation(unsigned int thread) const;
-        Verse* GetConnectedVerse(unsigned int idx) const;
+        std::shared_ptr<Station> GetConnectedStation(thread_t thread) const;
+        Verse* GetConnectedVerse(thread_t idx) const;
 
-        void ConnectStation(unsigned int thread, const std::shared_ptr<Station>& station);
-        void DisconnectStation(unsigned int thread);
+        void ConnectStation(thread_t thread, const std::shared_ptr<Station>& station);
+        void DisconnectStation(thread_t thread);
         void PushStation(const std::shared_ptr<Station>& station);
 
         unsigned int getThreadCount() const { return stations.size(); }

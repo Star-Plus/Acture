@@ -9,7 +9,7 @@
 
 namespace SPI {
 
-    Station::Station(const STATION_TYPE type, const double timelapse) : type(type), timelapse(timelapse) {}
+    Station::Station(const STATION_TYPE type, const timelapse_t timelapse) : type(type), timelapse(timelapse) {}
 
     Station::~Station() {
         verses.clear();
@@ -19,14 +19,14 @@ namespace SPI {
         stations.clear();
     }
 
-    Verse* Station::GetConnectedVerse(const unsigned int idx) const {
+    Verse* Station::GetConnectedVerse(const thread_t idx) const {
         if (idx >= verses.size()) {
             throw std::out_of_range("Index out of range");
         }
         return verses[idx];
     }
 
-    void Station::ConnectStation(const unsigned int thread, const std::shared_ptr<Station>& station) {
+    void Station::ConnectStation(const thread_t thread, const std::shared_ptr<Station>& station) {
         if (thread >= this->stations.size()) {
             stations.resize(thread + 1);
             verses.resize(thread + 1);
@@ -39,9 +39,11 @@ namespace SPI {
         verses[thread] = new Verse();
     }
 
-    void Station::DisconnectStation(const unsigned int thread) {
-        stations[thread].reset();
-        stations[thread] = nullptr;
+    void Station::DisconnectStation(const thread_t thread) {
+
+        if (thread >= stations.size()) return;
+
+        stations.erase(stations.begin() + thread);
 
         if (verses[thread] != nullptr) {
             delete verses[thread];
@@ -49,7 +51,7 @@ namespace SPI {
         }
     }
 
-    std::shared_ptr<Station> Station::GetConnectedStation(const unsigned int thread) const {
+    std::shared_ptr<Station> Station::GetConnectedStation(const thread_t thread) const {
         if (thread >= stations.size()) return nullptr;
         return stations[thread];
     }

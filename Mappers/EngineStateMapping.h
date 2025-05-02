@@ -16,6 +16,7 @@
 #include "../States/EngineStationedPauseState.h"
 #include "../States/EngineStationedRunState.h"
 #include "../States/EngineTravellingState.h"
+#include "../States/EngineRewindState.h"
 
 namespace SPI {
     inline std::unique_ptr<EngineStateBase> CreateEngineState(const EngineState state) {
@@ -30,6 +31,8 @@ namespace SPI {
                 return std::make_unique<EngineStationedPauseState>();
             case EngineState::FORWARDING:
                 return std::make_unique<EngineTravellingState>();
+            case EngineState::REWINDING:
+                return std::make_unique<EngineRewindState>();
             default:
                 return std::make_unique<EngineEmptyState>();
         }

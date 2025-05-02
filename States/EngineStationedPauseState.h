@@ -5,18 +5,12 @@
 #ifndef ENGINESTATIONEDPAUSESTATE_H
 #define ENGINESTATIONEDPAUSESTATE_H
 
-#include "EngineStateBase.h"
-#include "../Managers/MediaBinder.h"
-#include "../Managers/TimeService.h"
+#include "EngineStationedState.h"
 
 namespace SPI {
-    class EngineStationedPauseState final : public EngineStateBase {
+    class EngineStationedPauseState final : public EngineStationedState {
     public:
         ~EngineStationedPauseState() override = default;
-
-        void OnEnter(Application& app) override {
-            std::cout << "EngineState: Entering paused station state." << std::endl;
-        }
 
         void OnUpdate(Application& app, const float deltaTime) override {
 

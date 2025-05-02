@@ -4,23 +4,15 @@
 
 #ifndef ENGINESTATIONEDRUNSTATE_H
 #define ENGINESTATIONEDRUNSTATE_H
-
-#include "EngineStateBase.h"
-#include "../Managers/MediaBinder.h"
 #include "../Managers/TimeService.h"
 
 namespace SPI {
-    class EngineStationedRunState final : public EngineStateBase {
+    class EngineStationedRunState final : public EngineStationedState {
     public:
         ~EngineStationedRunState() override = default;
 
-        void OnEnter(Application& app) override {
-            std::cout << "EngineState: Entering running station state." << std::endl;
-        }
-
         void OnUpdate(Application& app, const float deltaTime) override {
-            TimeService::Get().StepTime(deltaTime);
-            auto clips = MediaBinder::Get().DataToBind();
+            app.GetTimeService()->StepTime(deltaTime);
 
             if (app.GetCurrentThread() != -1)
                 app.TranslateState(EngineState::FORWARDING);

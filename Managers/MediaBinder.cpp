@@ -16,35 +16,43 @@ namespace SPI {
 
     void MediaBinder::BindVerse(Verse* verse) {
         this->verse = verse;
-        this->clipIndices.clear();
     }
 
     void MediaBinder::UnbindVerse() {
         this->verse = nullptr;
-        this->clipIndices.clear();
     }
 
-    std::vector<Clip> MediaBinder::DataToBind() const {
+    std::vector<Clip> MediaBinder::DataToBind(const double currentTime) {
 
         if (verse == nullptr) {
+            std::cout << "No verse bound to MediaBinder" << std::endl;
             return {};
         }
 
-        auto tracks = verse->tracks;
-        std::vector<Clip> clips;
+        const auto tracks = verse->tracks;
 
-        auto currentTime = TimeService::Get().GetPlayerTime();
+        std::vector<Clip> clipsToBind(tracks.size());
+        currentClips.resize(tracks.size());
 
-        for (auto& track: tracks) {
-            for (auto& clip: track.clips) {
-                if (currentTime <= clip.first+clip.second.end-clip.second.start) {
-                    clips.push_back(clip.second);
+        for (size_t i = 0; i < tracks.size(); i++) {
+            const auto& track = tracks[i];
+            for (auto clip: track->clips) {
+
+                if (currentTime <= clip.first + clip.second->end - clip.second->start && currentTime >= clip.first + clip.second->start) {
+                    if (currentClips[i] != clip.second) {
+                        currentClips[i] = clip.second;
+                        clipsToBind[i] = *clip.second;
+                    }
+                    else {
+                        clipsToBind[i] = Clip();
+                    }
+
                     break;
                 }
             }
         }
 
-        return clips;
+        return clipsToBind;
 
     }
 

@@ -30,7 +30,7 @@ namespace SPI {
         void ResetPlayingTime();
 
         void StepTime(double delta);
-        void SetLastTime(double lastTime) { this->lastTime = lastTime; }
+        void SetLastTime(const double lastTime) { this->lastTime = lastTime; }
 
     };
 

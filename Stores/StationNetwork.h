@@ -5,6 +5,7 @@
 #ifndef INTRASTATION_STATIONSTORE_H
 #define INTRASTATION_STATIONSTORE_H
 
+#include "../Core/Core.h"
 #include "../Machines/Station.h"
 #include "../Core/RootStation.h"
 
@@ -15,26 +16,26 @@ namespace SPI {
     class StationNetwork {
 
         std::shared_ptr<RootStation> root;
-        std::map<unsigned int, StationPtr> idCache;
-        unsigned int count{};
+        std::map<ID_T, StationPtr> idCache;
+        stations_size_t count = 0;
 
-        void RecursiveSearchById(unsigned int id, StationPtr currentStation, unsigned int& count, StationPtr& stationFound);
-
+        void RecursiveSearchById(ID_T id, const StationPtr& currentStation, ID_T currentId, unsigned int level, StationPtr& stationFound);
         void RecursiveSearchWithinTimeRange(double start, double end, StationPtr currentStation, std::vector<StationPtr>& stationsFound);
+        ID_T SearchForId(const StationPtr& station);
 
     public:
         StationNetwork();
-        StationNetwork(std::shared_ptr<RootStation> rootStation);
+        explicit StationNetwork(std::shared_ptr<RootStation> rootStation);
         ~StationNetwork();
 
         StationPtr GetRoot() { return root; }
-        unsigned int Size() { return count; }
+        unsigned int Size() const { return count; }
 
-        StationPtr GetStationById(unsigned int id);
+        StationPtr GetStationById(ID_T id);
         std::vector<StationPtr> GetStationsWithinTimeRange(double start, double end);
 
-        void PushStation(unsigned int subRootId, const StationPtr& stationToPush);
-        void RemoveStation(unsigned int id);
+        ID_T PushStation(ID_T subRootId, const StationPtr& stationToPush);
+        void RemoveStation(ID_T id);
 
     };
 }

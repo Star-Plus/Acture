@@ -1,6 +1,8 @@
 #pragma once
 
+#include "Channels/StationChannel.h"
 #include "Core/EngineState.h"
+#include "Events/StationCallEvent.h"
 #include "Managers/TimeService.h"
 #include "Managers/StationManager.h"
 #include "Managers/MediaBinder.h"
@@ -13,11 +15,17 @@ namespace SPI
         std::unique_ptr<EngineStateBase> appState;
         EngineState stateType;
 
-        TimeService timeService;
-        StationManager stationManager;
-        MediaBinder mediaBinder;
+        TimeService* timeService;
+        StationManager* stationManager;
+        MediaBinder* mediaBinder;
 
         unsigned int currentThread = 0;
+
+        // Events
+        StationCallEvent stationCallEvent;
+
+        // Pipeline
+        StationChannel stationChannel;
 
     public:
 
@@ -33,10 +41,36 @@ namespace SPI
 
         double GetCurrentTime() const
         {
-            return timeService.GetMainTime();
+            return timeService->GetMainTime();
+        }
+
+        StationNetwork* GetStationNetwork()
+        {
+            return stationManager->getNetwork();
+        }
+        MediaBinder* GetMediaBinder()
+        {
+            return mediaBinder;
+        }
+        TimeService* GetTimeService()
+        {
+            return timeService;
+        }
+        StationManager* GetStationManager()
+        {
+            return stationManager;
+        }
+        StationCallEvent* GetStationCallEvent()
+        {
+            return &stationCallEvent;
+        }
+        StationChannel* GetStationChannel()
+        {
+            return &stationChannel;
         }
 
         void OnUpdate(float deltaTime);
+        std::vector<Clip> DataToBind();
 
         void Play();
         void Pause();
@@ -44,6 +78,7 @@ namespace SPI
         void Rewind();
         void Serialize();
         void Deserialize();
+        void ScrubTime(float time) const;
 
         friend class Editor;
     };

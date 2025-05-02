@@ -17,8 +17,7 @@ namespace SPI {
         }
 
         void OnUpdate(Application& app, const float deltaTime) override {
-            TimeService::Get().StepTime(deltaTime);
-            auto clips = MediaBinder::Get().DataToBind();
+            app.GetTimeService()->StepTime(deltaTime);
 
             if (StationManager::Get().CheckTimelapse(TimeService::Get().GetMainTime())) {
                 if (StationManager::Get().getNextStation()->WillPause())

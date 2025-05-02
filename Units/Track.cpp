@@ -4,19 +4,25 @@
 
 #include "Track.h"
 
+#include <iostream>
 #include <ranges>
+#include <functional>
 
 namespace SPI {
 
     Track::Track() : length(0.0) {}
+    Track::~Track() {
+        for (auto& clip : clips) {
+            delete clip.second;
+        }
+    }
 
-    void Track::AddClip(double position, const Clip &clip) {
-        clips.insert(std::pair(position, clip));
-
+    void Track::AddClip(double position, Clip *clip) {
+        clips.insert({position, clip});
         CalculateLength();
     }
 
-    void Track::RemoveClip(double position) {
+    void Track::RemoveClip(const double position) {
         if (auto it = clips.find(position); it != clips.end()) {
             clips.erase(it);
         }
@@ -30,7 +36,7 @@ namespace SPI {
         CalculateLength();
     }
 
-    const Clip &Track::GetClip(double position) const {
+    Clip* Track::GetClip(const double position) const {
         auto it = clips.find(position);
         if (it != clips.end()) {
             return it->second;
@@ -41,7 +47,7 @@ namespace SPI {
     double Track::CalculateLength() {
         const auto lastClip = clips.rbegin();
 
-        length = lastClip->first + lastClip->second.end - lastClip->second.start;
+        length = lastClip->first + lastClip->second->end - lastClip->second->start;
 
         return length;
     }

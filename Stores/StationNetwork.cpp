@@ -4,10 +4,12 @@
 
 #include "StationNetwork.h"
 
+#include <iostream>
 #include <utility>
 
-namespace SPI {
+#include "../Utils/SMath.h"
 
+namespace SPI {
 
     StationNetwork::StationNetwork() = default;
 
@@ -19,31 +21,31 @@ namespace SPI {
         root.reset();
     }
 
-    void StationNetwork::RecursiveSearchById(unsigned int id, StationPtr currentStation, unsigned int& count, StationPtr& stationFound) {
+    void StationNetwork::RecursiveSearchById(const ID_T id, const StationPtr& currentStation, const ID_T currentId, const unsigned int level, StationPtr& stationFound) {
         if (idCache.find(id) != idCache.end()) {
             stationFound = idCache[id];
             return;
         }
 
-        if (id == count){
+        if (currentId == id) {
             stationFound = currentStation;
             idCache[id] = currentStation;
             return;
         }
 
         for (int i = 0; i < currentStation->getThreadCount(); i++){
-            count++;
+            const ID_T nextId = SMath::EncodeBitPack(level+1, currentStation->GetThreadId(), i);
 
             if (!stationFound)
-                RecursiveSearchById(id, currentStation->GetConnectedStation(i), count, stationFound);
+                RecursiveSearchById(id, currentStation->GetConnectedStation(i), nextId, level+1, stationFound);
+
         }
     }
 
-    StationPtr StationNetwork::GetStationById(unsigned int id) {
+    StationPtr StationNetwork::GetStationById(const ID_T id) {
         StationPtr stationFound = nullptr;
-        unsigned int count = 0;
 
-        RecursiveSearchById(id, root, count, stationFound);
+        RecursiveSearchById(id, root, 0.0, 0, stationFound);
 
         return stationFound;
     }
@@ -67,16 +69,25 @@ namespace SPI {
         return stationsFound;
     }
 
-    void StationNetwork::PushStation(const unsigned int subRootId, const StationPtr& stationToPush) {
+    ID_T StationNetwork::PushStation(const ID_T subRootId, const StationPtr& stationToPush) {
         const auto subRootStation = GetStationById(subRootId);
 
-        if (!subRootStation) return;
+        if (!subRootStation) {
+            throw std::invalid_argument("Cannot push to a non-existing station");
+        }
 
         subRootStation->PushStation(stationToPush);
         count++;
+
+        const auto decoded = SMath::DecodeBitPack(subRootId);
+        const auto id = SMath::EncodeBitPack(decoded[0] + 1, subRootStation->GetThreadId(), stationToPush->GetThreadId());
+
+        stationToPush->SetId(id);
+
+        return id;
     }
 
-    void StationNetwork::RemoveStation(unsigned int id) {
+    void StationNetwork::RemoveStation(const ID_T id) {
 
         if (id <= 0) {
             throw std::invalid_argument("Cannot remove the root station");
@@ -90,6 +101,15 @@ namespace SPI {
         stationToRemove.reset();
         idCache.erase(id);
         count--;
+    }
+
+    ID_T StationNetwork::SearchForId(const StationPtr& station) {
+        for (const auto& [key, value] : idCache) {
+            if (value == station) {
+                return key;
+            }
+        }
+        return -1.0f;
     }
 
 }
