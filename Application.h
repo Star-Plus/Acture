@@ -48,22 +48,24 @@ namespace SPI
         {
             return stationManager->getNetwork();
         }
-        MediaBinder* GetMediaBinder()
-        {
+
+        MediaBinder* GetMediaBinder() const {
             return mediaBinder;
         }
-        TimeService* GetTimeService()
-        {
+
+        TimeService* GetTimeService() const {
             return timeService;
         }
-        StationManager* GetStationManager()
-        {
+
+        StationManager* GetStationManager() const {
             return stationManager;
         }
+
         StationCallEvent* GetStationCallEvent()
         {
             return &stationCallEvent;
         }
+
         StationChannel* GetStationChannel()
         {
             return &stationChannel;

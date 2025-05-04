@@ -37,6 +37,8 @@ namespace SPI {
         ID_T PushStation(ID_T subRootId, const StationPtr& stationToPush);
         void RemoveStation(ID_T id);
 
+        friend class StationNetworkSerializer;
+
     };
 }
 

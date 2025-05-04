@@ -5,6 +5,8 @@
 #ifndef CHANNEL_H
 #define CHANNEL_H
 
+#include <memory>
+
 namespace SPI {
 
     template <typename T>

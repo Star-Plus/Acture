@@ -27,6 +27,10 @@ namespace SPI {
         void setQuestion(const str &question) { this->question = question; }
 
         std::vector<str> getOptions() { return options; }
+        std::string getOption(const size_t idx) const {
+            if (idx >= options.size()) return "";
+            return options[idx];
+        }
         void setOption(const size_t idx, const str& newOption) { 
             if (idx >= options.size()) options.push_back(newOption);
             this->options[idx] = newOption;

@@ -4,28 +4,54 @@
 
 #include "McqSerializer.h"
 
-#include <Features/MCQStation.h>
+#include "../MCQStation.h"
 
 namespace SPI {
 
-    McqSerializer::McqSerializer(const StationPtr &station, std::fstream& out)
-        : StationSerializer(station, out) {}
+    McqSerializer::McqSerializer(std::fstream& out)
+        : StationSerializer(out) {}
 
     void McqSerializer::SerializeBody() {
         const auto& mcq = std::dynamic_pointer_cast<MCQStation>(station);
 
         const auto question = mcq->getQuestion();
-        const auto questionSize = question.size();
+        const uint32_t questionSize = question.size();
 
-        out.write(reinterpret_cast<const char *>(&questionSize), sizeof(question.size()));
-        out.write(question.data(), questionSize);
+        out.write(reinterpret_cast<const char *>(&questionSize), sizeof(questionSize));
+        out.write(question.c_str(), questionSize);
 
-        for (int i = 0; i < mcq->getOptions().size(); ++i) {
-            const auto& option = mcq->getOptions()[i];
-            const auto optionSize = option.size();
+        const auto optionsCount = mcq->getOptions().size();
+        out.write(reinterpret_cast<const char *>(&optionsCount), sizeof(optionsCount));
+
+        for (int i = 0; i < optionsCount; ++i) {
+            const auto& option = mcq->getOption(i);
+            const auto optionSize = static_cast<uint32_t>(option.length());
             out.write(reinterpret_cast<const char *>(&optionSize), sizeof(optionSize));
-            out.write(option.data(), optionSize);
+            out.write(option.c_str(), optionSize);
         }
+    }
+
+    void McqSerializer::DeserializeBody() {
+        const auto& mcq = std::dynamic_pointer_cast<MCQStation>(station);
+        uint32_t questionSize;
+        out.read(reinterpret_cast<char *>(&questionSize), sizeof(questionSize));
+        std::string question(questionSize, '\0');
+        out.read(question.data(), questionSize);
+
+
+        mcq->setQuestion(question);
+
+        size_t optionsCount;
+        out.read(reinterpret_cast<char *>(&optionsCount), sizeof(optionsCount));
+
+        for (int i = 0; i < optionsCount; ++i) {
+            uint32_t optionSize;
+            out.read(reinterpret_cast<char *>(&optionSize), sizeof(optionSize));
+            std::string option(optionSize, '\0');
+            out.read(option.data(), optionSize);
+            mcq->setOption(i, option);
+        }
+
     }
 
 }

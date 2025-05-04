@@ -4,7 +4,7 @@
 
 #ifndef STATIONCHANNEL_H
 #define STATIONCHANNEL_H
-#include <iostream>
+
 #include <utility>
 
 #include "Channel.h"

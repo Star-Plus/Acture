@@ -6,9 +6,11 @@
 
 #include <utility>
 
+#include "../Mappers/StationTypeMapper.h"
+
 namespace SPI {
 
-    StationSerializer::StationSerializer(StationPtr station, std::fstream &out)
+    StationSerializer::StationSerializer(std::fstream &out)
         : station(std::move(station)), out(out)
     {}
 
@@ -17,17 +19,36 @@ namespace SPI {
         const timelapse_t timeLapse = this->station->GetTimelapse();
         const lifetime_t lifeTime = this->station->GetLifetime();
         const STATION_TYPE type = this->station->GetType();
-        const n_threads_t nThreads = this->station->getThreadCount();
 
+        this->out.write(reinterpret_cast<const char*>(&type), sizeof(type));
         this->out.write(reinterpret_cast<const char*>(&timeLapse), sizeof(timeLapse));
         this->out.write(reinterpret_cast<const char*>(&lifeTime), sizeof(lifeTime));
-        this->out.write(reinterpret_cast<const char*>(&type), sizeof(type));
-        this->out.write(reinterpret_cast<const char*>(&nThreads), sizeof(nThreads));
     }
 
-    void StationSerializer::Perform() {
+    void StationSerializer::DeserializeBase(const STATION_TYPE type) {
+        timelapse_t timeLapse;
+        lifetime_t lifeTime;
+
+        this->out.read(reinterpret_cast<char*>(&timeLapse), sizeof(timeLapse));
+
+        this->station = CreateStation(type, timeLapse);
+
+        this->out.read(reinterpret_cast<char*>(&lifeTime), sizeof(lifeTime));
+
+        // this->station->SetLifetime(lifeTime);
+    }
+
+    void StationSerializer::Serialize(const StationPtr& station) {
+        this->station = station;
         this->SerializeBase();
         this->SerializeBody();
+    }
+
+    StationPtr& StationSerializer::Deserialize(const STATION_TYPE type) {
+        this->DeserializeBase(type);
+        this->DeserializeBody();
+
+        return this->station;
     }
 
 
