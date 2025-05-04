@@ -6,7 +6,7 @@
 #define STATIONSERIALIZER_H
 
 #include <fstream>
-#include "Stores/StationNetwork.h"
+#include "../Stores/StationNetwork.h"
 
 namespace SPI {
     class StationSerializer {

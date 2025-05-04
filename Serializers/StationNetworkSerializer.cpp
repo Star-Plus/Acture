@@ -6,7 +6,7 @@
 #include "StationNetworkSerializer.h"
 
 #include "VerseSerializer.h"
-#include "Mappers/StationSerialzerMapper.h"
+#include "../Mappers/StationSerialzerMapper.h"
 
 namespace SPI {
 

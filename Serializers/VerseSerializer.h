@@ -7,7 +7,7 @@
 
 #include <fstream>
 
-#include "Units/Verse.h"
+#include "../Units/Verse.h"
 
 namespace SPI {
     class VerseSerializer {

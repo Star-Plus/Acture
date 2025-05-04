@@ -6,7 +6,7 @@
 
 #include <utility>
 
-#include "Mappers/StationTypeMapper.h"
+#include "../Mappers/StationTypeMapper.h"
 
 namespace SPI {
 
