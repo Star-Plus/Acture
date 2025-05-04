@@ -9,7 +9,7 @@
 #include <fstream>
 #include <queue>
 
-#include "Application.h"
+#include "../Application.h"
 #include "../Stores/StationNetwork.h"
 
 namespace SPI {
