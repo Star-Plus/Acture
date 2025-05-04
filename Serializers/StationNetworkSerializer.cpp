@@ -195,7 +195,6 @@ namespace SPI {
             verse->CreateTrack();
             const auto clip = new Clip{this->path+"/"+to_string(video_pos)+"-"+std::to_string(videoSize), 0, child->GetTimelapse()};
             verse->tracks[0]->AddClip(0, clip);
-
         }
 
         return station;
