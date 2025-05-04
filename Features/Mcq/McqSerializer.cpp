@@ -4,7 +4,7 @@
 
 #include "McqSerializer.h"
 
-#include <Features/MCQStation.h>
+#include "../MCQStation.h"
 
 namespace SPI {
 
