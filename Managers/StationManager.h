@@ -44,6 +44,8 @@ namespace SPI {
         void ReverseTravel();
 
         bool CheckTimelapse(double time);
+
+        friend class StationNetworkSerializer;
     };
 
 }

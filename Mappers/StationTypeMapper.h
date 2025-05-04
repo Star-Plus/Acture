@@ -12,6 +12,8 @@
 namespace SPI {
     inline std::shared_ptr<Station> CreateStation(const STATION_TYPE type, const double timelapse) {
         switch (type) {
+            case STATION_TYPE::ROOT:
+                return std::make_shared<RootStation>(RootStation());
             case STATION_TYPE::MCQ:
                 return std::make_shared<MCQStation>(MCQStation(timelapse));
             case STATION_TYPE::LEAF:
