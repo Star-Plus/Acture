@@ -27,3 +27,6 @@
 
 // Channels
 #include "Channels/StationChannel.h"
+
+// Serializers
+#include "Serializers/StationNetworkSerializer.cpp"
