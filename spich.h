@@ -30,3 +30,9 @@
 
 // Serializers
 #include "Serializers/StationNetworkSerializer.cpp"
+#include "Serializers/StationSerializer.cpp"
+#include "Serializers/VerseSerializer.cpp"
+#include "Features/Mcq/McqSerializer.cpp"
+
+// Mappers
+#include "Mappers/StationSerialzerMapper.h"

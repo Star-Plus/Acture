@@ -19,6 +19,8 @@ namespace SPI {
             const auto fileSize = videoFile.tellg();
             videoFile.seekg(0, std::ios::beg);
 
+            out.write(reinterpret_cast<const char*>(&fileSize), sizeof(fileSize));
+
             std::vector<char> buffer(fileSize);
             if (!videoFile.read(buffer.data(), fileSize)) {
                 throw std::runtime_error("Failed to read video file");

@@ -19,6 +19,7 @@ namespace SPI {
         Application *app;
         StationNetwork* network;
         std::fstream out;
+        std::string path;
 
         std::queue<std::streampos> stations_positions;
         std::queue<std::streampos> videos_positions;

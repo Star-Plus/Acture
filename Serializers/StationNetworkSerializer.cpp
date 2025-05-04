@@ -121,6 +121,8 @@ namespace SPI {
             throw std::runtime_error("Failed to open file for reading");
         }
 
+        this->path = loadPath;
+
         DeserializeNetwork();
 
         out.close();
@@ -184,6 +186,15 @@ namespace SPI {
             videos_positions.pop();
             this->out.seekg(video_pos);
 
+            // Read size of the video
+            std::streampos videoSize;
+            this->out.read(reinterpret_cast<char*>(&videoSize), sizeof(std::streampos));
+
+            const auto verse = station->GetConnectedVerse(station->getThreadCount()-1);
+
+            verse->CreateTrack();
+            const auto clip = new Clip{this->path+"/"+to_string(video_pos)+"-"+std::to_string(videoSize), 0, child->GetTimelapse()};
+            verse->tracks[0]->AddClip(0, clip);
         }
 
         return station;
