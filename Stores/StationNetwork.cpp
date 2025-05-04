@@ -109,7 +109,7 @@ namespace SPI {
                 return key;
             }
         }
-        return -1.0f;
+        return 0;
     }
 
 }
