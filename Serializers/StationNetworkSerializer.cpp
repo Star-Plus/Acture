@@ -162,6 +162,9 @@ namespace SPI {
     }
 
     StationPtr StationNetworkSerializer::RecursiveDeserialize() {
+
+        std::cout << "Current position: " << this->out.tellg() << std::endl;
+
         // Read the station type
         STATION_TYPE type;
         this->out.read(reinterpret_cast<char*>(&type), sizeof(uint8_t));
