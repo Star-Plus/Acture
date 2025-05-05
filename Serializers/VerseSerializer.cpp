@@ -4,7 +4,7 @@
 
 #include "VerseSerializer.h"
 
-#include "Core/Core.h"
+#include "../Core/Core.h"
 
 namespace SPI {
 
