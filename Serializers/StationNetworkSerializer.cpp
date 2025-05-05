@@ -28,11 +28,11 @@ namespace SPI {
     }
 
     void StationNetworkSerializer::SerializeNetwork() {
-        const stations_size_t stationCount = this->network->Size();
-        this->out.write(reinterpret_cast<const char*>(&stationCount), sizeof(stationCount));
-
-        const videos_size_t videosCount = stationCount-1;
-        this->out.write(reinterpret_cast<const char*>(&videosCount), sizeof(videosCount));
+        // const stations_size_t stationCount = this->network->Size();
+        // this->out.write(reinterpret_cast<const char*>(&stationCount), sizeof(stationCount));
+        //
+        // const videos_size_t videosCount = stationCount-1;
+        // this->out.write(reinterpret_cast<const char*>(&videosCount), sizeof(videosCount));
 
         const location_t location = 0;
         this->firstvideo_position = this->out.tellp();
@@ -146,11 +146,11 @@ namespace SPI {
 
         delete network;
 
-        stations_size_t stationCount;
-        this->out.read(reinterpret_cast<char*>(&stationCount), sizeof(stationCount));
-
-        videos_size_t videosCount;
-        this->out.read(reinterpret_cast<char*>(&videosCount), sizeof(videosCount));
+        // stations_size_t stationCount;
+        // this->out.read(reinterpret_cast<char*>(&stationCount), sizeof(stationCount));
+        //
+        // videos_size_t videosCount;
+        // this->out.read(reinterpret_cast<char*>(&videosCount), sizeof(videosCount));
 
         location_t firstVideoLocation;
         this->out.read(reinterpret_cast<char*>(&firstVideoLocation), sizeof(location_t));
@@ -166,6 +166,8 @@ namespace SPI {
         STATION_TYPE type;
         this->out.read(reinterpret_cast<char*>(&type), sizeof(type));
 
+        std::cout << "Station type: " << (int)type << std::endl;
+
         // Read the station data
         const auto station_serializer = CreateStationSerializer(type, this->out);
         const auto station = station_serializer->Deserialize(type);
@@ -174,18 +176,22 @@ namespace SPI {
         n_threads_t nThreads;
         this->out.read(reinterpret_cast<char*>(&nThreads), sizeof(nThreads));
 
+        std::cout << "Number of threads: " << nThreads << std::endl;
+
         std::queue<std::streampos> stations_positions;
         std::queue<std::streampos> videos_positions;
 
         for (auto i = 0; i < nThreads; i++) {
             std::streampos position;
             this->out.read(reinterpret_cast<char*>(&position), sizeof(location_t));
+            std::cout << "Station position: " << position << std::endl;
             stations_positions.push(position);
         }
 
         for (auto i = 0; i < nThreads; i++) {
             std::streampos position;
             this->out.read(reinterpret_cast<char*>(&position), sizeof(location_t));
+            std::cout << "Video position: " << position << std::endl;
             videos_positions.push(position);
         }
 
