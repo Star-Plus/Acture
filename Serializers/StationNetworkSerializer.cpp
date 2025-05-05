@@ -139,6 +139,7 @@ namespace SPI {
         out.close();
 
         app->GetStationManager()->network = network;
+        app->TranslateState(EngineState::PAUSED);
 
     }
 
