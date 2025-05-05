@@ -11,12 +11,18 @@ namespace SPI {
             const auto path = track->clips[0]->mediaPath;
             // Read file from path
             std::ifstream videoFile(path, std::ios::binary);
-            if (!videoFile) {
+            if (!videoFile.is_open()) {
                 throw std::runtime_error("Failed to open video file");
             }
 
             videoFile.seekg(0, std::ios::end);
             const auto fileSize = videoFile.tellg();
+
+
+            if (fileSize == -1) {
+                throw std::runtime_error("Failed to get video file size");
+            }
+
             videoFile.seekg(0, std::ios::beg);
 
             out.write(reinterpret_cast<const char*>(&fileSize), sizeof(fileSize));
@@ -27,6 +33,8 @@ namespace SPI {
             }
 
             out.write(buffer.data(), fileSize);
+            out.flush();
+
             videoFile.close();
         }
     }

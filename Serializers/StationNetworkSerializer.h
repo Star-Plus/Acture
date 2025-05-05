@@ -24,6 +24,8 @@ namespace SPI {
         std::queue<std::streampos> stations_positions;
         std::queue<std::streampos> videos_positions;
 
+        std::streampos firstvideo_position;
+
         void SerializeNetwork();
         void DeserializeNetwork();
 
@@ -35,6 +37,10 @@ namespace SPI {
 
         void ExportSpiFile(const std::string& savePath);
         void ImportSpiFile(const std::string& loadPath);
+
+        location_t GetFirstVideoPosition() const {
+            return this->firstvideo_position;
+        }
 
     };
 

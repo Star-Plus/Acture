@@ -34,7 +34,10 @@ namespace SPI {
         const videos_size_t videosCount = stationCount-1;
         this->out.write(reinterpret_cast<const char*>(&videosCount), sizeof(videosCount));
 
-        // const location_t location = 0;
+        const location_t location = 0;
+        this->firstvideo_position = this->out.tellp();
+        out.write(reinterpret_cast<const char*>(&location), sizeof(location_t));
+
         // for (auto i = 0; i < stationCount; i++) {
         //     stations_positions.push(this->out.tellp());
         //     this->out.write(reinterpret_cast<const char *>(&location), sizeof(location_t));
@@ -54,7 +57,6 @@ namespace SPI {
             return;
         }
 
-
         // Serialize the station
 
         if (!mode) {
@@ -62,24 +64,25 @@ namespace SPI {
             station_serializer->Serialize(station);
             const n_threads_t nThreads = station->getThreadCount();
             this->out.write(reinterpret_cast<const char*>(&nThreads), sizeof(nThreads));
+            constexpr
+            location_t location = 0;
+
+
+            // Reserve space for the stations locations
+            for (auto i = 0; i < station->getThreadCount(); i++) {
+                stations_positions.push(this->out.tellp());
+                this->out.write(reinterpret_cast<const char *>(&location), sizeof(location_t));
+            }
+
+            // Reserve space for the videos locations
+            for (auto i = 0; i < station->getThreadCount(); i++) {
+                videos_positions.push(this->out.tellp());
+                this->out.write(reinterpret_cast<const char *>(&location), sizeof(location_t));
+            }
+
         }
 
-        constexpr
-        location_t location = 0;
-
-        // Reserve space for the stations locations
-        for (auto i = 0; i < station->getThreadCount(); i++) {
-            stations_positions.push(this->out.tellp());
-            this->out.write(reinterpret_cast<const char *>(&location), sizeof(location_t));
-        }
-
-        // Reserve space for the videos locations
-        for (auto i = 0; i < station->getThreadCount(); i++) {
-            videos_positions.push(this->out.tellp());
-            this->out.write(reinterpret_cast<const char *>(&location), sizeof(location_t));
-        }
-
-        for (auto i = 0; i < station->getThreadCount(); i++) {
+        for (short i = station->getThreadCount()-1; i >= 0; i--) {
 
             if (!mode) {
                 // write the station position
@@ -91,20 +94,28 @@ namespace SPI {
                 this->out.seekp(stationLocation);
             }
 
-
-            const auto child = station->GetConnectedStation(i);
-            this->RecursiveSerialize(child, mode);
-
             if (mode) {
+
                 const auto videoLocation = this->out.tellp();
+
                 this->out.seekp(videos_positions.front());
                 this->out.write(reinterpret_cast<const char *>(&videoLocation), sizeof(location_t));
                 videos_positions.pop();
+
+                if (station->GetId() == 0) {
+                    // Write the first video position
+                    this->out.seekp(this->firstvideo_position);
+                    this->out.write(reinterpret_cast<const char *>(&videoLocation), sizeof(location_t));
+                }
+
                 this->out.seekp(videoLocation);
 
                 VerseSerializer verseSerializer (this->out);
                 verseSerializer.Serialize(station->GetConnectedVerse(i));
             }
+
+            const auto child = station->GetConnectedStation(i);
+            this->RecursiveSerialize(child, mode);
         }
     }
 
@@ -140,6 +151,12 @@ namespace SPI {
 
         videos_size_t videosCount;
         this->out.read(reinterpret_cast<char*>(&videosCount), sizeof(videosCount));
+
+        location_t firstVideoLocation;
+        this->out.read(reinterpret_cast<char*>(&firstVideoLocation), sizeof(location_t));
+
+        this->firstvideo_position = firstVideoLocation;
+        std::cout << "First video position: " << firstVideoLocation << std::endl;
 
         network = new StationNetwork(std::dynamic_pointer_cast<RootStation>(RecursiveDeserialize()));
     }
