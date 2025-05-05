@@ -31,9 +31,13 @@ namespace SPI {
 
         this->out.read(reinterpret_cast<char*>(&timeLapse), sizeof(timeLapse));
 
+        std::cout << "Timelapse: " << timeLapse << std::endl;
+
         this->station = CreateStation(type, timeLapse);
 
         this->out.read(reinterpret_cast<char*>(&lifeTime), sizeof(lifeTime));
+
+        std::cout << "Lifetime: " << lifeTime << std::endl;
 
         // this->station->SetLifetime(lifeTime);
     }
