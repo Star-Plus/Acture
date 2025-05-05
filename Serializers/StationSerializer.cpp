@@ -20,7 +20,7 @@ namespace SPI {
         const lifetime_t lifeTime = this->station->GetLifetime();
         const STATION_TYPE type = this->station->GetType();
 
-        this->out.write(reinterpret_cast<const char*>(&type), sizeof(type));
+        this->out.write(reinterpret_cast<const char*>(&type), sizeof(uint8_t));
         this->out.write(reinterpret_cast<const char*>(&timeLapse), sizeof(timeLapse));
         this->out.write(reinterpret_cast<const char*>(&lifeTime), sizeof(lifeTime));
     }

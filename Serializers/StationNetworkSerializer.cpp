@@ -164,7 +164,7 @@ namespace SPI {
     StationPtr StationNetworkSerializer::RecursiveDeserialize() {
         // Read the station type
         STATION_TYPE type;
-        this->out.read(reinterpret_cast<char*>(&type), sizeof(type));
+        this->out.read(reinterpret_cast<char*>(&type), sizeof(uint8_t));
 
         std::cout << "Station type: " << (int)type << std::endl;
 
