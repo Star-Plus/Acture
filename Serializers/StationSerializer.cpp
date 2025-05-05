@@ -11,7 +11,7 @@
 namespace SPI {
 
     StationSerializer::StationSerializer(std::fstream &out)
-        : station(std::move(station)), out(out)
+        : out(out)
     {}
 
     void StationSerializer::SerializeBase() const {
