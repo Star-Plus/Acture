@@ -4,6 +4,8 @@
 
 #include "VerseSerializer.h"
 
+#include "Core/Core.h"
+
 namespace SPI {
 
     void VerseSerializer::Serialize(const Verse* verse) {
@@ -16,8 +18,7 @@ namespace SPI {
             }
 
             videoFile.seekg(0, std::ios::end);
-            const auto fileSize = videoFile.tellg();
-
+            const location_t fileSize = videoFile.tellg();
 
             if (fileSize == -1) {
                 throw std::runtime_error("Failed to get video file size");

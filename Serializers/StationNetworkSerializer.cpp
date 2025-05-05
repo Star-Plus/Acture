@@ -214,7 +214,7 @@ namespace SPI {
 
             // Read size of the video
             std::streampos videoSize;
-            this->out.read(reinterpret_cast<char*>(&videoSize), sizeof(std::streampos));
+            this->out.read(reinterpret_cast<char*>(&videoSize), sizeof(location_t));
 
             const auto verse = station->GetConnectedVerse(station->getThreadCount()-1);
 
