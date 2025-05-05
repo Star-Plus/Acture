@@ -38,6 +38,7 @@ namespace SPI {
         std::string question(questionSize, '\0');
         out.read(question.data(), questionSize);
 
+        std::cout << "Question: " << question << std::endl;
 
         mcq->setQuestion(question);
 
@@ -49,6 +50,7 @@ namespace SPI {
             out.read(reinterpret_cast<char *>(&optionSize), sizeof(optionSize));
             std::string option(optionSize, '\0');
             out.read(option.data(), optionSize);
+            std::cout << "Option " << i << ": " << option << std::endl;
             mcq->setOption(i, option);
         }
 
