@@ -178,18 +178,18 @@ namespace SPI {
 
         std::cout << "Number of threads: " << (int)nThreads << std::endl;
 
-        std::queue<std::streampos> stations_positions;
-        std::queue<std::streampos> videos_positions;
+        std::queue<location_t> stations_positions;
+        std::queue<location_t> videos_positions;
 
         for (auto i = 0; i < nThreads; i++) {
-            std::streampos position;
+            location_t position;
             this->out.read(reinterpret_cast<char*>(&position), sizeof(location_t));
             std::cout << "Station position: " << position << std::endl;
             stations_positions.push(position);
         }
 
         for (auto i = 0; i < nThreads; i++) {
-            std::streampos position;
+            location_t position;
             this->out.read(reinterpret_cast<char*>(&position), sizeof(location_t));
             std::cout << "Video position: " << position << std::endl;
             videos_positions.push(position);
@@ -216,7 +216,7 @@ namespace SPI {
             const auto verse = station->GetConnectedVerse(station->getThreadCount()-1);
 
             verse->CreateTrack();
-            const auto clip = new Clip{this->path+"/"+to_string(video_pos)+"-"+std::to_string(videoSize), 0, child->GetTimelapse()};
+            const auto clip = new Clip{this->path+"/"+std::to_string(video_pos)+"-"+std::to_string(videoSize), 0, child->GetTimelapse()};
             verse->tracks[0]->AddClip(0, clip);
         }
 
