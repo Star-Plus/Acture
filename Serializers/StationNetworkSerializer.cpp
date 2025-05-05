@@ -210,7 +210,6 @@ namespace SPI {
 
             const auto video_pos = videos_positions.front();
             videos_positions.pop();
-            this->out.seekg(video_pos);
 
             const auto verse = station->GetConnectedVerse(station->getThreadCount()-1);
 
