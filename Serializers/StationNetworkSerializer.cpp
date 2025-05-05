@@ -208,21 +208,14 @@ namespace SPI {
             const auto child = RecursiveDeserialize();
             station->PushStation(child);
 
-            const auto current_pos = this->out.tellg();
             const auto video_pos = videos_positions.front();
             videos_positions.pop();
             this->out.seekg(video_pos);
 
-            // Read size of the video
-            std::streampos videoSize;
-            this->out.read(reinterpret_cast<char*>(&videoSize), sizeof(location_t));
-            std::cout << "Video size: " << videoSize << std::endl;
-            this->out.seekg(current_pos);
-
             const auto verse = station->GetConnectedVerse(station->getThreadCount()-1);
 
             verse->CreateTrack();
-            const auto clip = new Clip{this->path+"/"+std::to_string(video_pos)+"-"+std::to_string(videoSize), 0, child->GetTimelapse()};
+            const auto clip = new Clip{this->path+"/"+std::to_string(video_pos), 0, child->GetTimelapse()};
             verse->tracks[0]->AddClip(0, clip);
         }
 
