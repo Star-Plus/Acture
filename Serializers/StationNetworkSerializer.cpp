@@ -208,6 +208,7 @@ namespace SPI {
             const auto child = RecursiveDeserialize();
             station->PushStation(child);
 
+            const auto current_pos = this->out.tellg();
             const auto video_pos = videos_positions.front();
             videos_positions.pop();
             this->out.seekg(video_pos);
@@ -215,6 +216,8 @@ namespace SPI {
             // Read size of the video
             std::streampos videoSize;
             this->out.read(reinterpret_cast<char*>(&videoSize), sizeof(location_t));
+            std::cout << "Video size: " << videoSize << std::endl;
+            this->out.seekg(current_pos);
 
             const auto verse = station->GetConnectedVerse(station->getThreadCount()-1);
 

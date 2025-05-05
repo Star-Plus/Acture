@@ -34,7 +34,6 @@ namespace SPI {
             }
 
             out.write(buffer.data(), fileSize);
-            out.flush();
 
             videoFile.close();
         }
