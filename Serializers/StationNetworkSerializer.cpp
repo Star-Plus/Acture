@@ -176,7 +176,7 @@ namespace SPI {
         n_threads_t nThreads;
         this->out.read(reinterpret_cast<char*>(&nThreads), sizeof(nThreads));
 
-        std::cout << "Number of threads: " << nThreads << std::endl;
+        std::cout << "Number of threads: " << (int)nThreads << std::endl;
 
         std::queue<std::streampos> stations_positions;
         std::queue<std::streampos> videos_positions;
