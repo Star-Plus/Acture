@@ -20,7 +20,7 @@ namespace SPI {
         out.write(reinterpret_cast<const char *>(&questionSize), sizeof(questionSize));
         out.write(question.c_str(), questionSize);
 
-        const auto optionsCount = mcq->getOptions().size();
+        const uint32_t optionsCount = mcq->getOptions().size();
         out.write(reinterpret_cast<const char *>(&optionsCount), sizeof(optionsCount));
 
         for (int i = 0; i < optionsCount; ++i) {
@@ -36,13 +36,13 @@ namespace SPI {
         uint32_t questionSize;
         out.read(reinterpret_cast<char *>(&questionSize), sizeof(questionSize));
         std::string question(questionSize, '\0');
-        out.read(question.data(), questionSize);
+        out.read(&question[0], questionSize);
 
         std::cout << "Question: " << question << std::endl;
 
         mcq->setQuestion(question);
 
-        size_t optionsCount;
+        uint32_t optionsCount;
         out.read(reinterpret_cast<char *>(&optionsCount), sizeof(optionsCount));
 
         for (uint32_t i = 0; i < optionsCount; ++i) {
