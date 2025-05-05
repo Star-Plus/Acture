@@ -45,11 +45,13 @@ namespace SPI {
         size_t optionsCount;
         out.read(reinterpret_cast<char *>(&optionsCount), sizeof(optionsCount));
 
-        for (int i = 0; i < optionsCount; ++i) {
+        for (uint32_t i = 0; i < optionsCount; ++i) {
             uint32_t optionSize;
             out.read(reinterpret_cast<char *>(&optionSize), sizeof(optionSize));
+
             std::string option(optionSize, '\0');
-            out.read(option.data(), optionSize);
+            out.read(&option[0], optionSize);
+
             std::cout << "Option " << i << ": " << option << std::endl;
             mcq->setOption(i, option);
         }
