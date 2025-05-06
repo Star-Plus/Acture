@@ -50,6 +50,9 @@ namespace SPI {
     bool StationManager::CheckTimelapse(const double time) {
         if (nextStation == nullptr) return false;
         if (time >= nextStation->GetTimelapse() && !stationed) {
+
+            if (nextStation->GetType() == STATION_TYPE::LEAF) return false;
+
             stationed = true;
             return true;
         }
