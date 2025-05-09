@@ -10,14 +10,14 @@
 #include "../Serializers/NoBodySerializer.h"
 
 namespace SPI {
-    inline StationSerializer* CreateStationSerializer(const STATION_TYPE type, std::fstream &out) {
+    inline StationSerializer* CreateStationSerializer(const STATION_TYPE type, std::ostream &out, std::istream &in) {
         switch (type) {
             case STATION_TYPE::ROOT:
-                return new NoBodySerializer(out);
+                return new NoBodySerializer(out, in);
             case STATION_TYPE::LEAF:
-                return new NoBodySerializer(out);
+                return new NoBodySerializer(out, in);
             case STATION_TYPE::MCQ:
-                return new McqSerializer(out);
+                return new McqSerializer(out, in);
             default:
                 throw std::runtime_error("Unknown station type");
         }

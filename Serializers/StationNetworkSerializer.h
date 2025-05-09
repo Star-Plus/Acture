@@ -26,16 +26,17 @@ namespace SPI {
 
         std::streampos firstvideo_position;
 
-        void SerializeNetwork();
+        void SerializeNetwork(std::ostream& out);
         void DeserializeNetwork();
 
-        void RecursiveSerialize(const StationPtr& station, bool mode);
+        void RecursiveSerialize(std::ostream& out, const StationPtr& station, bool mode);
         StationPtr RecursiveDeserialize();
 
     public:
         explicit StationNetworkSerializer(Application* );
 
         void ExportSpiFile(const std::string& savePath);
+        std::vector<uint8_t> ExportSpiBuffer();
         void ImportSpiFile(const std::string& loadPath);
 
         location_t GetFirstVideoPosition() const {

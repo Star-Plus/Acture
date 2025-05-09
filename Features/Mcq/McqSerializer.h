@@ -10,7 +10,7 @@ namespace SPI {
 
     class McqSerializer final : public StationSerializer {
     public:
-        explicit McqSerializer(std::fstream& out);
+        explicit McqSerializer(std::ostream& out, std::istream& in);
         ~McqSerializer() override = default;
     protected:
         void SerializeBody() override;

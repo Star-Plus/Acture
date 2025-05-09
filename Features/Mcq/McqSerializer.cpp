@@ -8,8 +8,8 @@
 
 namespace SPI {
 
-    McqSerializer::McqSerializer(std::fstream& out)
-        : StationSerializer(out) {}
+    McqSerializer::McqSerializer(std::ostream& out, std::istream& in)
+        : StationSerializer(out, in) {}
 
     void McqSerializer::SerializeBody() {
         const auto& mcq = std::dynamic_pointer_cast<MCQStation>(station);
@@ -34,23 +34,23 @@ namespace SPI {
     void McqSerializer::DeserializeBody() {
         const auto& mcq = std::dynamic_pointer_cast<MCQStation>(station);
         uint32_t questionSize;
-        out.read(reinterpret_cast<char *>(&questionSize), sizeof(questionSize));
+        in.read(reinterpret_cast<char *>(&questionSize), sizeof(questionSize));
         std::string question(questionSize, '\0');
-        out.read(&question[0], questionSize);
+        in.read(&question[0], questionSize);
 
         std::cout << "Question: " << question << std::endl;
 
         mcq->setQuestion(question);
 
         uint32_t optionsCount;
-        out.read(reinterpret_cast<char *>(&optionsCount), sizeof(optionsCount));
+        in.read(reinterpret_cast<char *>(&optionsCount), sizeof(optionsCount));
 
         for (uint32_t i = 0; i < optionsCount; ++i) {
             uint32_t optionSize;
-            out.read(reinterpret_cast<char *>(&optionSize), sizeof(optionSize));
+            in.read(reinterpret_cast<char *>(&optionSize), sizeof(optionSize));
 
             std::string option(optionSize, '\0');
-            out.read(&option[0], optionSize);
+            in.read(&option[0], optionSize);
 
             std::cout << "Option " << i << ": " << option << std::endl;
             mcq->setOption(i, option);

@@ -10,8 +10,8 @@
 
 namespace SPI {
 
-    StationSerializer::StationSerializer(std::fstream &out)
-        : out(out)
+    StationSerializer::StationSerializer(std::ostream &out, std::istream &in)
+        : out(out), in(in)
     {}
 
     void StationSerializer::SerializeBase() const {
@@ -29,13 +29,13 @@ namespace SPI {
         timelapse_t timeLapse;
         lifetime_t lifeTime;
 
-        this->out.read(reinterpret_cast<char*>(&timeLapse), sizeof(timeLapse));
+        this->in.read(reinterpret_cast<char*>(&timeLapse), sizeof(timeLapse));
 
         std::cout << "Timelapse: " << timeLapse << std::endl;
 
         this->station = CreateStation(type, timeLapse);
 
-        this->out.read(reinterpret_cast<char*>(&lifeTime), sizeof(lifeTime));
+        this->in.read(reinterpret_cast<char*>(&lifeTime), sizeof(lifeTime));
 
         std::cout << "Lifetime: " << lifeTime << std::endl;
 

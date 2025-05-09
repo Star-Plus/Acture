@@ -15,19 +15,29 @@ namespace SPI {
     StationNetworkSerializer::StationNetworkSerializer(Application* app) : app(app), network(app->GetStationNetwork()) {}
 
     void StationNetworkSerializer::ExportSpiFile(const std::string &savePath) {
-        this->out.open(savePath, std::ios::out | std::ios::binary);
+        std::ofstream fileStream;
+        fileStream.open(savePath, std::ios::out | std::ios::binary);
 
-        if (!this->out.is_open()) {
+        if (!fileStream.is_open()) {
             throw std::runtime_error("Failed to open file for writing");
         }
 
-        this->SerializeNetwork();
+        this->SerializeNetwork(fileStream);
 
-        this->out.close();
+        fileStream.close();
         std::cout << "File saved successfully at " << savePath << std::endl;
     }
 
-    void StationNetworkSerializer::SerializeNetwork() {
+    std::vector<uint8_t> StationNetworkSerializer::ExportSpiBuffer() {
+        std::ostringstream oss;
+        this->SerializeNetwork(oss);
+        std::string str = oss.str();
+        std::vector<uint8_t> buffer(str.begin(), str.end());
+        return buffer;
+    }
+
+
+    void StationNetworkSerializer::SerializeNetwork(std::ostream& out) {
         // const stations_size_t stationCount = this->network->Size();
         // this->out.write(reinterpret_cast<const char*>(&stationCount), sizeof(stationCount));
         //
@@ -47,12 +57,12 @@ namespace SPI {
         //     this->out.write(reinterpret_cast<const char *>(&location), sizeof(location_t));
         // }
 
-        RecursiveSerialize(network->GetRoot(), false);
-        RecursiveSerialize(network->GetRoot(), true);
+        RecursiveSerialize(out, network->GetRoot(), false);
+        RecursiveSerialize(out, network->GetRoot(), true);
 
     }
 
-    void StationNetworkSerializer::RecursiveSerialize(const StationPtr& station, const bool mode=false) {
+    void StationNetworkSerializer::RecursiveSerialize(std::ostream& out, const StationPtr& station, const bool mode=false) {
         if (station == nullptr) {
             return;
         }
@@ -60,7 +70,7 @@ namespace SPI {
         // Serialize the station
 
         if (!mode) {
-            const auto station_serializer = CreateStationSerializer(station->GetType(), this->out);
+            const auto station_serializer = CreateStationSerializer(station->GetType(), this->out, this->out);
             station_serializer->Serialize(station);
             const n_threads_t nThreads = station->getThreadCount();
             this->out.write(reinterpret_cast<const char*>(&nThreads), sizeof(nThreads));
@@ -115,7 +125,7 @@ namespace SPI {
             }
 
             const auto child = station->GetConnectedStation(i);
-            this->RecursiveSerialize(child, mode);
+            this->RecursiveSerialize(out, child, mode);
         }
     }
 
@@ -177,7 +187,7 @@ namespace SPI {
         std::cout << "Station type: " << (int)type << std::endl;
 
         // Read the station data
-        const auto station_serializer = CreateStationSerializer(type, this->out);
+        const auto station_serializer = CreateStationSerializer(type, this->out, this->out);
         const auto station = station_serializer->Deserialize(type);
 
         // Read number of threads
