@@ -14,6 +14,7 @@ namespace SPI {
             // Read file from path
             std::ifstream videoFile(path, std::ios::binary);
             if (!videoFile.is_open()) {
+                std::cout << "Failed to open video file: " << path << std::endl;
                 throw std::runtime_error("Failed to open video file");
             }
 
