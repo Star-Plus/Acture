@@ -40,24 +40,10 @@ namespace SPI {
 
 
     void StationNetworkSerializer::SerializeNetwork(std::ostream& out, const bool fileMode) {
-        // const stations_size_t stationCount = this->network->Size();
-        // this->out.write(reinterpret_cast<const char*>(&stationCount), sizeof(stationCount));
-        //
-        // const videos_size_t videosCount = stationCount-1;
-        // this->out.write(reinterpret_cast<const char*>(&videosCount), sizeof(videosCount));
 
         const location_t location = 0;
         this->firstvideo_position = out.tellp();
         out.write(reinterpret_cast<const char*>(&location), sizeof(location_t));
-
-        // for (auto i = 0; i < stationCount; i++) {
-        //     stations_positions.push(this->out.tellp());
-        //     this->out.write(reinterpret_cast<const char *>(&location), sizeof(location_t));
-        // }
-        // for (auto i = 0; i < videosCount; i++) {
-        //     videos_positions.push(this->out.tellp());
-        //     this->out.write(reinterpret_cast<const char *>(&location), sizeof(location_t));
-        // }
 
         RecursiveSerialize(out, network->GetRoot(), fileMode,false);
         RecursiveSerialize(out, network->GetRoot(), fileMode, true);
