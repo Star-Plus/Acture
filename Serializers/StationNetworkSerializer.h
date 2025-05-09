@@ -26,10 +26,10 @@ namespace SPI {
 
         std::streampos firstvideo_position;
 
-        void SerializeNetwork(std::ostream& out);
+        void SerializeNetwork(std::ostream& out, bool fileMode=true);
         void DeserializeNetwork();
 
-        void RecursiveSerialize(std::ostream& out, const StationPtr& station, bool mode);
+        void RecursiveSerialize(std::ostream& out, const StationPtr& station, bool ,bool);
         StationPtr RecursiveDeserialize();
 
     public:

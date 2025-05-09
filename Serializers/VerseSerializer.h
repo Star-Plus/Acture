@@ -18,7 +18,7 @@ namespace SPI {
         explicit VerseSerializer(std::ostream& out) : out(out) {}
         ~VerseSerializer() = default;
 
-        void Serialize(const Verse* verse);
+        void Serialize(const Verse* verse, bool mode = true);
         void Deserialize();
     };
 }

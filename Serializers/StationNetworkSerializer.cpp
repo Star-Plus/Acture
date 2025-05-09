@@ -32,14 +32,14 @@ namespace SPI {
 
     std::vector<uint8_t> StationNetworkSerializer::ExportSpiBuffer() {
         std::ostringstream oss;
-        this->SerializeNetwork(oss);
+        this->SerializeNetwork(oss, false);
         std::string str = oss.str();
         std::vector<uint8_t> buffer(str.begin(), str.end());
         return buffer;
     }
 
 
-    void StationNetworkSerializer::SerializeNetwork(std::ostream& out) {
+    void StationNetworkSerializer::SerializeNetwork(std::ostream& out, const bool fileMode) {
         // const stations_size_t stationCount = this->network->Size();
         // this->out.write(reinterpret_cast<const char*>(&stationCount), sizeof(stationCount));
         //
@@ -59,19 +59,19 @@ namespace SPI {
         //     this->out.write(reinterpret_cast<const char *>(&location), sizeof(location_t));
         // }
 
-        RecursiveSerialize(out, network->GetRoot(), false);
-        RecursiveSerialize(out, network->GetRoot(), true);
+        RecursiveSerialize(out, network->GetRoot(), fileMode,false);
+        RecursiveSerialize(out, network->GetRoot(), fileMode, true);
 
     }
 
-    void StationNetworkSerializer::RecursiveSerialize(std::ostream& out, const StationPtr& station, const bool mode=false) {
+    void StationNetworkSerializer::RecursiveSerialize(std::ostream& out, const StationPtr& station, const bool fileMode, const bool verseMode=false) {
         if (station == nullptr) {
             return;
         }
 
         // Serialize the station
 
-        if (!mode) {
+        if (!verseMode) {
             const auto station_serializer = CreateStationSerializer(station->GetType(), this->out, this->out);
             station_serializer->Serialize(station);
             const n_threads_t nThreads = station->getThreadCount();
@@ -96,7 +96,7 @@ namespace SPI {
 
         for (short i = station->getThreadCount()-1; i >= 0; i--) {
 
-            if (!mode) {
+            if (!verseMode) {
                 // write the station position
                 const auto stationLocation = this->out.tellp();
                 this->out.seekp(stations_positions.front());
@@ -106,7 +106,7 @@ namespace SPI {
                 this->out.seekp(stationLocation);
             }
 
-            if (mode) {
+            if (verseMode) {
 
                 const auto videoLocation = this->out.tellp();
 
@@ -123,11 +123,11 @@ namespace SPI {
                 this->out.seekp(videoLocation);
 
                 VerseSerializer verseSerializer (this->out);
-                verseSerializer.Serialize(station->GetConnectedVerse(i));
+                verseSerializer.Serialize(station->GetConnectedVerse(i), fileMode);
             }
 
             const auto child = station->GetConnectedStation(i);
-            this->RecursiveSerialize(out, child, mode);
+            this->RecursiveSerialize(out, child, fileMode, verseMode);
         }
     }
 
