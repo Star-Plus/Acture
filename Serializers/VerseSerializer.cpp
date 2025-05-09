@@ -8,13 +8,13 @@
 
 namespace SPI {
 
-    void VerseSerializer::Serialize(const Verse* verse, bool mode) {
+    void VerseSerializer::Serialize(const Verse* verse, const bool mode) {
         for (const auto track : verse->tracks) {
             const auto path = track->clips[0]->mediaPath;
 
             // Check if type of out is fstream or ostream
             if (mode) {
-
+                std::cout << "Writing video file: " << path << std::endl;
                 // Read file from path
                 std::ifstream videoFile(path, std::ios::binary);
                 if (!videoFile.is_open()) {

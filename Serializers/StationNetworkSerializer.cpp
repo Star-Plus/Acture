@@ -47,7 +47,7 @@ namespace SPI {
         // this->out.write(reinterpret_cast<const char*>(&videosCount), sizeof(videosCount));
 
         const location_t location = 0;
-        this->firstvideo_position = this->out.tellp();
+        this->firstvideo_position = out.tellp();
         out.write(reinterpret_cast<const char*>(&location), sizeof(location_t));
 
         // for (auto i = 0; i < stationCount; i++) {
@@ -72,24 +72,24 @@ namespace SPI {
         // Serialize the station
 
         if (!verseMode) {
-            const auto station_serializer = CreateStationSerializer(station->GetType(), this->out, this->out);
+            const auto station_serializer = CreateStationSerializer(station->GetType(), out, this->out);
             station_serializer->Serialize(station);
             const n_threads_t nThreads = station->getThreadCount();
-            this->out.write(reinterpret_cast<const char*>(&nThreads), sizeof(nThreads));
+            out.write(reinterpret_cast<const char*>(&nThreads), sizeof(nThreads));
             constexpr
             location_t location = 0;
 
 
             // Reserve space for the stations locations
             for (auto i = 0; i < station->getThreadCount(); i++) {
-                stations_positions.push(this->out.tellp());
-                this->out.write(reinterpret_cast<const char *>(&location), sizeof(location_t));
+                stations_positions.push(out.tellp());
+                out.write(reinterpret_cast<const char *>(&location), sizeof(location_t));
             }
 
             // Reserve space for the videos locations
             for (auto i = 0; i < station->getThreadCount(); i++) {
-                videos_positions.push(this->out.tellp());
-                this->out.write(reinterpret_cast<const char *>(&location), sizeof(location_t));
+                videos_positions.push(out.tellp());
+                out.write(reinterpret_cast<const char *>(&location), sizeof(location_t));
             }
 
         }
@@ -98,31 +98,31 @@ namespace SPI {
 
             if (!verseMode) {
                 // write the station position
-                const auto stationLocation = this->out.tellp();
-                this->out.seekp(stations_positions.front());
-                this->out.write(reinterpret_cast<const char *>(&stationLocation), sizeof(location_t));
+                const auto stationLocation = out.tellp();
+                out.seekp(stations_positions.front());
+                out.write(reinterpret_cast<const char *>(&stationLocation), sizeof(location_t));
                 stations_positions.pop();
                 // Go back to the original position
-                this->out.seekp(stationLocation);
+                out.seekp(stationLocation);
             }
 
             if (verseMode) {
 
-                const auto videoLocation = this->out.tellp();
+                const auto videoLocation = out.tellp();
 
-                this->out.seekp(videos_positions.front());
-                this->out.write(reinterpret_cast<const char *>(&videoLocation), sizeof(location_t));
+                out.seekp(videos_positions.front());
+                out.write(reinterpret_cast<const char *>(&videoLocation), sizeof(location_t));
                 videos_positions.pop();
 
                 if (station->GetId() == 0) {
                     // Write the first video position
-                    this->out.seekp(this->firstvideo_position);
-                    this->out.write(reinterpret_cast<const char *>(&videoLocation), sizeof(location_t));
+                    out.seekp(this->firstvideo_position);
+                    out.write(reinterpret_cast<const char *>(&videoLocation), sizeof(location_t));
                 }
 
                 this->out.seekp(videoLocation);
 
-                VerseSerializer verseSerializer (this->out);
+                VerseSerializer verseSerializer (out);
                 verseSerializer.Serialize(station->GetConnectedVerse(i), fileMode);
             }
 
