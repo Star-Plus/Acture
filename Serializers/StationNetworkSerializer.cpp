@@ -2,11 +2,13 @@
 // Created by Ahmed Mustafa on 5/2/2025.
 //
 
+#include <sstream>
 
 #include "StationNetworkSerializer.h"
 
 #include "VerseSerializer.h"
 #include "../Mappers/StationSerialzerMapper.h"
+
 
 namespace SPI {
 
