@@ -40,7 +40,7 @@ namespace SPI {
 
     void StationManager::ReverseTravel()
     {
-        if (history.empty()) return;
+        if (history.size() <= 1) return;
         nextStation = prevStation;
         prevStation = history.top();
         history.pop();

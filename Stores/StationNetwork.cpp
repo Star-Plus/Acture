@@ -96,11 +96,23 @@ namespace SPI {
         auto stationToRemove = GetStationById(id);
         if (!stationToRemove) return;
 
-        stationToRemove->GetParent()->DisconnectStation(stationToRemove->GetThreadId());
+        const auto parentStation = stationToRemove->GetParent();
+        if (!parentStation) {
+            throw std::invalid_argument("Cannot remove a station without a parent");
+        }
+
+        parentStation->DisconnectStation(stationToRemove->GetThreadId());
 
         stationToRemove.reset();
         idCache.erase(id);
         count--;
+
+        // Update IDs of all child stations
+        for (const auto& childStation : parentStation->GetAllConnectedStations()) {
+            const auto newId = SMath::EncodeBitPack(SMath::DecodeBitPack(childStation->GetId())[0] - 1, childStation->GetThreadId(), childStation->GetThreadId());
+            childStation->SetId(newId);
+            idCache[newId] = childStation;
+        }
     }
 
     ID_T StationNetwork::SearchForId(const StationPtr& station) {

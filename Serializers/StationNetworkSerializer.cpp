@@ -62,6 +62,7 @@ namespace SPI {
             station_serializer->Serialize(station);
             const n_threads_t nThreads = station->getThreadCount();
             out.write(reinterpret_cast<const char*>(&nThreads), sizeof(nThreads));
+            std::cout << "Number of threads: " << (int)nThreads << std::endl;
             constexpr
             location_t location = 0;
 
@@ -94,7 +95,7 @@ namespace SPI {
 
             if (verseMode) {
 
-                const auto videoLocation = out.tellp();
+                const location_t videoLocation = out.tellp();
 
                 out.seekp(videos_positions.front());
                 out.write(reinterpret_cast<const char *>(&videoLocation), sizeof(location_t));
@@ -102,11 +103,12 @@ namespace SPI {
 
                 if (station->GetId() == 0) {
                     // Write the first video position
+                    std::cout << "First video position: " << this->firstvideo_position << std::endl;
                     out.seekp(this->firstvideo_position);
                     out.write(reinterpret_cast<const char *>(&videoLocation), sizeof(location_t));
                 }
 
-                this->out.seekp(videoLocation);
+                out.seekp(videoLocation);
 
                 VerseSerializer verseSerializer (out);
                 verseSerializer.Serialize(station->GetConnectedVerse(i), fileMode);
@@ -148,12 +150,6 @@ namespace SPI {
     void StationNetworkSerializer::DeserializeNetwork() {
 
         delete network;
-
-        // stations_size_t stationCount;
-        // this->out.read(reinterpret_cast<char*>(&stationCount), sizeof(stationCount));
-        //
-        // videos_size_t videosCount;
-        // this->out.read(reinterpret_cast<char*>(&videosCount), sizeof(videosCount));
 
         location_t firstVideoLocation;
         this->out.read(reinterpret_cast<char*>(&firstVideoLocation), sizeof(location_t));

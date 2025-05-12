@@ -12,6 +12,8 @@ namespace SPI {
         for (const auto track : verse->tracks) {
             const auto path = track->clips[0]->mediaPath;
 
+            std::cout << "Path: " << path << std::endl;
+
             // Check if type of out is fstream or ostream
             if (mode) {
                 std::cout << "Writing video file: " << path << std::endl;
@@ -45,7 +47,8 @@ namespace SPI {
             }
             else {
                 // Write the path length
-                const uint32_t pathLength = path.length();
+                const uint32_t pathLength = path.size();
+                std::cout << "Current position: " << out.tellp() << std::endl;
                 out.write(reinterpret_cast<const char*>(&pathLength), sizeof(pathLength));
 
                 // Write the path
