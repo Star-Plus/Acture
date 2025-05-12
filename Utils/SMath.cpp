@@ -4,6 +4,9 @@
 
 #include "SMath.h"
 
+#include <bitset>
+#include <random>
+
 namespace SPI {
     unsigned short SMath::GetFloatPart(const float value) {
         float fractional = value - static_cast<int>(value);
@@ -39,4 +42,17 @@ namespace SPI {
         return result;
     }
 
+    uint16_t SMath::GenerateId() {
+        static std::bitset<sizeof(uint16_t) * 8 - 1> used;
+
+        static std::mt19937 rng{std::random_device{}()};
+        static std::uniform_int_distribution<uint16_t> dist(0, sizeof(uint16_t) * 8 - 1);
+
+        while (true) {
+            if (const uint16_t id = dist(rng); !used.test(id)) {
+                used.set(id);
+                return id;
+            }
+        }
+    }
 }

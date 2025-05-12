@@ -10,14 +10,14 @@
 #include "../Machines/Station.h"
 
 namespace SPI {
-    inline std::shared_ptr<Station> CreateStation(const STATION_TYPE type, const double timelapse) {
+    inline std::shared_ptr<Station> CreateStation(const STATION_TYPE type) {
         switch (type) {
             case STATION_TYPE::ROOT:
                 return std::make_shared<RootStation>(RootStation());
             case STATION_TYPE::MCQ:
-                return std::make_shared<MCQStation>(MCQStation(timelapse));
+                return std::make_shared<MCQStation>(MCQStation());
             case STATION_TYPE::LEAF:
-                return std::make_shared<LeafStation>(LeafStation(timelapse));
+                return std::make_shared<LeafStation>(LeafStation());
             default:
                 return nullptr;
         }

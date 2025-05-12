@@ -16,7 +16,7 @@ namespace SPI {
 
     void StationSerializer::SerializeBase() const {
 
-        const timelapse_t timeLapse = this->station->GetTimelapse();
+        const itime_t timeLapse = this->station->GetTimelapse();
         const lifetime_t lifeTime = this->station->GetLifetime();
         const STATION_TYPE type = this->station->GetType();
 
@@ -26,14 +26,14 @@ namespace SPI {
     }
 
     void StationSerializer::DeserializeBase(const STATION_TYPE type) {
-        timelapse_t timeLapse;
+        itime_t timeLapse;
         lifetime_t lifeTime;
 
         this->in.read(reinterpret_cast<char*>(&timeLapse), sizeof(timeLapse));
 
         std::cout << "Timelapse: " << timeLapse << std::endl;
 
-        this->station = CreateStation(type, timeLapse);
+        this->station = CreateStation(type);
 
         this->in.read(reinterpret_cast<char*>(&lifeTime), sizeof(lifeTime));
 

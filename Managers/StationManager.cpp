@@ -6,17 +6,15 @@
 
 namespace SPI {
 
-    StationManager* StationManager::instance = nullptr;
 
     StationManager::StationManager() : network(new StationNetwork(rootStation)) {
-        instance = this;
         nextStation = nullptr;
         this->InitializeStation();
+        rootStation.reset();
     }
 
     StationManager::~StationManager() {
         delete network;
-        instance = nullptr;
         rootStation.reset();
         prevStation.reset();
         nextStation.reset();
@@ -32,8 +30,15 @@ namespace SPI {
         if (nextStation == nullptr) return;
         history.push(prevStation);
         prevStation = nextStation;
-        nextStation = nextStation->GetConnectedStation(thread);
+        nextStation = network->GetStationById(nextStation->GetConnectedStation(thread));
         threadHistory.push(thread);
+
+        const auto willPause = nextStation->WillPause();
+        const auto newTimelapse = prevStation->GetTimelapse() + prevStation->GetConnectedVerse(thread)->GetLength() + nextStation->GetLifetime() * (willPause ? 1.0f : -1.0f);
+
+        std::cout << nextStation->GetId() << " Timelapse: " << newTimelapse << std::endl;
+
+        prevStation->SetTimelapse(newTimelapse);
 
         stationed = false;
     }

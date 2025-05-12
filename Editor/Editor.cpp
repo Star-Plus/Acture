@@ -14,8 +14,9 @@ namespace SPI {
         // Constructor implementation
     }
 
-    ID_T Editor::AddStation(const ID_T id, const STATION_TYPE type, const double timelapse) const {
-        const auto createdStation = CreateStation(type, timelapse);
+    ID_T Editor::AddStation(const ID_T id, const STATION_TYPE type, const itime_t timelapse) const {
+        const auto createdStation = CreateStation(type);
+        createdStation->SetTimelapse(timelapse);
         const ID_T createdId = this->AddStationInstance(id, createdStation);
 
         return createdId;
@@ -32,14 +33,13 @@ namespace SPI {
 
         if (app.GetCurrentState() == EngineState::EMPTY){
             app.Travel(0);
-            app.OnUpdate(0);
             app.TranslateState(EngineState::PAUSED);
         }
 
         return csId;
     }
 
-    Clip* Editor::CreateClip(std::string mediaPath, const double start, const double end) {
+    Clip* Editor::CreateClip(std::string mediaPath, const itime_t start, const itime_t end) {
         const auto clip = new Clip{std::move(mediaPath), start, end};
         return clip;
     }

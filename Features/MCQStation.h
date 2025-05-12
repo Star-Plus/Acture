@@ -17,7 +17,7 @@ namespace SPI {
         std::vector<str> options;
 
     public:
-        explicit MCQStation(const double timelapse) : Station(STATION_TYPE::MCQ, timelapse) {}
+        explicit MCQStation() : Station(STATION_TYPE::MCQ) {}
 
         std::shared_ptr<Station> self() override { 
             return std::static_pointer_cast<Station>(shared_from_this()); 

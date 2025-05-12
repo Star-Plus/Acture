@@ -3,27 +3,14 @@
 //
 
 #include "Station.h"
-
-#include <iostream>
 #include <utility>
+#include "../Stores/StationNetwork.h"
 
 namespace SPI {
 
-    Station::Station(const STATION_TYPE type, const timelapse_t timelapse) : type(type), timelapse(timelapse) {}
-
     Station::~Station() {
         verses.clear();
-        for (auto &station : stations) {
-            station.reset();
-        }
         stations.clear();
-    }
-
-    Verse* Station::GetConnectedVerse(const thread_t idx) const {
-        if (idx >= verses.size()) {
-            throw std::out_of_range("Index out of range");
-        }
-        return verses[idx];
     }
 
     void Station::ConnectStation(const thread_t thread, const std::shared_ptr<Station>& station) {
@@ -32,32 +19,30 @@ namespace SPI {
             verses.resize(thread + 1);
         }
 
-        stations[thread] = station;
-        station->parent = shared_from_this();
-        station->threadId = thread;
+        stations[thread] = station->GetId();
+        station->AddParent(shared_from_this());
 
         verses[thread] = new Verse();
     }
 
-    void Station::DisconnectStation(const thread_t thread) {
+    void Station::DisconnectStation(const ID_T id) {
 
-        if (thread >= stations.size()) return;
-
-        stations.erase(stations.begin() + thread);
-
-        if (verses[thread] != nullptr) {
-            delete verses[thread];
-            verses[thread] = nullptr;
+        auto it = std::find(stations.begin(), stations.end(), id);
+        if (it != stations.end()) {
+            const size_t index = std::distance(stations.begin(), it);
+            stations.erase(it);
+            delete verses[index];
+            verses.erase(verses.begin() + index);
         }
-    }
-
-    std::shared_ptr<Station> Station::GetConnectedStation(const thread_t thread) const {
-        if (thread >= stations.size()) return nullptr;
-        return stations[thread];
     }
 
     void Station::PushStation(const std::shared_ptr<Station>& station) {
         ConnectStation(stations.size(), station);
+    }
+
+    void Station::AddParent(const StationPtr& parent) {
+        if (parent == nullptr) return;
+        parents.push_back(parent->GetId());
     }
 
 }

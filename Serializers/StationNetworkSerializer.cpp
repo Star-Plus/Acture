@@ -83,39 +83,39 @@ namespace SPI {
 
         for (short i = station->getThreadCount()-1; i >= 0; i--) {
 
-            if (!verseMode) {
-                // write the station position
-                const auto stationLocation = out.tellp();
-                out.seekp(stations_positions.front());
-                out.write(reinterpret_cast<const char *>(&stationLocation), sizeof(location_t));
-                stations_positions.pop();
-                // Go back to the original position
-                out.seekp(stationLocation);
-            }
-
-            if (verseMode) {
-
-                const location_t videoLocation = out.tellp();
-
-                out.seekp(videos_positions.front());
-                out.write(reinterpret_cast<const char *>(&videoLocation), sizeof(location_t));
-                videos_positions.pop();
-
-                if (station->GetId() == 0) {
-                    // Write the first video position
-                    std::cout << "First video position: " << this->firstvideo_position << std::endl;
-                    out.seekp(this->firstvideo_position);
-                    out.write(reinterpret_cast<const char *>(&videoLocation), sizeof(location_t));
-                }
-
-                out.seekp(videoLocation);
-
-                VerseSerializer verseSerializer (out);
-                verseSerializer.Serialize(station->GetConnectedVerse(i), fileMode);
-            }
-
-            const auto child = station->GetConnectedStation(i);
-            this->RecursiveSerialize(out, child, fileMode, verseMode);
+            // if (!verseMode) {
+            //     // write the station position
+            //     const auto stationLocation = out.tellp();
+            //     out.seekp(stations_positions.front());
+            //     out.write(reinterpret_cast<const char *>(&stationLocation), sizeof(location_t));
+            //     stations_positions.pop();
+            //     // Go back to the original position
+            //     out.seekp(stationLocation);
+            // }
+            //
+            // if (verseMode) {
+            //
+            //     const location_t videoLocation = out.tellp();
+            //
+            //     out.seekp(videos_positions.front());
+            //     out.write(reinterpret_cast<const char *>(&videoLocation), sizeof(location_t));
+            //     videos_positions.pop();
+            //
+            //     if (station->GetId() == 0) {
+            //         // Write the first video position
+            //         std::cout << "First video position: " << this->firstvideo_position << std::endl;
+            //         out.seekp(this->firstvideo_position);
+            //         out.write(reinterpret_cast<const char *>(&videoLocation), sizeof(location_t));
+            //     }
+            //
+            //     out.seekp(videoLocation);
+            //
+            //     VerseSerializer verseSerializer (out);
+            //     verseSerializer.Serialize(station->GetConnectedVerse(i), fileMode);
+            // }
+            //
+            // const auto child = station->GetConnectedStation(i);
+            // this->RecursiveSerialize(out, child, fileMode, verseMode);
         }
     }
 

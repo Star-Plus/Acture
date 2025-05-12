@@ -7,13 +7,15 @@
 
 #include <filesystem>
 
+#include "Core/Core.h"
+
 namespace SPI {
 
     class Clip {
     public:
         std::string mediaPath;
-        double start = 0;
-        double end = 0;
+        itime_t start = 0;
+        itime_t end = 0;
 
         bool operator>(const Clip &other) const;
         bool operator!() const;

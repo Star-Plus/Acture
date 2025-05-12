@@ -14,8 +14,6 @@ namespace SPI {
 
     class StationManager {
 
-        static StationManager* instance;
-
         std::shared_ptr<RootStation> rootStation = std::make_shared<RootStation>();
         StationPtr prevStation;
         StationPtr nextStation;
@@ -31,8 +29,6 @@ namespace SPI {
         StationManager();
         ~StationManager();
 
-        static StationManager& Get() { return *instance; }
-        
         StationPtr getPrevStation() { return prevStation; }
         StationPtr getNextStation() { return nextStation; }
         StationNetwork* getNetwork() { return network; }

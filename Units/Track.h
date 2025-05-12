@@ -9,28 +9,29 @@
 #include <map>
 #include "Clip.h"
 #include "../Types/MEDIA_TYPE.h"
+#include "Core/Core.h"
 
 namespace SPI {
 
     class Track {
 
         MEDIA_TYPE mediaType = MEDIA_TYPE::NONE;
-        double length;
+        itime_t length;
 
-        double CalculateLength();
+        itime_t CalculateLength();
 
     public:
 
         Track();
         ~Track();
 
-        void AddClip(double position, Clip* clip);
-        void RemoveClip(double position);
+        void AddClip(itime_t position, Clip* clip);
+        void RemoveClip(itime_t position);
         void ClearClips();
 
-        Clip* GetClip(double position) const;
+        Clip* GetClip(itime_t position) const;
 
-        double GetLength() const {
+        itime_t GetLength() const {
             return length;
         }
 
@@ -47,7 +48,7 @@ namespace SPI {
         }
 
 
-        std::map<double, Clip*> clips;
+        std::map<itime_t, Clip*> clips;
     };
 
 }

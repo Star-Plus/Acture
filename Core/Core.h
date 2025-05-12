@@ -5,13 +5,13 @@
 #ifndef CORE_H
 #define CORE_H
 
-#define ID_T uint32_t
+#define ID_T uint16_t
 
 #define stations_size_t uint16_t
 #define videos_size_t uint16_t
 #define location_t uint32_t
 
-#define timelapse_t float
+#define itime_t float
 #define lifetime_t float
 #define n_threads_t uint8_t
 #define thread_t uint8_t

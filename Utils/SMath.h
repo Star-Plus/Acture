@@ -14,6 +14,8 @@ namespace SPI {
         static int CantorFunction(int k1, int k2);
         static uint32_t EncodeBitPack(uint16_t k1, uint16_t k2, uint16_t k3);
         static std::vector<uint16_t> DecodeBitPack(uint32_t id);
+
+        static uint16_t GenerateId();
     };
 }
 
