@@ -9,7 +9,7 @@
 #include <map>
 #include "Clip.h"
 #include "../Types/MEDIA_TYPE.h"
-#include "Core/Core.h"
+#include "../Core/Core.h"
 
 namespace SPI {
 
