@@ -39,6 +39,7 @@ namespace SPI {
         virtual std::shared_ptr<Station> self() { return shared_from_this(); }
 
         ID_T GetId() const { return id; }
+        void SetId(const ID_T id) { this->id = id; }
 
         STATION_TYPE GetType() const { return type; }
 

@@ -29,8 +29,12 @@ namespace SPI {
         StationPtr GetRoot() { return root; }
         unsigned int Size() const { return count; }
 
+        std::vector<ID_T> GetAllStationIds() const;
+        std::vector<StationPtr> GetAllStations() const;
+
         StationPtr GetStationById(ID_T id);
 
+        void AddStation(const StationPtr& station);
         ID_T PushStation(ID_T subRootId, const StationPtr& stationToPush);
         void RemoveStation(ID_T id);
 

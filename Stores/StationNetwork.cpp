@@ -7,7 +7,6 @@
 #include <iostream>
 #include <utility>
 
-#include "../Utils/SMath.h"
 
 namespace SPI {
 
@@ -23,36 +22,76 @@ namespace SPI {
         stations.clear();
     }
 
-    StationPtr StationNetwork::GetStationById(const ID_T id) {
+    std::vector<ID_T> StationNetwork::GetAllStationIds() const
+    {
+        std::vector<ID_T> ids;
+
+        ids.reserve(stations.size());
+        for (const auto& [key, value] : stations) {
+            ids.push_back(key);
+        }
+        return ids;
+    }
+
+    std::vector<StationPtr> StationNetwork::GetAllStations() const
+    {
+        std::vector<StationPtr> allStations;
+
+        allStations.reserve(stations.size());
+        for (const auto& [key, value] : stations) {
+            allStations.push_back(value);
+        }
+        return allStations;
+    }
+
+    StationPtr StationNetwork::GetStationById(const ID_T id)
+    {
 
         if (id < 0) {
+            std::cerr << "Invalid station ID: " << id << std::endl;
             throw std::invalid_argument("Cannot get the root station");
         }
 
         const auto stationFound = stations.find(id);
         if (stationFound == stations.end()) {
+            std::cerr << "Station with ID " << id << " not found." << std::endl;
             return nullptr;
         }
 
         return stationFound->second;
     }
 
-    ID_T StationNetwork::PushStation(const ID_T subRootId, const StationPtr& stationToPush) {
+    void StationNetwork::AddStation(const StationPtr &station)
+    {
+        if (station == nullptr) {
+            std::cerr << "Cannot add a null station" << std::endl;
+            throw std::invalid_argument("Cannot add a null station");
+        }
+
+        const auto id = SearchForId(station);
+        if (id != 0) {
+            std::cerr << "Station with ID " << id << " already exists." << std::endl;
+            return;
+        }
+
+        stations.insert({station->GetId(), station});
+        count++;
+    }
+
+    ID_T StationNetwork::PushStation(const ID_T subRootId, const StationPtr &stationToPush)
+    {
         const auto subRootStation = GetStationById(subRootId);
 
         if (!subRootStation) {
             throw std::invalid_argument("Cannot push to a non-existing station");
         }
 
-        const auto id = SMath::GenerateId();
-        stationToPush->id = id;
-
         subRootStation->PushStation(stationToPush);
-        stations.insert({id, stationToPush});
+        stations.insert({stationToPush->GetId(), stationToPush});
 
         count++;
 
-        return id;
+        return stationToPush->GetId();
     }
 
     void StationNetwork::RemoveStation(const ID_T id) {
