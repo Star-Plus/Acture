@@ -14,6 +14,7 @@ namespace SPI {
 
         void OnEnter(Application& app) override {
             std::cout << "EngineState: Entering running state." << std::endl;
+            app.GetStationManager()->CalculateNextTimelapse();
         }
 
         void OnUpdate(Application& app, const float deltaTime) override {

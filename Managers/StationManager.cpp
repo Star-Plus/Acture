@@ -25,6 +25,23 @@ namespace SPI {
         nextStation = rootStation;
     }
 
+    void StationManager::CalculateNextTimelapse() {
+        if (nextStation == nullptr) return;
+        const auto willPause = nextStation->WillPause();
+
+        const auto currentVerse = prevStation->GetConnectedVerse(threadHistory.top());
+        if (currentVerse == nullptr) {
+            std::cerr << "Current verse is null." << std::endl;
+            return;
+        }
+
+        currentVerse->CalculateLength();
+
+        const auto newTimelapse = prevStation->GetTimelapse() + currentVerse->GetLength() + nextStation->GetLifetime() * (willPause ? 1.0f : -1.0f);
+
+        nextStation->SetTimelapse(newTimelapse);
+    }
+
     void StationManager::Travel(const unsigned int thread)
     {
         if (nextStation == nullptr) return;
@@ -33,12 +50,7 @@ namespace SPI {
         nextStation = network->GetStationById(nextStation->GetConnectedStation(thread));
         threadHistory.push(thread);
 
-        const auto willPause = nextStation->WillPause();
-        const auto newTimelapse = prevStation->GetTimelapse() + prevStation->GetConnectedVerse(thread)->GetLength() + nextStation->GetLifetime() * (willPause ? 1.0f : -1.0f);
-
-        std::cout << nextStation->GetId() << " Timelapse: " << newTimelapse << std::endl;
-
-        prevStation->SetTimelapse(newTimelapse);
+        CalculateNextTimelapse();
 
         stationed = false;
     }
@@ -54,7 +66,7 @@ namespace SPI {
 
     bool StationManager::CheckTimelapse(const double time) {
         if (nextStation == nullptr) return false;
-        if (time >= nextStation->GetTimelapse() && !stationed) {
+        if (time >= nextStation->GetTimelapse() - callingThreashold && !stationed) {
 
             if (nextStation->GetType() == STATION_TYPE::LEAF) return false;
 

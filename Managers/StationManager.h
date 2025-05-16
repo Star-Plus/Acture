@@ -25,19 +25,22 @@ namespace SPI {
 
         StationNetwork* network;
 
+        float callingThreashold = 0.01f;
+    
     public:
         StationManager();
         ~StationManager();
-
+        
         StationPtr getPrevStation() { return prevStation; }
         StationPtr getNextStation() { return nextStation; }
         StationNetwork* getNetwork() { return network; }
         unsigned int getLastThread() { return threadHistory.top(); }
-
+        
         void InitializeStation();
-
+        
         void Travel(unsigned int thread);
         void ReverseTravel();
+        void CalculateNextTimelapse();
 
         bool CheckTimelapse(double time);
 

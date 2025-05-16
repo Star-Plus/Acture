@@ -37,8 +37,10 @@ namespace SPI {
     }
 
     void Application::Play() {
-        if (stateType == EngineState::PAUSED)
+        if (stateType == EngineState::PAUSED){
             TranslateState(EngineState::RUNNING);
+        }
+            
     }
 
     void Application::Pause() {
