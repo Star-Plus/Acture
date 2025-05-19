@@ -27,7 +27,7 @@ namespace SPI {
         ~StationNetwork();
 
         StationPtr GetRoot() { return root; }
-        unsigned int Size() const { return count; }
+        stations_size_t Size() const { return count; }
 
         std::vector<ID_T> GetAllStationIds() const;
         std::vector<StationPtr> GetAllStations() const;

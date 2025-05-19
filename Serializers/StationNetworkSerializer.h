@@ -18,7 +18,7 @@ namespace SPI {
 
         Application *app;
         StationNetwork* network;
-        std::fstream out;
+        std::fstream fStream;
         std::string path;
 
         std::queue<std::streampos> stations_positions;
@@ -29,8 +29,8 @@ namespace SPI {
         void SerializeNetwork(std::ostream& out, bool fileMode=true);
         void DeserializeNetwork();
 
-        void RecursiveSerialize(std::ostream& out, const StationPtr& station, bool ,bool);
-        StationPtr RecursiveDeserialize();
+        void MapSerialize(std::ostream& out, bool verseMode, bool fileMode);
+        StationNetwork* MapDeserialize(std::istream& in);
 
     public:
         explicit StationNetworkSerializer(Application* );

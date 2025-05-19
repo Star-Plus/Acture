@@ -44,91 +44,63 @@ namespace SPI {
         const location_t location = 0;
         this->firstvideo_position = out.tellp();
         out.write(reinterpret_cast<const char*>(&location), sizeof(location_t));
+        const auto nStations = network->Size();
+        out.write(reinterpret_cast<const char*>(&nStations), sizeof(stations_size_t));
 
-        RecursiveSerialize(out, network->GetRoot(), fileMode,false);
-        RecursiveSerialize(out, network->GetRoot(), fileMode, true);
+        MapSerialize(out, false, fileMode);
+        MapSerialize(out, true, fileMode);
 
     }
 
-    void StationNetworkSerializer::RecursiveSerialize(std::ostream& out, const StationPtr& station, const bool fileMode, const bool verseMode=false) {
-        if (station == nullptr) {
-            return;
-        }
-
-        // Serialize the station
-
-        if (!verseMode) {
-            const auto station_serializer = CreateStationSerializer(station->GetType(), out, this->out);
-            station_serializer->Serialize(station);
-            const n_threads_t nThreads = station->getThreadCount();
-            out.write(reinterpret_cast<const char*>(&nThreads), sizeof(nThreads));
-            std::cout << "Number of threads: " << (int)nThreads << std::endl;
-            constexpr
-            location_t location = 0;
-
-
-            // Reserve space for the stations locations
-            for (auto i = 0; i < station->getThreadCount(); i++) {
-                stations_positions.push(out.tellp());
-                out.write(reinterpret_cast<const char *>(&location), sizeof(location_t));
+    void StationNetworkSerializer::MapSerialize(std::ostream& out, const bool verseMode, const bool fileMode) {
+        for (const auto& station : network->GetAllStations()) {
+            if (!verseMode) {
+                const auto station_serializer = CreateStationSerializer(station->GetType(), out, this->fStream);
+                station_serializer->Serialize(station);
             }
 
-            // Reserve space for the videos locations
             for (auto i = 0; i < station->getThreadCount(); i++) {
-                videos_positions.push(out.tellp());
-                out.write(reinterpret_cast<const char *>(&location), sizeof(location_t));
+                if (verseMode) {
+                    const location_t videoLocation = out.tellp();
+
+                    out.seekp(videos_positions.front());
+                    out.write(reinterpret_cast<const char *>(&videoLocation), sizeof(location_t));
+                    videos_positions.pop();
+
+                    if (station->GetId() == 0) {
+                        // Write the first video position
+                        std::cout << "First video position: " << this->firstvideo_position << std::endl;
+                        out.seekp(this->firstvideo_position);
+                        out.write(reinterpret_cast<const char *>(&videoLocation), sizeof(location_t));
+                    }
+
+                    out.seekp(videoLocation);
+
+                    VerseSerializer verseSerializer (out);
+                    verseSerializer.Serialize(station->GetConnectedVerse(i), fileMode);
+                }
+                else {
+                    location_t location = 0;
+                    videos_positions.push(out.tellp());
+                    out.write(reinterpret_cast<const char *>(&location), sizeof(location_t));
+                }
+
             }
-
-        }
-
-        for (short i = station->getThreadCount()-1; i >= 0; i--) {
-
-            // if (!verseMode) {
-            //     // write the station position
-            //     const auto stationLocation = out.tellp();
-            //     out.seekp(stations_positions.front());
-            //     out.write(reinterpret_cast<const char *>(&stationLocation), sizeof(location_t));
-            //     stations_positions.pop();
-            //     // Go back to the original position
-            //     out.seekp(stationLocation);
-            // }
-            //
-            // if (verseMode) {
-            //
-            //     const location_t videoLocation = out.tellp();
-            //
-            //     out.seekp(videos_positions.front());
-            //     out.write(reinterpret_cast<const char *>(&videoLocation), sizeof(location_t));
-            //     videos_positions.pop();
-            //
-            //     if (station->GetId() == 0) {
-            //         // Write the first video position
-            //         std::cout << "First video position: " << this->firstvideo_position << std::endl;
-            //         out.seekp(this->firstvideo_position);
-            //         out.write(reinterpret_cast<const char *>(&videoLocation), sizeof(location_t));
-            //     }
-            //
-            //     out.seekp(videoLocation);
-            //
-            //     VerseSerializer verseSerializer (out);
-            //     verseSerializer.Serialize(station->GetConnectedVerse(i), fileMode);
-            // }
-            //
-            // const auto child = station->GetConnectedStation(i);
-            // this->RecursiveSerialize(out, child, fileMode, verseMode);
         }
     }
+
+
 
     // Importing
 
     void StationNetworkSerializer::ImportSpiFile(const std::string &loadPath) {
 
-        if (this->out.is_open()) {
-            this->out.close();
+        if (this->fStream.is_open()) {
+            this->fStream.close();
         }
 
-        this->out.open(loadPath, std::ios::in | std::ios::binary);
-        if (!this->out.is_open()) {
+        this->fStream.open(loadPath, std::ios::in | std::ios::binary);
+        if (!this->fStream.is_open()) {
             throw std::runtime_error("Failed to open file for reading");
         }
 
@@ -136,7 +108,7 @@ namespace SPI {
 
         DeserializeNetwork();
 
-        out.close();
+        fStream.close();
 
         app->GetStationManager()->network = network;
         app->GetStationManager()->prevStation = network->GetRoot();
@@ -152,72 +124,68 @@ namespace SPI {
         delete network;
 
         location_t firstVideoLocation;
-        this->out.read(reinterpret_cast<char*>(&firstVideoLocation), sizeof(location_t));
+        this->fStream.read(reinterpret_cast<char*>(&firstVideoLocation), sizeof(location_t));
 
         this->firstvideo_position = firstVideoLocation;
         std::cout << "First video position: " << firstVideoLocation << std::endl;
 
-        network = new StationNetwork(std::dynamic_pointer_cast<RootStation>(RecursiveDeserialize()));
+        network = MapDeserialize(fStream);
     }
 
-    StationPtr StationNetworkSerializer::RecursiveDeserialize() {
+    StationNetwork* StationNetworkSerializer::MapDeserialize(std::istream &in) {
 
-        std::cout << "Current position: " << this->out.tellg() << std::endl;
+        auto* network = new StationNetwork();
 
-        // Read the station type
-        STATION_TYPE type;
-        this->out.read(reinterpret_cast<char*>(&type), sizeof(uint8_t));
+        stations_size_t nStations;
+        in.read(reinterpret_cast<char*>(&nStations), sizeof(stations_size_t));
+        std::cout << "Number of stations: " << nStations << std::endl;
 
-        std::cout << "Station type: " << (int)type << std::endl;
+        while (nStations--) {
+            STATION_TYPE type;
+            // Read the station type
+            in.read(reinterpret_cast<char*>(&type), sizeof(uint8_t));
 
-        // Read the station data
-        const auto station_serializer = CreateStationSerializer(type, this->out, this->out);
-        const auto station = station_serializer->Deserialize(type);
+            std::cout << "Station type: " << (int)type << std::endl;
 
-        // Read number of threads
-        n_threads_t nThreads;
-        this->out.read(reinterpret_cast<char*>(&nThreads), sizeof(nThreads));
+            // Read the station data
+            const auto station_serializer = CreateStationSerializer(type, this->fStream, in);
+            const auto station = station_serializer->Deserialize(type);
 
-        std::cout << "Number of threads: " << (int)nThreads << std::endl;
+            network->AddStation(station);
 
-        std::queue<location_t> stations_positions;
-        std::queue<location_t> videos_positions;
+            if (station->GetId() == 0) {
+                network->root = std::dynamic_pointer_cast<RootStation>(station);
+            }
 
-        for (auto i = 0; i < nThreads; i++) {
-            location_t position;
-            this->out.read(reinterpret_cast<char*>(&position), sizeof(location_t));
-            std::cout << "Station position: " << position << std::endl;
-            stations_positions.push(position);
+            for (auto j = 0; j < station->getThreadCount(); j++) {
+                location_t position;
+                in.read(reinterpret_cast<char*>(&position), sizeof(location_t));
+                videos_positions.emplace(position);
+            }
         }
 
-        for (auto i = 0; i < nThreads; i++) {
-            location_t position;
-            this->out.read(reinterpret_cast<char*>(&position), sizeof(location_t));
-            std::cout << "Video position: " << position << std::endl;
-            videos_positions.push(position);
+        for (const auto& station : network->GetAllStations()) {
+            std::cout << "Station ID: " << station->GetId() << std::endl;
+            for (auto i = 0; i < station->getThreadCount(); i++) {
+                const auto child = network->GetStationById(station->GetConnectedStation(i));
+                station->ConnectStation(i, child);
+
+                location_t video_pos;
+                in.read(reinterpret_cast<char*>(&video_pos), sizeof(location_t));
+                std::cout << "Video position: " << video_pos << std::endl;
+
+                const auto verse = station->GetConnectedVerse(i);
+
+                verse->CreateTrack();
+                const auto clip = new Clip{this->path+"/"+std::to_string(video_pos), 0, child->GetTimelapse()};
+                verse->tracks[0]->AddClip(0, clip);
+
+            }
         }
 
-        // Read the connected stations
-        while (!stations_positions.empty() && !videos_positions.empty()) {
+        return network;
 
-            const auto station_pos = stations_positions.front();
-            stations_positions.pop();
-            this->out.seekg(station_pos);
-
-            const auto child = RecursiveDeserialize();
-            station->PushStation(child);
-
-            const auto video_pos = videos_positions.front();
-            videos_positions.pop();
-
-            const auto verse = station->GetConnectedVerse(station->getThreadCount()-1);
-
-            verse->CreateTrack();
-            const auto clip = new Clip{this->path+"/"+std::to_string(video_pos), 0, child->GetTimelapse()};
-            verse->tracks[0]->AddClip(0, clip);
-        }
-
-        return station;
     }
+
 
 }

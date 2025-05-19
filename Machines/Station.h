@@ -77,7 +77,9 @@ namespace SPI {
         void DisconnectStation(ID_T id);
         void PushStation(const std::shared_ptr<Station>& station);
 
-        unsigned int getThreadCount() const { return stations.size(); }
+        void PushId(const ID_T id) { stations.push_back(id); }
+
+        n_threads_t getThreadCount() const { return stations.size(); }
 
         friend class StationNetwork;
     };

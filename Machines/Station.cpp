@@ -4,7 +4,6 @@
 
 #include "Station.h"
 #include <utility>
-#include "../Stores/StationNetwork.h"
 
 namespace SPI {
 
@@ -16,6 +15,8 @@ namespace SPI {
     void Station::ConnectStation(const thread_t thread, const std::shared_ptr<Station>& station) {
         if (thread >= this->stations.size()) {
             stations.resize(thread + 1);
+        }
+        if (thread >= this->verses.size()) {
             verses.resize(thread + 1);
         }
 

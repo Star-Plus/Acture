@@ -19,7 +19,7 @@ namespace SPI {
             case STATION_TYPE::MCQ:
                 return new McqSerializer(out, in);
             default:
-                throw std::runtime_error("Unknown station type");
+                return new NoBodySerializer(out, in);
         }
 
     }
