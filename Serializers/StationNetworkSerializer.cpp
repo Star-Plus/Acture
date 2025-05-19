@@ -68,8 +68,6 @@ namespace SPI {
                     videos_positions.pop();
 
                     if (station->GetId() == 0) {
-                        // Write the first video position
-                        std::cout << "First video position: " << this->firstvideo_position << std::endl;
                         out.seekp(this->firstvideo_position);
                         out.write(reinterpret_cast<const char *>(&videoLocation), sizeof(location_t));
                     }
