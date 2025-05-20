@@ -11,9 +11,10 @@ namespace SPI {
     struct StationChannelSchema : std::enable_shared_from_this<StationChannelSchema> {
         STATION_TYPE stationType;
         bool willPause;
+        float lifetime = 0.0f;
 
-        StationChannelSchema(STATION_TYPE type, bool pause)
-            : stationType(type), willPause(pause) {}
+        StationChannelSchema(const STATION_TYPE type, const bool pause, const float lifetime = 0.0f)
+            : stationType(type), willPause(pause), lifetime(lifetime) {}
         virtual ~StationChannelSchema() = default;
     };
 }

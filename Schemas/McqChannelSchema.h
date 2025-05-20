@@ -15,8 +15,8 @@ namespace SPI {
         std::string question;
         std::vector<std::string> options;
 
-        McqChannelSchema(STATION_TYPE type, bool pause, std::string q, std::vector<std::string> opts)
-            : StationChannelSchema(type, pause), question(std::move(q)), options(std::move(opts)) {}
+        McqChannelSchema(const STATION_TYPE type, const bool pause, const float lifetime, std::string q, std::vector<std::string> opts)
+            : StationChannelSchema(type, pause, lifetime), question(std::move(q)), options(std::move(opts)) {}
     };
 
     inline std::ostream& operator<<(std::ostream& os, const McqChannelSchema& schema) {

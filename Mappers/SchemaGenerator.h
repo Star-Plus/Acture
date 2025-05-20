@@ -21,7 +21,8 @@ namespace SPI {
                 return std::make_shared<McqChannelSchema>(
                     McqChannelSchema{
                         mcqStation->GetType(),
-                        false,
+                        mcqStation->WillPause(),
+                        mcqStation->GetLifetime(),
                         mcqStation->getQuestion(),
                         mcqStation->getOptions()
                     }
