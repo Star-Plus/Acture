@@ -37,7 +37,7 @@ namespace SPI {
 
         currentVerse->CalculateLength();
 
-        const auto newTimelapse = prevStation->GetTimelapse() + currentVerse->GetLength() + nextStation->GetLifetime() * (willPause ? 1.0f : -1.0f);
+        const auto newTimelapse = prevStation->GetTimelapse() + currentVerse->GetLength() + nextStation->GetLifetime() * (willPause ? 0.0f : -1.0f);
 
         nextStation->SetTimelapse(newTimelapse);
     }
