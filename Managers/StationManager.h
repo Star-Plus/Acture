@@ -9,6 +9,7 @@
 #include <stack>
 
 #include "../Stores/StationNetwork.h"
+#include "Stores/StationHistory.h"
 
 namespace SPI {
 
@@ -24,8 +25,9 @@ namespace SPI {
         bool stationed = false;
 
         StationNetwork* network;
+        StationHistory* stationHistory;
 
-        float callingThreashold = 0.01f;
+        float callingThreshold = 0.01f;
     
     public:
         StationManager();
@@ -33,7 +35,8 @@ namespace SPI {
         
         StationPtr getPrevStation() { return prevStation; }
         StationPtr getNextStation() { return nextStation; }
-        StationNetwork* getNetwork() { return network; }
+        StationNetwork* getNetwork() const { return network; }
+        StationHistory* getStationHistory() const { return stationHistory; }
         unsigned int getLastThread() { return threadHistory.top(); }
         
         void InitializeStation();

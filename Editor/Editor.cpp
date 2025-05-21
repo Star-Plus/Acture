@@ -19,7 +19,7 @@ namespace SPI {
 
         const auto createdId = SMath::GenerateId();
 
-        const auto createdStation = CreateStation(type);
+        const auto createdStation = CreateStation(type, &app);
         if (createdStation == nullptr) {
             std::cerr << "Failed to create station of type: " << static_cast<int>(type) << std::endl;
             return 0;
@@ -35,7 +35,7 @@ namespace SPI {
     {
         const auto createdId = SMath::GenerateId();
 
-        const auto createdStation = CreateStation(type);
+        const auto createdStation = CreateStation(type, &app);
         if (createdStation == nullptr) {
             std::cerr << "Failed to create station of type: " << static_cast<int>(type) << std::endl;
             return 0;

@@ -35,7 +35,7 @@ namespace SPI {
         }
     }
 
-    void StationSerializer::DeserializeBase(const STATION_TYPE type) {
+    void StationSerializer::DeserializeBase(const STATION_TYPE type, Application* context) {
         ID_T id;
         itime_t timeLapse;
         lifetime_t lifeTime;
@@ -49,7 +49,7 @@ namespace SPI {
 
         std::cout << "Timelapse: " << timeLapse << std::endl;
 
-        this->station = CreateStation(type);
+        this->station = CreateStation(type, context);
         this->station->SetId(id);
 
         this->in.read(reinterpret_cast<char*>(&lifeTime), sizeof(lifeTime));

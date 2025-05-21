@@ -142,6 +142,7 @@ classDiagram
     MediaBinder --> "*" Clip
     Network "1" --o "1" StationManager
     StationManager "1" --o "*" Station
+    StationManager "1" --* "1" StationHistory
 
 
     namespace Stores {
@@ -167,6 +168,16 @@ classDiagram
             + GetDataUnitCount() Number
             + GetDataUnitById(id: Number) DataUnit
             + GetDataUnitByPath(path: String) DataUnit
+        }
+
+        class StationHistory:::concrete {
+            - choicesTaken: Map~Number, Number~
+
+            + GetChoicesTaken() Map~Number, Number~
+            + GetChoiceById(id: Number) Number
+            + AddChoice(id: Number, choice: Number) void
+            + RemoveChoice(id: Number) void
+            + ClearChoices() void
         }
 
     }
@@ -255,6 +266,8 @@ classDiagram
             + SetTimelapse(timelapse: Number) void
             + GetLifetime() Number
             + SetLifetime(lifetime: Number) void
+
+            + AutoRoad() Number
 
             + GetAllConnectedStations() Station[]
             + GetAllConnectedVerses() Verse[]

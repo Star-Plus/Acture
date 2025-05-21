@@ -55,7 +55,7 @@ namespace SPI {
     void StationNetworkSerializer::MapSerialize(std::ostream& out, const bool verseMode, const bool fileMode) {
         for (const auto& station : network->GetAllStations()) {
             if (!verseMode) {
-                const auto station_serializer = CreateStationSerializer(station->GetType(), out, this->fStream);
+                const auto station_serializer = CreateStationSerializer(station->GetType(), out, this->fStream, app);
                 station_serializer->Serialize(station);
             }
 
@@ -146,7 +146,7 @@ namespace SPI {
             std::cout << "Station type: " << (int)type << std::endl;
 
             // Read the station data
-            const auto station_serializer = CreateStationSerializer(type, this->fStream, in);
+            const auto station_serializer = CreateStationSerializer(type, this->fStream, in, app);
             const auto station = station_serializer->Deserialize(type);
 
             network->AddStation(station);

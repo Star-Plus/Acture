@@ -11,7 +11,7 @@ using str = std::string;
 
 namespace SPI {
 
-    class MCQStation : public Station {
+    class MCQStation final : public Station {
 
         str question;
         std::vector<str> options;

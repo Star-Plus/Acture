@@ -10,7 +10,7 @@
 #include "../Serializers/NoBodySerializer.h"
 
 namespace SPI {
-    inline StationSerializer* CreateStationSerializer(const STATION_TYPE type, std::ostream &out, std::istream &in) {
+    inline StationSerializer* CreateStationSerializer(const STATION_TYPE type, std::ostream &out, std::istream &in, Application* context) {
         switch (type) {
             case STATION_TYPE::ROOT:
                 return new NoBodySerializer(out, in);

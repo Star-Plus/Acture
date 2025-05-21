@@ -9,6 +9,7 @@
 #include "../Mappers/SchemaGenerator.h"
 
 namespace SPI {
+
     class EngineStationedState : public EngineStateBase {
     public:
         ~EngineStationedState() override = default;
@@ -16,8 +17,16 @@ namespace SPI {
         void OnEnter(Application& app) override {
             std::cout << "EngineState: Entering station state." << std::endl;
 
-            const auto channelData = GenerateStationChannel(app.GetStationManager()->getNextStation());
-            app.GetStationCallEvent()->Dispatch(channelData);
+            const auto& station = app.GetStationManager()->getNextStation();
+            const auto autoThread = station->AutoRoad();
+
+            if (autoThread == -1) {
+                const auto channelData = GenerateStationChannel(station);
+                app.GetStationCallEvent()->Dispatch(channelData);
+            }
+            else {
+                app.Travel(autoThread);
+            }
         }
 
     };

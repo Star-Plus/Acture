@@ -12,7 +12,7 @@ namespace SPI {
     class StationSerializer {
 
         void SerializeBase() const;
-        void DeserializeBase(STATION_TYPE type);
+        void DeserializeBase(STATION_TYPE type, Application* context=nullptr);
 
     protected:
         StationPtr station;

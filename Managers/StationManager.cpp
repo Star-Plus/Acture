@@ -52,6 +52,8 @@ namespace SPI {
 
         CalculateNextTimelapse();
 
+        stationHistory->SetChoiceOfStation(prevStation->GetId(), thread);
+
         stationed = false;
     }
 
@@ -66,7 +68,7 @@ namespace SPI {
 
     bool StationManager::CheckTimelapse(const double time) {
         if (nextStation == nullptr) return false;
-        if (time >= nextStation->GetTimelapse() - callingThreashold && !stationed) {
+        if (time >= nextStation->GetTimelapse() - callingThreshold && !stationed) {
 
             if (nextStation->GetType() == STATION_TYPE::LEAF) return false;
 

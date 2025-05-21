@@ -15,11 +15,16 @@
 
 namespace SPI {
 
+    class Application;
+
     class Station : public std::enable_shared_from_this<Station> {
 
         using StationPtr = std::shared_ptr<Station>;
 
     protected:
+
+        Application* context = nullptr;
+
         ID_T id = 0;
 
         STATION_TYPE type;
@@ -33,7 +38,10 @@ namespace SPI {
         bool pause = true;
 
     public:
-        explicit Station(const STATION_TYPE type) : type(type) {}
+        Station(const STATION_TYPE type) : type(type) {}
+
+        Station(STATION_TYPE type, Application * context) : context(context), type(type) {}
+
         virtual ~Station();
 
         virtual std::shared_ptr<Station> self() { return shared_from_this(); }
@@ -80,6 +88,8 @@ namespace SPI {
         void PushId(const ID_T id) { stations.push_back(id); }
 
         n_threads_t getThreadCount() const { return stations.size(); }
+
+        virtual int AutoRoad() { return -1; }
 
         friend class StationNetwork;
     };
