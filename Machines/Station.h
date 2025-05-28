@@ -46,6 +46,10 @@ namespace SPI {
 
         virtual std::shared_ptr<Station> self() { return shared_from_this(); }
 
+        void SetContext(Application* context) {
+            this->context = context;
+        }
+
         ID_T GetId() const { return id; }
         void SetId(const ID_T id) { this->id = id; }
 

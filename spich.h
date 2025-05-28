@@ -8,6 +8,7 @@
 #include "Managers/TimeService.cpp"
 
 #include "Stores/StationNetwork.cpp"
+#include "Stores/StationHistory.cpp"
 
 #include "Units/Clip.cpp"
 #include "Units/Track.cpp"
@@ -36,3 +37,6 @@
 
 // Mappers
 #include "Mappers/StationSerialzerMapper.h"
+
+// Stations
+#include "Features/History/HistoryStation.cpp"

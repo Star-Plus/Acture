@@ -9,7 +9,7 @@
 #include <stack>
 
 #include "../Stores/StationNetwork.h"
-#include "Stores/StationHistory.h"
+#include "../Stores/StationHistory.h"
 
 namespace SPI {
 

@@ -17,7 +17,8 @@ namespace SPI {
         std::map<std::string, thread_t> gates;
 
     public:
-        explicit HistoryStation(Application* context) : Station(STATION_TYPE::HISTORY, context) {}
+        HistoryStation() : Station(STATION_TYPE::HISTORY) {}
+        HistoryStation(Application* context) : Station(STATION_TYPE::HISTORY, context) {}
 
         std::shared_ptr<Station> self() override {
             return std::static_pointer_cast<Station>(shared_from_this());
@@ -30,7 +31,7 @@ namespace SPI {
 
         void CreateNewGate();
         void SetGate(const std::string &gateId, const std::string& gateValue);
-        std::string GetGate(std::string gateId) const;
+        thread_t GetGate(std::string gateId) const { return gates.find(gateId)->second; }
         std::map<std::string, thread_t> GetGates() const { return gates; }
         bool IsGateExist(const std::string& gateId) const { return gates.find(gateId) != gates.end(); }
 

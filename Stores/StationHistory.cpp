@@ -6,7 +6,7 @@
 
 namespace SPI {
 
-    thread_t StationHistory::GetChoiceOfStation(const ID_T id) const {
+    int8_t StationHistory::GetChoiceOfStation(const ID_T id) const {
         auto it = choicesTaken.find(id);
         if (it != choicesTaken.end()) {
             return it->second;

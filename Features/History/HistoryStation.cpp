@@ -2,23 +2,20 @@
 // Created by Ahmed Mustafa on 5/21/2025.
 //
 
+#include <algorithm>
+
 #include "HistoryStation.h"
 
-#include "Application.h"
+#include "../../Application.h"
 
 namespace SPI {
 
     void HistoryStation::UseStation(const ID_T id) {
-        if (std::ranges::find(stationsIds, id) == stationsIds.end()) {
-            stationsIds.push_back(id);
-        }
+        stationsIds.push_back(id);
     }
 
     void HistoryStation::RemoveStation(const ID_T id) {
-        auto it = std::ranges::find(stationsIds, id);
-        if (it != stationsIds.end()) {
-            stationsIds.erase(it);
-        }
+        
     }
 
     void HistoryStation::RemoveStationByIndex(const size_t index) {

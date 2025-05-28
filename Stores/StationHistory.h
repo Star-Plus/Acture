@@ -12,11 +12,11 @@
 namespace SPI {
     class StationHistory {
 
-        std::map<ID_T, thread_t> choicesTaken;
+        std::map<ID_T, int8_t> choicesTaken;
 
     public:
-        std::map<ID_T, thread_t> GetChoicesTaken() const { return choicesTaken; }
-        thread_t GetChoiceOfStation(ID_T id) const;
+        std::map<ID_T, int8_t> GetChoicesTaken() const { return choicesTaken; }
+        int8_t GetChoiceOfStation(ID_T id) const;
         void SetChoiceOfStation(ID_T id, thread_t choice);
         void RemoveChoiceOfStation(ID_T id);
         void ClearChoices();
