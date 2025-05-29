@@ -1,7 +1,14 @@
 #include "Application.cpp"
 #include "Editor/Editor.cpp"
 
+// Utils
+#include "Utils/SMath.cpp"
+
+// Machines
+
 #include "Machines/Station.cpp"
+
+// Managers
 
 #include "Managers/MediaBinder.cpp"
 #include "Managers/StationManager.cpp"
@@ -19,8 +26,6 @@
 
 #include "Events/Event.h"
 #include "Events/StationCallEvent.h"
-
-#include "Utils/SMath.cpp"
 
 // Schemas
 #include "Schemas/StationChannelSchema.h"

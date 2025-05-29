@@ -54,6 +54,7 @@ namespace SPI {
 
     void Editor::AddStationInstance(const ID_T parentId, const std::shared_ptr<Station>& station) const {
         const auto csId = app.stationManager->getNetwork()->PushStation(parentId, station);
+        SMath::ReserveId(csId);
 
         if (app.GetCurrentState() == EngineState::EMPTY){
             app.Travel(0);

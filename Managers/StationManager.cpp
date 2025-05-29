@@ -7,7 +7,7 @@
 namespace SPI {
 
 
-    StationManager::StationManager() : network(new StationNetwork(rootStation)) {
+    StationManager::StationManager() : network(new StationNetwork(rootStation)), stationHistory(new StationHistory()) {
         nextStation = nullptr;
         this->InitializeStation();
         rootStation.reset();

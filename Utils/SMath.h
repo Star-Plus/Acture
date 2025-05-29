@@ -6,9 +6,11 @@
 #define SMATH_H
 #include <cstdint>
 #include <vector>
+#include <bitset>
 
 namespace SPI {
     class SMath {
+        static std::bitset<sizeof(uint16_t) * 8 - 1> usedIds;
     public:
         static unsigned short GetFloatPart(float value);
         static int CantorFunction(int k1, int k2);
@@ -16,6 +18,7 @@ namespace SPI {
         static std::vector<uint16_t> DecodeBitPack(uint32_t id);
 
         static uint16_t GenerateId();
+        static void ReserveId(uint16_t);
     };
 }
 
