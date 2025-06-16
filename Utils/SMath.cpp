@@ -8,6 +8,9 @@
 #include <random>
 
 namespace SPI {
+
+    std::bitset<sizeof(uint16_t) * 8 - 1> SMath::usedIds;
+
     unsigned short SMath::GetFloatPart(const float value) {
         float fractional = value - static_cast<int>(value);
         // Shift the fractional part to the right until it becomes an integer
@@ -43,16 +46,19 @@ namespace SPI {
     }
 
     uint16_t SMath::GenerateId() {
-        static std::bitset<sizeof(uint16_t) * 8 - 1> used;
 
         static std::mt19937 rng{std::random_device{}()};
         static std::uniform_int_distribution<uint16_t> dist(0, sizeof(uint16_t) * 8 - 1);
 
         while (true) {
-            if (const uint16_t id = dist(rng); !used.test(id)) {
-                used.set(id);
+            if (const uint16_t id = dist(rng); !usedIds.test(id)) {
+                usedIds.set(id);
                 return id;
             }
         }
+    }
+
+    void SMath::ReserveId(uint16_t id){
+        usedIds.set(id);
     }
 }

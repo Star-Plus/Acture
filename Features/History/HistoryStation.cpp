@@ -29,18 +29,18 @@ namespace SPI {
         gates[gateId] = 0;
     }
 
-    void HistoryStation::SetGate(const std::string &gateId, const std::string& gateValue) {
-        if (gates.find(gateId) != gates.end()) {
-            gates[gateId] = std::stoi(gateValue);
-        }
+    void HistoryStation::SetGate(const std::string &gateId, const thread_t gateValue) {
+        gates[gateId] = gateValue;
     }
 
     int HistoryStation::AutoRoad() {
         std::string gateId;
         for (const auto& id : stationsIds) {
             const auto thread = context->GetStationManager()->getStationHistory()->GetChoiceOfStation(id);
-            gateId += (thread == -1) ? 'o' : (char)thread;
+            gateId += (thread == -1) ? 'o' : std::to_string(thread)[0];
         }
+
+        std::cout << "HistoryStation::AutoRoad: Gate ID: " << gateId << std::endl;
 
         auto it = gates.find(gateId);
         if (it != gates.end()) {
@@ -50,6 +50,8 @@ namespace SPI {
         return -1;
     }
 
-
+    void HistoryStation::RemoveGate(const std::string& gateId){
+        gates.erase(gateId);
+    }
 
 }

@@ -20,6 +20,8 @@ namespace SPI {
             const auto& station = app.GetStationManager()->getNextStation();
             const auto autoThread = station->AutoRoad();
 
+            std::cout << "Auto road: " << autoThread << std::endl;
+
             if (autoThread == -1) {
                 const auto channelData = GenerateStationChannel(station);
                 app.GetStationCallEvent()->Dispatch(channelData);
