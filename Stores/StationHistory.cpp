@@ -15,7 +15,11 @@ namespace SPI {
     }
 
     void StationHistory::SetChoiceOfStation(const ID_T id, const thread_t choice) {
-        choicesTaken[id] = choice;
+        auto it = choicesTaken.find(id);
+        if (it == choicesTaken.end())
+            choicesTaken.insert({id, choice});
+        else
+            choicesTaken[id] = choice;
     }
 
     void StationHistory::RemoveChoiceOfStation(const ID_T id) {
