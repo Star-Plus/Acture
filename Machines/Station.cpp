@@ -4,7 +4,7 @@
 
 #include "Station.h"
 
-#include "Utils/SMath.h"
+#include "../Utils/SMath.h"
 
 namespace SPI {
 
