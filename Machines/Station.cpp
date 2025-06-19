@@ -3,7 +3,8 @@
 //
 
 #include "Station.h"
-#include <utility>
+
+#include "Utils/SMath.h"
 
 namespace SPI {
 
@@ -24,6 +25,9 @@ namespace SPI {
         station->AddParent(shared_from_this());
 
         verses[thread] = new Verse();
+
+        const auto id = SMath::EncodeBitPack(this->id, thread);
+        verses[thread]->SetID(id);
     }
 
     void Station::DisconnectStation(const ID_T id) {

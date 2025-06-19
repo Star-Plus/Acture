@@ -12,6 +12,7 @@ namespace SPI {
 
     class Verse {
 
+        ID_T id;
         itime_t length{};
 
     public:
@@ -20,6 +21,9 @@ namespace SPI {
 
         Verse();
         ~Verse();
+
+        ID_T GetID() const {return id;}
+        void SetID(const ID_T newID) {id = newID;}
 
         void CreateTrack();
         void DeleteTrack(thread_t idx);
