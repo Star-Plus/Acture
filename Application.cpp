@@ -32,7 +32,7 @@ namespace SPI {
         appState->OnUpdate(*this, deltaTime);
     }
 
-    std::vector<Clip> Application::DataToBind() {
+    std::vector<Clip> Application::DataToBind() const {
         return mediaBinder->DataToBind(timeService->GetPlayerTime());
     }
 
