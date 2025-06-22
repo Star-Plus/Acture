@@ -26,8 +26,8 @@ namespace SPI {
 
         verses[thread] = new Verse();
 
-        const auto id = SMath::EncodeBitPack(this->id, thread);
-        verses[thread]->SetID(id);
+        const ID_T verseId = SMath::EncodeBitPack(this->id, thread);
+        verses[thread]->SetID(verseId);
     }
 
     void Station::DisconnectStation(const ID_T id) {

@@ -22,8 +22,12 @@ namespace SPI {
         Verse();
         ~Verse();
 
-        ID_T GetID() const {return id;}
-        void SetID(const ID_T newID) {id = newID;}
+        ID_T GetID() const {
+            return id;
+        }
+        void SetID(const ID_T newID) {
+            id = newID;
+        }
 
         void CreateTrack();
         void DeleteTrack(thread_t idx);
