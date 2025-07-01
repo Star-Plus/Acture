@@ -8,11 +8,20 @@ namespace SPI {
 
     class MediaBinder {
 
+        static MediaBinder* instance;
+
         std::vector<Clip*> currentClips;
 
         Verse* verse = nullptr;
 
     public:
+
+        static MediaBinder& Get() {
+            if (instance == nullptr) {
+                instance = new MediaBinder();
+            }
+            return *instance;
+        }
 
         MediaBinder();
         ~MediaBinder();
@@ -21,7 +30,7 @@ namespace SPI {
         void UnbindVerse();
         Verse* getVerse() const { return verse; }
 
-        std::vector<Clip> DataToBind(double);
+        std::vector<Clip*> DataToBind(double);
 
     };
 

@@ -5,9 +5,11 @@
 #ifndef INTRASTATION_STATION_H
 #define INTRASTATION_STATION_H
 
+#include <functional>
 #include <memory>
 #include <vector>
 
+#include "ITrigger.h"
 #include "../Types/STATION_TYPE.h"
 #include "../Units/Verse.h"
 #include "../Core/Core.h"
@@ -37,10 +39,15 @@ namespace SPI {
 
         bool pause = true;
 
+        std::function<void*()> onHookCallback;
+        std::function<void*()> onUnhookCallback;
+
+        ITrigger* trigger = nullptr;
+
     public:
         Station(const STATION_TYPE type) : type(type) {}
 
-        Station(STATION_TYPE type, Application * context) : context(context), type(type) {}
+        Station(const STATION_TYPE type, Application * context) : context(context), type(type) {}
 
         virtual ~Station();
 
@@ -52,6 +59,10 @@ namespace SPI {
 
         ID_T GetId() const { return id; }
         void SetId(const ID_T id) { this->id = id; }
+
+        void SetTrigger(ITrigger* trigger) {
+            this->trigger = trigger;
+        }
 
         STATION_TYPE GetType() const { return type; }
 
@@ -96,10 +107,9 @@ namespace SPI {
         virtual int AutoRoad() { return -1; }
 
         friend class StationNetwork;
+        friend class StationManager;
     };
 
 }
-
-
 
 #endif //INTRASTATION_STATION_H

@@ -20,7 +20,7 @@ namespace SPI {
         void OnUpdate(Application& app, const float deltaTime) override {
             app.GetTimeService()->StepTime(deltaTime);
 
-            if (app.GetStationManager()->CheckTimelapse(TimeService::Get().GetMainTime())) {
+            if (app.GetStationManager()->CheckNextTrigger()) {
                 if (app.GetStationManager()->getNextStation()->WillPause())
                     app.TranslateState(EngineState::STATIONED_PAUSE);
                 else

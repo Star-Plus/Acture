@@ -13,6 +13,7 @@ namespace SPI {
         AUDIO = 1,
         IMAGE = 2,
         TEXT = 3,
+        PPTX = 4,
         UNKNOWN = 255
     };
 

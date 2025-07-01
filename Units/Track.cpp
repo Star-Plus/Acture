@@ -8,6 +8,8 @@
 #include <ranges>
 #include <functional>
 
+#include "VideoClip.h"
+
 namespace SPI {
 
     Track::Track() : length(0.0) {}
@@ -47,7 +49,13 @@ namespace SPI {
     itime_t Track::CalculateLength() {
         const auto lastClip = clips.rbegin();
 
-        length = lastClip->first + lastClip->second->end - lastClip->second->start;
+        if (lastClip->second->mediaType == MEDIA_TYPE::VIDEO) {
+            const auto videoClip = static_cast<VideoClip*>(lastClip->second);
+            length = lastClip->first + videoClip->end - videoClip->start;
+        }
+        else {
+            length = -1;
+        }
 
         return length;
     }

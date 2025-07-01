@@ -28,6 +28,8 @@ namespace SPI {
         StationHistory* stationHistory;
 
         float callingThreshold = 0.01f;
+
+
     
     public:
         StationManager();
@@ -45,7 +47,7 @@ namespace SPI {
         void ReverseTravel();
         void CalculateNextTimelapse();
 
-        bool CheckTimelapse(double time);
+        bool CheckNextTrigger() const;
 
         friend class StationNetworkSerializer;
     };

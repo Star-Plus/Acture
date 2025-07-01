@@ -7,8 +7,6 @@
 #include <iostream>
 #include <utility>
 
-#include "../Utils/SMath.h"
-
 
 namespace SPI {
 
@@ -124,21 +122,6 @@ namespace SPI {
             }
         }
         return 0;
-    }
-
-    Verse* StationNetwork::GetVerseById(const ID_T id) {
-
-        const auto ids = SMath::Decode2BitPack(id);
-        const auto parentId = ids[0];
-        const auto thread = ids[1];
-
-        const auto station = GetStationById(parentId);
-        if (!station) {
-            std::cerr << "Station with ID " << id << " not found." << std::endl;
-            return nullptr;
-        }
-
-        return station->GetConnectedVerse(thread);
     }
 
 }

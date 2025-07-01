@@ -33,7 +33,6 @@ namespace SPI {
         std::vector<StationPtr> GetAllStations() const;
 
         StationPtr GetStationById(ID_T id);
-        Verse* GetVerseById(ID_T id);
 
         void AddStation(const StationPtr& station);
         ID_T PushStation(ID_T subRootId, const StationPtr& stationToPush);

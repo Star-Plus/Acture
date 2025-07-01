@@ -6,18 +6,15 @@
 #define INTRASTATION_CLIP_H
 
 #include <filesystem>
-
-#include "../Core/Core.h"
+#include <Types/MEDIA_TYPE.h>
 
 namespace SPI {
 
     class Clip {
     public:
+        MEDIA_TYPE mediaType = MEDIA_TYPE::UNKNOWN;
         std::string mediaPath;
-        itime_t start = 0;
-        itime_t end = 0;
 
-        bool operator>(const Clip &other) const;
         bool operator!() const;
     };
 

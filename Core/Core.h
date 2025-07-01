@@ -5,7 +5,7 @@
 #ifndef CORE_H
 #define CORE_H
 
-#define ID_T uint32_t
+#define ID_T uint16_t
 
 #define stations_size_t uint16_t
 #define videos_size_t uint16_t
