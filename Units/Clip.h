@@ -15,6 +15,8 @@ namespace SPI {
         MEDIA_TYPE mediaType = MEDIA_TYPE::UNKNOWN;
         std::string mediaPath;
 
+        std::string externalRef;
+
         bool operator!() const;
     };
 

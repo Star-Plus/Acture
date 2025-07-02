@@ -6,7 +6,7 @@
 
 #include "StationNetworkSerializer.h"
 
-#include "VerseSerializer.h"
+#include "AssetSerializer.h"
 #include "../Mappers/StationSerialzerMapper.h"
 #include "Units/VideoClip.h"
 
@@ -75,7 +75,7 @@ namespace SPI {
 
                     out.seekp(videoLocation);
 
-                    VerseSerializer verseSerializer (out);
+                    AssetSerializer verseSerializer (out);
                     verseSerializer.Serialize(station->GetConnectedVerse(i), fileMode);
                 }
                 else {
