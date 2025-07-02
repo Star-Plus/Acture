@@ -33,14 +33,14 @@ namespace SPI {
 
     std::vector<uint8_t> StationNetworkSerializer::ExportSpiBuffer() {
         std::ostringstream oss;
-        this->SerializeNetwork(oss, false);
+        this->SerializeNetwork(oss);
         std::string str = oss.str();
         std::vector<uint8_t> buffer(str.begin(), str.end());
         return buffer;
     }
 
 
-    void StationNetworkSerializer::SerializeNetwork(std::ostream& out, const bool fileMode) {
+    void StationNetworkSerializer::SerializeNetwork(std::ostream& out) {
 
         const location_t location = 0;
         this->firstvideo_position = out.tellp();
@@ -48,12 +48,12 @@ namespace SPI {
         const auto nStations = network->Size();
         out.write(reinterpret_cast<const char*>(&nStations), sizeof(stations_size_t));
 
-        MapSerialize(out, false, fileMode);
-        MapSerialize(out, true, fileMode);
+        MapSerialize(out, false);
+        MapSerialize(out, true);
 
     }
 
-    void StationNetworkSerializer::MapSerialize(std::ostream& out, const bool verseMode, const bool fileMode) {
+    void StationNetworkSerializer::MapSerialize(std::ostream& out, const bool verseMode) {
         for (const auto& station : network->GetAllStations()) {
             if (!verseMode) {
                 const auto station_serializer = CreateStationSerializer(station->GetType(), out, this->fStream, app);
@@ -75,8 +75,8 @@ namespace SPI {
 
                     out.seekp(videoLocation);
 
-                    AssetSerializer verseSerializer (out);
-                    verseSerializer.Serialize(station->GetConnectedVerse(i), fileMode);
+                    AssetSerializer assetSerializer(out, this->assetMode);
+                    assetSerializer.Serialize(reinterpret_cast<const Clip *>(&station->GetConnectedVerse(i)->tracks[0]->clips[0]));
                 }
                 else {
                     location_t location = 0;

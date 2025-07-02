@@ -9,6 +9,7 @@
 #include <fstream>
 #include <queue>
 
+#include "AssetSerializer.h"
 #include "../Application.h"
 #include "../Stores/StationNetwork.h"
 
@@ -26,18 +27,25 @@ namespace SPI {
 
         std::streampos firstvideo_position;
 
-        void SerializeNetwork(std::ostream& out, bool fileMode=true);
+        ASSETS_MODE assetMode = ASSETS_MODE::BUNDLE;
+
+        void SerializeNetwork(std::ostream& out);
         void DeserializeNetwork();
 
-        void MapSerialize(std::ostream& out, bool verseMode, bool fileMode);
+        void MapSerialize(std::ostream& out, bool verseMode);
         StationNetwork* MapDeserialize(std::istream& in);
 
+
     public:
-        explicit StationNetworkSerializer(Application* );
+        explicit StationNetworkSerializer(Application*);
 
         void ExportSpiFile(const std::string& savePath);
         std::vector<uint8_t> ExportSpiBuffer();
         void ImportSpiFile(const std::string& loadPath);
+
+        void SetAssetMode(const ASSETS_MODE mode) {
+            this->assetMode = mode;
+        }
 
         location_t GetFirstVideoPosition() const {
             return this->firstvideo_position;
