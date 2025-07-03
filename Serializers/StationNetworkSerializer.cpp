@@ -176,7 +176,9 @@ namespace SPI {
                 const auto verse = station->GetConnectedVerse(i);
 
                 verse->CreateTrack();
-                const auto clip = new VideoClip{this->path+"/"+std::to_string(video_pos), 0, child->GetTimelapse()};
+                // const auto clip = new VideoClip{this->path+"/"+std::to_string(video_pos), 0, child->GetTimelapse()};
+                const auto clip = new VideoClip{this->path, 0, child->GetTimelapse()};
+
                 verse->tracks[0]->AddClip(0, clip);
 
             }
