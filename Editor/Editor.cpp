@@ -49,12 +49,13 @@ namespace SPI {
 
     void Editor::InitializeVerse(Verse* verse, const std::string& mediaPath, const float duration) const {
         verse->CreateTrack();
-        Clip* clip = new VideoClip{mediaPath, 0, duration};
+        auto* clip = new VideoClip{mediaPath, 0, duration};
         verse->tracks[0]->AddClip(0, clip);
     }
 
     void Editor::AddStationInstance(const ID_T parentId, const std::shared_ptr<Station>& station) const {
         const auto csId = app.stationManager->getNetwork()->PushStation(parentId, station);
+        SMath::ReserveId(csId);
 
         if (app.GetCurrentState() == EngineState::EMPTY){
             app.Travel(0);

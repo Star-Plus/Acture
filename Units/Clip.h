@@ -5,7 +5,7 @@
 #ifndef INTRASTATION_CLIP_H
 #define INTRASTATION_CLIP_H
 
-#include <filesystem>
+#include <string>
 #include "../Types/MEDIA_TYPE.h"
 
 namespace SPI {

@@ -6,6 +6,7 @@
 #define INTRASTATION_VERSE_H
 
 #include "Track.h"
+#include <vector>
 #include "../Core/Core.h"
 
 namespace SPI {

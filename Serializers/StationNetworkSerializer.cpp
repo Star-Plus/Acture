@@ -76,7 +76,7 @@ namespace SPI {
                     out.seekp(videoLocation);
 
                     AssetSerializer assetSerializer(out, this->assetMode);
-                    assetSerializer.Serialize(reinterpret_cast<const Clip *>(&station->GetConnectedVerse(i)->tracks[0]->clips[0]));
+                    assetSerializer.Serialize(station->GetConnectedVerse(i)->tracks[0]->clips[0]);
                 }
                 else {
                     location_t location = 0;
