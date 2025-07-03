@@ -10,7 +10,7 @@ namespace SPI {
     = default;
 
     Verse::~Verse() {
-        for (auto* track : tracks) {
+        for (const auto* track : tracks) {
             delete track;
         }
     }
@@ -21,15 +21,24 @@ namespace SPI {
         tracks.emplace_back(newTrack);
     }
 
-    void Verse::DeleteTrack(unsigned int idx){
+    void Verse::DeleteTrack(const thread_t idx){
 
         if (idx >= tracks.size()) return;
         delete tracks[idx];
         tracks.erase(tracks.begin() + idx);
     }
 
-    double Verse::CalculateLength()
+    itime_t Verse::CalculateLength()
     {
+        itime_t length = 0;
+        for (const auto* track : tracks) {
+            if (track->GetLength() > length) {
+                length = track->GetLength();
+            }
+        }
+
+        this->length = length;
+
         return length;
     }
 }

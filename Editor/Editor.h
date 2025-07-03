@@ -15,13 +15,15 @@ namespace SPI {
 
     public:
         Editor(Application& app);
+        ~Editor() {}
 
-        ID_T AddStation(ID_T id, STATION_TYPE type, double timelapse) const;
+        ID_T AddStation(ID_T id, STATION_TYPE type, itime_t timelapse) const;
+        ID_T AddStationToNetwork(STATION_TYPE type) const;
         void InitializeVerse(Verse* verse, const std::string& mediaPath, float duration) const;
 
-        ID_T AddStationInstance(ID_T parentId, const std::shared_ptr<Station>& station) const;
+        void AddStationInstance(ID_T parentId, const std::shared_ptr<Station>& station) const;
 
-        Clip* CreateClip(std::string mediaPath, double start, double end);
+        Clip* CreateClip(std::string mediaPath, itime_t start, itime_t end);
 
         void RemoveStation(ID_T id) const;
 

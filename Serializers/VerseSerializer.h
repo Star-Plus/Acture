@@ -12,13 +12,13 @@
 namespace SPI {
     class VerseSerializer {
 
-        std::fstream out;
+        std::ostream& out;
 
     public:
-        explicit VerseSerializer(std::fstream& out) : out(std::move(out)) {}
+        explicit VerseSerializer(std::ostream& out) : out(out) {}
         ~VerseSerializer() = default;
 
-        void Serialize(const Verse* verse);
+        void Serialize(const Verse* verse, bool mode = true);
         void Deserialize();
     };
 }

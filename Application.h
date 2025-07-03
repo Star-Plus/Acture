@@ -72,7 +72,7 @@ namespace SPI
         }
 
         void OnUpdate(float deltaTime);
-        std::vector<Clip> DataToBind();
+        std::vector<Clip> DataToBind() const;
 
         void Play();
         void Pause();

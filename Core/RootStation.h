@@ -15,7 +15,7 @@ namespace SPI {
 
 
     public:
-        explicit RootStation() : Station(STATION_TYPE::ROOT, 0) {
+        explicit RootStation() : Station(STATION_TYPE::ROOT) {
             pause = false;
         }
     };

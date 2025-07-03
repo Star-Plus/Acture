@@ -12,17 +12,18 @@ namespace SPI {
     class StationSerializer {
 
         void SerializeBase() const;
-        void DeserializeBase(STATION_TYPE type);
+        void DeserializeBase(STATION_TYPE type, Application* context=nullptr);
 
     protected:
         StationPtr station;
-        std::fstream& out;
+        std::ostream& out;
+        std::istream& in;
 
         virtual void SerializeBody() = 0;
         virtual void DeserializeBody() = 0;
 
     public:
-        StationSerializer(std::fstream& out);
+        StationSerializer(std::ostream& out, std::istream& in);
         virtual ~StationSerializer() = default;
 
         void Serialize(const StationPtr& station);

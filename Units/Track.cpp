@@ -17,13 +17,13 @@ namespace SPI {
         }
     }
 
-    void Track::AddClip(double position, Clip *clip) {
+    void Track::AddClip(itime_t position, Clip *clip) {
         clips.insert({position, clip});
         CalculateLength();
     }
 
-    void Track::RemoveClip(const double position) {
-        if (auto it = clips.find(position); it != clips.end()) {
+    void Track::RemoveClip(const itime_t position) {
+        if (const auto it = clips.find(position); it != clips.end()) {
             clips.erase(it);
         }
 
@@ -36,7 +36,7 @@ namespace SPI {
         CalculateLength();
     }
 
-    Clip* Track::GetClip(const double position) const {
+    Clip* Track::GetClip(const itime_t position) const {
         auto it = clips.find(position);
         if (it != clips.end()) {
             return it->second;
@@ -44,7 +44,7 @@ namespace SPI {
         throw std::out_of_range("Clip not found at the specified position.");
     }
 
-    double Track::CalculateLength() {
+    itime_t Track::CalculateLength() {
         const auto lastClip = clips.rbegin();
 
         length = lastClip->first + lastClip->second->end - lastClip->second->start;

@@ -18,23 +18,30 @@ namespace SPI {
 
         Application *app;
         StationNetwork* network;
-        std::fstream out;
+        std::fstream fStream;
         std::string path;
 
         std::queue<std::streampos> stations_positions;
         std::queue<std::streampos> videos_positions;
 
-        void SerializeNetwork();
+        std::streampos firstvideo_position;
+
+        void SerializeNetwork(std::ostream& out, bool fileMode=true);
         void DeserializeNetwork();
 
-        void RecursiveSerialize(const StationPtr& station, bool mode);
-        StationPtr RecursiveDeserialize();
+        void MapSerialize(std::ostream& out, bool verseMode, bool fileMode);
+        StationNetwork* MapDeserialize(std::istream& in);
 
     public:
         explicit StationNetworkSerializer(Application* );
 
         void ExportSpiFile(const std::string& savePath);
+        std::vector<uint8_t> ExportSpiBuffer();
         void ImportSpiFile(const std::string& loadPath);
+
+        location_t GetFirstVideoPosition() const {
+            return this->firstvideo_position;
+        }
 
     };
 

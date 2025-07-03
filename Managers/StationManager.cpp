@@ -6,17 +6,15 @@
 
 namespace SPI {
 
-    StationManager* StationManager::instance = nullptr;
 
-    StationManager::StationManager() : network(new StationNetwork(rootStation)) {
-        instance = this;
+    StationManager::StationManager() : network(new StationNetwork(rootStation)), stationHistory(new StationHistory()) {
         nextStation = nullptr;
         this->InitializeStation();
+        rootStation.reset();
     }
 
     StationManager::~StationManager() {
         delete network;
-        instance = nullptr;
         rootStation.reset();
         prevStation.reset();
         nextStation.reset();
@@ -27,20 +25,41 @@ namespace SPI {
         nextStation = rootStation;
     }
 
+    void StationManager::CalculateNextTimelapse() {
+        if (nextStation == nullptr) return;
+        const auto willPause = nextStation->WillPause();
+
+        const auto currentVerse = prevStation->GetConnectedVerse(threadHistory.top());
+        if (currentVerse == nullptr) {
+            std::cerr << "Current verse is null." << std::endl;
+            return;
+        }
+
+        currentVerse->CalculateLength();
+
+        const auto newTimelapse = prevStation->GetTimelapse() + currentVerse->GetLength() + nextStation->GetLifetime() * (willPause ? 0.0f : -1.0f);
+
+        nextStation->SetTimelapse(newTimelapse);
+    }
+
     void StationManager::Travel(const unsigned int thread)
     {
         if (nextStation == nullptr) return;
         history.push(prevStation);
         prevStation = nextStation;
-        nextStation = nextStation->GetConnectedStation(thread);
+        nextStation = network->GetStationById(nextStation->GetConnectedStation(thread));
         threadHistory.push(thread);
+
+        CalculateNextTimelapse();
+
+        stationHistory->SetChoiceOfStation(prevStation->GetId(), thread);
 
         stationed = false;
     }
 
     void StationManager::ReverseTravel()
     {
-        if (history.empty()) return;
+        if (history.size() <= 1) return;
         nextStation = prevStation;
         prevStation = history.top();
         history.pop();
@@ -49,7 +68,10 @@ namespace SPI {
 
     bool StationManager::CheckTimelapse(const double time) {
         if (nextStation == nullptr) return false;
-        if (time >= nextStation->GetTimelapse() && !stationed) {
+        if (time >= nextStation->GetTimelapse() - callingThreshold && !stationed) {
+
+            if (nextStation->GetType() == STATION_TYPE::LEAF) return false;
+
             stationed = true;
             return true;
         }

@@ -12,56 +12,90 @@
 #include "../Units/Verse.h"
 #include "../Core/Core.h"
 
+
 namespace SPI {
 
+    class Application;
+
     class Station : public std::enable_shared_from_this<Station> {
+
+        using StationPtr = std::shared_ptr<Station>;
+
     protected:
 
-        STATION_TYPE type;
-        timelapse_t timelapse;
-        lifetime_t lifetime = 0.0;
-        std::vector<Verse*> verses;
-        std::vector<std::shared_ptr<Station>> stations;
-        std::shared_ptr<Station> parent = nullptr;
+        Application* context = nullptr;
+
         ID_T id = 0;
-        thread_t threadId = 0;
+
+        STATION_TYPE type;
+        itime_t timelapse = 0.0;
+        lifetime_t lifetime = 0.0;
+
+        std::vector<Verse*> verses;
+        std::vector<ID_T> stations;
+        std::vector<ID_T> parents;
 
         bool pause = true;
 
     public:
-        Station(STATION_TYPE type, timelapse_t timelapse);
+        Station(const STATION_TYPE type) : type(type) {}
+
+        Station(STATION_TYPE type, Application * context) : context(context), type(type) {}
+
         virtual ~Station();
 
         virtual std::shared_ptr<Station> self() { return shared_from_this(); }
-        std::shared_ptr<Station> GetParent() const { return parent; }
+
+        void SetContext(Application* context) {
+            this->context = context;
+        }
 
         ID_T GetId() const { return id; }
         void SetId(const ID_T id) { this->id = id; }
 
-        thread_t GetThreadId() const { return threadId; }
-
         STATION_TYPE GetType() const { return type; }
 
         bool WillPause() const { return pause; }
+        void SetPause(const bool pause) { this->pause = pause; }
 
-        timelapse_t GetTimelapse() const { return timelapse; }
-        void SetTimelapse(const timelapse_t timelapse) { this->timelapse = timelapse; }
+        itime_t GetTimelapse() const { return timelapse; }
+        void SetTimelapse(const itime_t timelapse) { this->timelapse = timelapse; }
 
         lifetime_t GetLifetime() const { return lifetime; }
         void SetLifetime(const lifetime_t lifetime) { this->lifetime = lifetime; }
 
-        std::vector<std::shared_ptr<Station>> GetAllConnectedStations() const { return stations; }
+        std::vector<ID_T> GetAllConnectedStations() const { return stations; }
         std::vector<Verse*> GetAllConnectedVerses() const { return verses; }
 
-        std::shared_ptr<Station> GetConnectedStation(thread_t thread) const;
-        Verse* GetConnectedVerse(thread_t idx) const;
+        ID_T GetConnectedStation(const thread_t thread) const {
+            if (thread >= stations.size()) return 0;
+            return stations[thread];
+        }
+
+        Verse* GetConnectedVerse(const thread_t idx) const {
+            if (idx >= verses.size()) return nullptr;
+            return verses[idx];
+        }
+
+
+        std::vector<ID_T> GetParents() const { return parents; }
+        ID_T GetParent(const unsigned idx) const {
+            if (idx >= parents.size()) return 0;
+            return parents[idx];
+        }
+        void AddParent(const StationPtr& parent);
 
         void ConnectStation(thread_t thread, const std::shared_ptr<Station>& station);
-        void DisconnectStation(thread_t thread);
+        void DisconnectStation(ID_T id);
         void PushStation(const std::shared_ptr<Station>& station);
 
-        unsigned int getThreadCount() const { return stations.size(); }
+        void PushId(const ID_T id) { stations.push_back(id); }
 
+        n_threads_t getThreadCount() const { return stations.size(); }
+
+        virtual int AutoRoad() { return -1; }
+
+        friend class StationNetwork;
     };
 
 }

@@ -9,12 +9,11 @@
 #include <stack>
 
 #include "../Stores/StationNetwork.h"
+#include "../Stores/StationHistory.h"
 
 namespace SPI {
 
     class StationManager {
-
-        static StationManager* instance;
 
         std::shared_ptr<RootStation> rootStation = std::make_shared<RootStation>();
         StationPtr prevStation;
@@ -26,22 +25,25 @@ namespace SPI {
         bool stationed = false;
 
         StationNetwork* network;
+        StationHistory* stationHistory;
 
+        float callingThreshold = 0.01f;
+    
     public:
         StationManager();
         ~StationManager();
-
-        static StationManager& Get() { return *instance; }
         
         StationPtr getPrevStation() { return prevStation; }
         StationPtr getNextStation() { return nextStation; }
-        StationNetwork* getNetwork() { return network; }
+        StationNetwork* getNetwork() const { return network; }
+        StationHistory* getStationHistory() const { return stationHistory; }
         unsigned int getLastThread() { return threadHistory.top(); }
-
+        
         void InitializeStation();
-
+        
         void Travel(unsigned int thread);
         void ReverseTravel();
+        void CalculateNextTimelapse();
 
         bool CheckTimelapse(double time);
 

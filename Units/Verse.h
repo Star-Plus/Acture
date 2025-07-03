@@ -6,12 +6,14 @@
 #define INTRASTATION_VERSE_H
 
 #include "Track.h"
+#include "../Core/Core.h"
 
 namespace SPI {
 
     class Verse {
 
-        double length{};
+        ID_T id;
+        itime_t length{};
 
     public:
 
@@ -20,11 +22,18 @@ namespace SPI {
         Verse();
         ~Verse();
 
-        void CreateTrack();
-        void DeleteTrack(unsigned int idx);
-        double CalculateLength();
+        ID_T GetID() const {
+            return id;
+        }
+        void SetID(const ID_T newID) {
+            id = newID;
+        }
 
-        double GetLength() const {return length;}
+        void CreateTrack();
+        void DeleteTrack(thread_t idx);
+        itime_t CalculateLength();
+
+        itime_t GetLength() const {return length;}
 
     };
 

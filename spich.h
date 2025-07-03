@@ -1,13 +1,21 @@
 #include "Application.cpp"
 #include "Editor/Editor.cpp"
 
+// Utils
+#include "Utils/SMath.cpp"
+
+// Machines
+
 #include "Machines/Station.cpp"
+
+// Managers
 
 #include "Managers/MediaBinder.cpp"
 #include "Managers/StationManager.cpp"
 #include "Managers/TimeService.cpp"
 
 #include "Stores/StationNetwork.cpp"
+#include "Stores/StationHistory.cpp"
 
 #include "Units/Clip.cpp"
 #include "Units/Track.cpp"
@@ -18,8 +26,6 @@
 
 #include "Events/Event.h"
 #include "Events/StationCallEvent.h"
-
-#include "Utils/SMath.cpp"
 
 // Schemas
 #include "Schemas/StationChannelSchema.h"
@@ -36,3 +42,6 @@
 
 // Mappers
 #include "Mappers/StationSerialzerMapper.h"
+
+// Stations
+#include "Features/History/HistoryStation.cpp"

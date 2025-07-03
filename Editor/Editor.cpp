@@ -7,6 +7,7 @@
 #include <iostream>
 #include <utility>
 
+#include "../Utils/SMath.h"
 #include "../Mappers/StationTypeMapper.h"
 
 namespace SPI {
@@ -14,9 +15,33 @@ namespace SPI {
         // Constructor implementation
     }
 
-    ID_T Editor::AddStation(const ID_T id, const STATION_TYPE type, const double timelapse) const {
-        const auto createdStation = CreateStation(type, timelapse);
-        const ID_T createdId = this->AddStationInstance(id, createdStation);
+    ID_T Editor::AddStation(const ID_T id, const STATION_TYPE type, const itime_t timelapse) const {
+
+        const auto createdId = SMath::GenerateId();
+
+        const auto createdStation = CreateStation(type, &app);
+        if (createdStation == nullptr) {
+            std::cerr << "Failed to create station of type: " << static_cast<int>(type) << std::endl;
+            return 0;
+        }
+        createdStation->SetId(createdId);
+        createdStation->SetTimelapse(timelapse);
+        this->AddStationInstance(id, createdStation);
+
+        return createdId;
+    }
+
+    ID_T Editor::AddStationToNetwork(STATION_TYPE type) const
+    {
+        const auto createdId = SMath::GenerateId();
+
+        const auto createdStation = CreateStation(type, &app);
+        if (createdStation == nullptr) {
+            std::cerr << "Failed to create station of type: " << static_cast<int>(type) << std::endl;
+            return 0;
+        }
+        createdStation->SetId(createdId);
+        app.stationManager->getNetwork()->AddStation(createdStation);
 
         return createdId;
     }
@@ -27,19 +52,17 @@ namespace SPI {
         verse->tracks[0]->AddClip(0, clip);
     }
 
-    ID_T Editor::AddStationInstance(const ID_T parentId, const std::shared_ptr<Station>& station) const {
+    void Editor::AddStationInstance(const ID_T parentId, const std::shared_ptr<Station>& station) const {
         const auto csId = app.stationManager->getNetwork()->PushStation(parentId, station);
+        SMath::ReserveId(csId);
 
         if (app.GetCurrentState() == EngineState::EMPTY){
             app.Travel(0);
-            app.OnUpdate(0);
             app.TranslateState(EngineState::PAUSED);
         }
-
-        return csId;
     }
 
-    Clip* Editor::CreateClip(std::string mediaPath, const double start, const double end) {
+    Clip* Editor::CreateClip(std::string mediaPath, const itime_t start, const itime_t end) {
         const auto clip = new Clip{std::move(mediaPath), start, end};
         return clip;
     }
