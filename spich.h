@@ -32,7 +32,7 @@
 // Serializers
 #include "Serializers/StationNetworkSerializer.cpp"
 #include "Serializers/StationSerializer.cpp"
-#include "Serializers/VerseSerializer.cpp"
+#include "Serializers/AssetSerializer.cpp"
 #include "Features/Mcq/McqSerializer.cpp"
 
 // Mappers
