@@ -1,3 +1,5 @@
+#include "Core/Core.h"
+
 #include "Application.cpp"
 #include "Editor/Editor.cpp"
 
