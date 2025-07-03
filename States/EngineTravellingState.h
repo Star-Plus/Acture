@@ -14,8 +14,6 @@ namespace SPI {
         ~EngineTravellingState() override = default;
 
         void OnEnter(Application& app) override {
-            std::cout << "EngineState: Entering travelling state." << std::endl;
-            std::cout << "Engine thread: " << app.GetCurrentThread() << std::endl;
             app.GetStationManager()->Travel(app.GetCurrentThread());
             const auto verse = app.GetStationManager()->getPrevStation()->GetConnectedVerse(app.GetCurrentThread());
             app.GetMediaBinder()->BindVerse(verse);

@@ -13,7 +13,6 @@ namespace SPI {
         ~EngineRunningState() override = default;
 
         void OnEnter(Application& app) override {
-            std::cout << "EngineState: Entering running state." << std::endl;
             app.GetStationManager()->CalculateNextTimelapse();
         }
 

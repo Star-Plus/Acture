@@ -13,7 +13,6 @@ namespace SPI {
         ~EnginePausedState() override = default;
 
         void OnEnter(Application& app) override {
-            std::cout << "EngineState: Entering paused state." << std::endl;
         }
 
         void OnUpdate(Application& app, float deltaTime) override {
