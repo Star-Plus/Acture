@@ -43,27 +43,20 @@ namespace SPI {
 
         this->in.read(reinterpret_cast<char*>(&id), sizeof(ID_T));
 
-        std::cout << "Station ID: " << id << std::endl;
-
         this->in.read(reinterpret_cast<char*>(&timeLapse), sizeof(timeLapse));
-
-        std::cout << "Timelapse: " << timeLapse << std::endl;
 
         this->station = CreateStation(type, context);
         this->station->SetId(id);
 
         this->in.read(reinterpret_cast<char*>(&lifeTime), sizeof(lifeTime));
 
-        std::cout << "Lifetime: " << lifeTime << std::endl;
         this->station->SetLifetime(lifeTime);
 
         this->in.read(reinterpret_cast<char*>(&nThreads), sizeof(nThreads));
-        std::cout << "Number of threads: " << (int)nThreads << std::endl;
 
         for (auto i = 0; i < nThreads; i++) {
             ID_T childId;
             this->in.read(reinterpret_cast<char*>(&childId), sizeof(ID_T));
-            std::cout << "Child ID: " << childId << std::endl;
             this->station->PushId(childId);
         }
 

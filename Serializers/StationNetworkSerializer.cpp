@@ -126,7 +126,6 @@ namespace SPI {
         this->fStream.read(reinterpret_cast<char*>(&firstVideoLocation), sizeof(location_t));
 
         this->firstvideo_position = firstVideoLocation;
-        std::cout << "First video position: " << firstVideoLocation << std::endl;
 
         network = MapDeserialize(fStream);
     }
@@ -137,14 +136,11 @@ namespace SPI {
 
         stations_size_t nStations;
         in.read(reinterpret_cast<char*>(&nStations), sizeof(stations_size_t));
-        std::cout << "Number of stations: " << nStations << std::endl;
 
         while (nStations--) {
             STATION_TYPE type;
             // Read the station type
             in.read(reinterpret_cast<char*>(&type), sizeof(uint8_t));
-
-            std::cout << "Station type: " << (int)type << std::endl;
 
             // Read the station data
             const auto station_serializer = CreateStationSerializer(type, this->fStream, in, app);
@@ -164,14 +160,12 @@ namespace SPI {
         }
 
         for (const auto& station : network->GetAllStations()) {
-            std::cout << "Station ID: " << station->GetId() << std::endl;
             for (auto i = 0; i < station->getThreadCount(); i++) {
                 const auto child = network->GetStationById(station->GetConnectedStation(i));
                 station->ConnectStation(i, child);
 
                 location_t video_pos;
                 in.read(reinterpret_cast<char*>(&video_pos), sizeof(location_t));
-                std::cout << "Video position: " << video_pos << std::endl;
 
                 const auto verse = station->GetConnectedVerse(i);
 

@@ -11,8 +11,6 @@ namespace SPI {
     void AssetSerializer::Serialize(const Clip* clip) const {
         const auto path = clip->mediaPath;
 
-        std::cout << "Path: " << path << std::endl;
-
         switch (mode) {
 
             case ASSETS_MODE::BUNDLE: {
