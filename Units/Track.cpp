@@ -14,9 +14,9 @@ namespace SPI {
 
     Track::Track() : length(0.0) {}
     Track::~Track() {
-        for (auto &val: clips | std::views::values) {
-            if (val) {
-                val.reset();
+        for (auto& clip : clips) {
+            if (clip.second) {
+                clip.second.reset();
             }
         }
     }
