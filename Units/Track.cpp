@@ -43,7 +43,7 @@ namespace SPI {
     std::shared_ptr<Clip> Track::GetClip(const itime_t position) const {
         auto it = clips.find(position);
         if (it != clips.end()) {
-            return std::make_shared<Clip>(*it->second);
+            return it->second;
         }
         throw std::out_of_range("Clip not found at the specified position.");
     }
