@@ -14,12 +14,14 @@ namespace SPI {
 
     Track::Track() : length(0.0) {}
     Track::~Track() {
-        for (auto& clip : clips) {
-            delete clip.second;
+        for (auto &val: clips | std::views::values) {
+            if (val) {
+                val.reset();
+            }
         }
     }
 
-    void Track::AddClip(itime_t position, Clip *clip) {
+    void Track::AddClip(itime_t position, const std::shared_ptr<Clip>& clip) {
         clips.insert({position, clip});
         CalculateLength();
     }
@@ -50,7 +52,7 @@ namespace SPI {
         const auto lastClip = clips.rbegin();
 
         if (lastClip->second->mediaType == MEDIA_TYPE::VIDEO) {
-            const auto videoClip = static_cast<VideoClip*>(lastClip->second);
+            const auto videoClip = std::reinterpret_pointer_cast<VideoClip>(lastClip->second);
             length = lastClip->first + videoClip->end - videoClip->start;
         }
         else {

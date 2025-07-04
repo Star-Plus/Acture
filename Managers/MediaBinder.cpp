@@ -30,7 +30,7 @@ namespace SPI {
         std::vector<std::shared_ptr<Clip>> clipsToBind(1);
         // currentClips.resize(1);
 
-        clipsToBind.push_back(std::make_shared<Clip>(*tracks[0]->clips[0]));
+        clipsToBind.push_back(tracks[0]->clips[0]);
 
         return clipsToBind;
 
