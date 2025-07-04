@@ -38,10 +38,10 @@ namespace SPI {
         CalculateLength();
     }
 
-    Clip* Track::GetClip(const itime_t position) const {
+    std::shared_ptr<Clip> Track::GetClip(const itime_t position) const {
         auto it = clips.find(position);
         if (it != clips.end()) {
-            return it->second;
+            return std::make_shared<Clip>(*it->second);
         }
         throw std::out_of_range("Clip not found at the specified position.");
     }

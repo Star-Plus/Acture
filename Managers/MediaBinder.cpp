@@ -18,7 +18,7 @@ namespace SPI {
         this->verse = nullptr;
     }
 
-    std::vector<Clip*> MediaBinder::DataToBind(const double currentTime) {
+    std::vector<std::shared_ptr<Clip>> MediaBinder::DataToBind(const double currentTime) {
 
         if (verse == nullptr) {
             std::cout << "No verse bound to MediaBinder" << std::endl;
@@ -27,10 +27,10 @@ namespace SPI {
 
         const auto tracks = verse->tracks;
 
-        std::vector<Clip*> clipsToBind(1);
+        std::vector<std::shared_ptr<Clip>> clipsToBind(1);
         // currentClips.resize(1);
 
-        clipsToBind.push_back(tracks[0]->clips[0]);
+        clipsToBind.push_back(std::make_shared<Clip>(*tracks[0]->clips[0]));
 
         return clipsToBind;
 

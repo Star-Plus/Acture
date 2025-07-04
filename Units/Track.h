@@ -29,7 +29,7 @@ namespace SPI {
         void RemoveClip(itime_t position);
         void ClearClips();
 
-        Clip* GetClip(itime_t position) const;
+        std::shared_ptr<Clip> GetClip(itime_t position) const;
 
         itime_t GetLength() const {
             return length;

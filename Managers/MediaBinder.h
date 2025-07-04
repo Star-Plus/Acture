@@ -21,7 +21,7 @@ namespace SPI {
         void UnbindVerse();
         Verse* getVerse() const { return verse; }
 
-        std::vector<Clip*> DataToBind(double);
+        std::vector<std::shared_ptr<Clip>> DataToBind(double);
 
     };
 
