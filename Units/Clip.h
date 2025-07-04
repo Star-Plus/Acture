@@ -6,12 +6,16 @@
 #define INTRASTATION_CLIP_H
 
 #include <string>
+#include <memory>
 #include "../Types/MEDIA_TYPE.h"
 
 namespace SPI {
 
-    class Clip {
+    class Clip : public std::enable_shared_from_this<Clip> {
     public:
+
+        virtual ~Clip()= default;
+
         MEDIA_TYPE mediaType = MEDIA_TYPE::UNKNOWN;
         std::string mediaPath;
 
