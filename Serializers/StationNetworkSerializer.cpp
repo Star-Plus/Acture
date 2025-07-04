@@ -173,7 +173,7 @@ namespace SPI {
                 // const auto clip = new VideoClip{this->path+"/"+std::to_string(video_pos), 0, child->GetTimelapse()};
                 const auto clip = VideoClip{this->path, 0, child->GetTimelapse()};
 
-                verse->tracks[0]->AddClip(0, std::make_shared<Clip>(clip));
+                verse->tracks[0]->AddClip(0, std::make_shared<VideoClip>(clip));
 
             }
         }
