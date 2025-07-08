@@ -27,7 +27,7 @@ namespace SPI {
 
         const auto tracks = verse->tracks;
 
-        std::vector<std::shared_ptr<Clip>> clipsToBind(1);
+        std::vector<std::shared_ptr<Clip>> clipsToBind;
         // currentClips.resize(1);
 
         clipsToBind.push_back(tracks[0]->clips[0]);
