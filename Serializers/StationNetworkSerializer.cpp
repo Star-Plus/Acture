@@ -164,14 +164,21 @@ namespace SPI {
                 const auto child = network->GetStationById(station->GetConnectedStation(i));
                 station->ConnectStation(i, child);
 
-                location_t video_pos;
-                in.read(reinterpret_cast<char*>(&video_pos), sizeof(location_t));
+                const location_t video_pos = videos_positions.front();
+                videos_positions.pop();
+                in.seekg(video_pos, std::ios::beg);
 
                 const auto verse = station->GetConnectedVerse(i);
 
                 verse->CreateTrack();
-                // const auto clip = new VideoClip{this->path+"/"+std::to_string(video_pos), 0, child->GetTimelapse()};
-                const auto clip = VideoClip{this->path, 0, child->GetTimelapse()};
+
+                uint32_t pathSize;
+                in.read(reinterpret_cast<char *>(&pathSize), sizeof(pathSize));
+                std::string path(pathSize, '\0');
+                in.read(&path[0], pathSize);
+
+                // const auto clip = VideoClip{this->path+"/"+std::to_string(video_pos), 0, child->GetTimelapse()};
+                const auto clip = VideoClip{path, 0, child->GetTimelapse()};
 
                 verse->tracks[0]->AddClip(0, std::make_shared<VideoClip>(clip));
 
