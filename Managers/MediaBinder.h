@@ -10,16 +10,16 @@ namespace SPI {
 
         std::vector<Clip*> currentClips;
 
-        Verse* verse = nullptr;
+        std::shared_ptr<Verse> verse = nullptr;
 
     public:
 
         MediaBinder();
         ~MediaBinder();
 
-        void BindVerse(Verse* verse);
+        void BindVerse(std::shared_ptr<Verse> );
         void UnbindVerse();
-        Verse* getVerse() const { return verse; }
+        std::shared_ptr<Verse> getVerse() const { return verse; }
 
         std::vector<std::shared_ptr<Clip>> DataToBind(double);
 

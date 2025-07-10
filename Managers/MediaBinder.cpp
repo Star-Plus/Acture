@@ -10,7 +10,7 @@ namespace SPI {
     MediaBinder::~MediaBinder() {
     }
 
-    void MediaBinder::BindVerse(Verse* verse) {
+    void MediaBinder::BindVerse(std::shared_ptr<Verse> verse) {
         this->verse = verse;
     }
 

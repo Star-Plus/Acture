@@ -18,7 +18,7 @@ namespace SPI {
 
     public:
 
-        std::vector<Track*> tracks;
+        std::vector<std::shared_ptr<Track>> tracks;
 
         Verse();
         ~Verse();

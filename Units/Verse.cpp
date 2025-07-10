@@ -9,29 +9,25 @@ namespace SPI {
     Verse::Verse()
     = default;
 
-    Verse::~Verse() {
-        for (const auto* track : tracks) {
-            delete track;
-        }
-    }
+    Verse::~Verse() {}
 
     void Verse::CreateTrack()
     {
-        auto* newTrack = new Track();
-        tracks.emplace_back(newTrack);
+        Track newTrack;
+        tracks.emplace_back(std::make_shared<Track>(newTrack));
     }
 
     void Verse::DeleteTrack(const thread_t idx){
 
         if (idx >= tracks.size()) return;
-        delete tracks[idx];
+        tracks[idx].reset();
         tracks.erase(tracks.begin() + idx);
     }
 
     itime_t Verse::CalculateLength()
     {
         itime_t length = 0;
-        for (const auto* track : tracks) {
+        for (const auto& track : tracks) {
             if (track->GetLength() > length) {
                 length = track->GetLength();
             }

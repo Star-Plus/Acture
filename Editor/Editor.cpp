@@ -47,7 +47,7 @@ namespace SPI {
         return createdId;
     }
 
-    void Editor::InitializeVerse(Verse* verse, const std::string& mediaPath, const float duration) const {
+    void Editor::InitializeVerse(std::shared_ptr<Verse> verse, const std::string& mediaPath, const float duration) const {
         verse->CreateTrack();
         VideoClip clip {mediaPath, 0, duration};
 

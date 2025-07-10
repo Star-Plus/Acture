@@ -24,7 +24,7 @@ namespace SPI {
         stations[thread] = station->GetId();
         station->AddParent(shared_from_this());
 
-        verses[thread] = new Verse();
+        verses[thread] = std::make_shared<Verse>();
 
         const ID_T verseId = SMath::EncodeBitPack(this->id, thread);
         verses[thread]->SetID(verseId);
@@ -36,7 +36,7 @@ namespace SPI {
         if (it != stations.end()) {
             const size_t index = std::distance(stations.begin(), it);
             stations.erase(it);
-            delete verses[index];
+            verses[index].reset();
             verses.erase(verses.begin() + index);
         }
     }
