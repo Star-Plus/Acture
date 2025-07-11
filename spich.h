@@ -42,3 +42,8 @@
 
 // Stations
 #include "Features/History/HistoryStation.cpp"
+
+// Triggers
+#include "Triggers/Features/DirectCall/DirectCallTrigger.cpp"
+#include "Triggers/Features/Time/TimeTrigger.cpp"
+#include "Serializers/TriggerSerializer.cpp"

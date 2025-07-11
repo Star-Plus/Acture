@@ -20,6 +20,8 @@ namespace SPI {
         DirectCallSerializer(std::ostream& out, std::istream& in, Application* context)
             : TriggerSerializer(out, in, context) {}
 
+        ~DirectCallSerializer() override = default;
+
     };
 
 } // SPI

@@ -4,8 +4,7 @@
 
 #include "TriggerSerializer.h"
 
-#include "Application.h"
-#include "Mappers/TriggerMapper.h"
+#include "../Mappers/TriggerMapper.h"
 
 namespace SPI {
 

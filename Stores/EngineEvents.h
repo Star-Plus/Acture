@@ -4,7 +4,7 @@
 
 #ifndef ENGINEEVENTS_H
 #define ENGINEEVENTS_H
-#include "Events/TravelEvent.h"
+#include "../Events/TravelEvent.h"
 
 namespace SPI {
 

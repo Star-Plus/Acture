@@ -4,7 +4,7 @@
 
 #include "AssetSerializer.h"
 
-#include "Utils/AssetBundle.h"
+#include "../Utils/AssetBundle.h"
 
 namespace SPI {
 

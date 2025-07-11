@@ -8,7 +8,7 @@
 
 #include "AssetSerializer.h"
 #include "../Mappers/StationSerialzerMapper.h"
-#include "Units/VideoClip.h"
+#include "../Units/VideoClip.h"
 
 
 namespace SPI {

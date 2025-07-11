@@ -11,8 +11,6 @@
 
 namespace SPI {
 
-    class Application;
-
     class TriggerSerializer {
 
     protected:

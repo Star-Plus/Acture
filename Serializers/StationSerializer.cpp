@@ -4,9 +4,9 @@
 
 #include "StationSerializer.h"
 
-#include "Application.h"
+#include "../Application.h"
 #include "../Mappers/StationTypeMapper.h"
-#include "Mappers/TriggerMapper.h"
+#include "../Mappers/TriggerMapper.h"
 
 namespace SPI {
 
