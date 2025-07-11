@@ -7,7 +7,7 @@
 
 namespace SPI {
 
-    enum class TriggerType {
+    enum class TRIGGER_TYPE {
         NONE = -1,
         TIMER,
         DIRECT_CALL,

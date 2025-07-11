@@ -13,13 +13,13 @@ namespace SPI {
     inline StationSerializer* CreateStationSerializer(const STATION_TYPE type, std::ostream &out, std::istream &in, Application* context) {
         switch (type) {
             case STATION_TYPE::ROOT:
-                return new NoBodySerializer(out, in);
+                return new NoBodySerializer(out, in, context);
             case STATION_TYPE::LEAF:
-                return new NoBodySerializer(out, in);
+                return new NoBodySerializer(out, in, context);
             case STATION_TYPE::MCQ:
-                return new McqSerializer(out, in);
+                return new McqSerializer(out, in, context);
             default:
-                return new NoBodySerializer(out, in);
+                return new NoBodySerializer(out, in, context);
         }
 
     }

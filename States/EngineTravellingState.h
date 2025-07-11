@@ -21,6 +21,9 @@ namespace SPI {
             app.GetTimeService()->ResetPlayingTime();
             app.GetTimeService()->SetLastTime(app.GetStationManager()->getPrevStation()->GetTimelapse());
 
+            const auto eventData = std::make_shared<unsigned int>(app.GetCurrentThread());
+            app.GetEngineEvents()->travelEvent.Dispatch(eventData);
+
             app.TranslateState(EngineState::RUNNING);
             app.SetCurrentThread(-1);
         }

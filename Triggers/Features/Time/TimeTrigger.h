@@ -5,18 +5,20 @@
 #ifndef TIMETRIGGER_H
 #define TIMETRIGGER_H
 
-#include "ITrigger.h"
+#include "../../ITrigger.h"
 
 namespace SPI {
 
-    class TimeTrigger : public ITrigger {
+    class TimeTrigger final : public ITrigger {
         float callingThreshold; // Threshold in seconds to trigger the action
     public:
         explicit TimeTrigger(Application* context, const float threshold = 0.01f)
-            : ITrigger(context), callingThreshold(threshold) {}
+            : ITrigger(context), callingThreshold(threshold) {
+            this->type = TRIGGER_TYPE::TIMER;
+        }
 
         ~TimeTrigger() override = default;
-        bool IsActive() const override;
+        bool IsActive() override;
     };
 
 }

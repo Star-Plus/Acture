@@ -7,6 +7,7 @@
 #include "Managers/StationManager.h"
 #include "Managers/MediaBinder.h"
 #include "States/EngineStateBase.h"
+#include "Stores/EngineEvents.h"
 
 namespace SPI
 {
@@ -26,6 +27,8 @@ namespace SPI
 
         // Pipeline
         StationChannel stationChannel;
+
+        EngineEvents engineEvents;
 
     public:
 
@@ -69,6 +72,11 @@ namespace SPI
         StationChannel* GetStationChannel()
         {
             return &stationChannel;
+        }
+
+        EngineEvents* GetEngineEvents()
+        {
+            return &engineEvents;
         }
 
         void OnUpdate(float deltaTime);

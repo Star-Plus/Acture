@@ -8,8 +8,8 @@
 
 namespace SPI {
 
-    McqSerializer::McqSerializer(std::ostream& out, std::istream& in)
-        : StationSerializer(out, in) {}
+    McqSerializer::McqSerializer(std::ostream& out, std::istream& in, Application* context)
+        : StationSerializer(out, in, context) {}
 
     void McqSerializer::SerializeBody() {
         const auto& mcq = std::dynamic_pointer_cast<MCQStation>(station);

@@ -4,14 +4,14 @@
 
 #include "StationSerializer.h"
 
-#include <utility>
-
+#include "Application.h"
 #include "../Mappers/StationTypeMapper.h"
+#include "Mappers/TriggerMapper.h"
 
 namespace SPI {
 
-    StationSerializer::StationSerializer(std::ostream &out, std::istream &in)
-        : out(out), in(in)
+    StationSerializer::StationSerializer(std::ostream &out, std::istream &in, Application* context)
+        : out(out), in(in), context(context)
     {}
 
     void StationSerializer::SerializeBase() const {
@@ -33,6 +33,18 @@ namespace SPI {
             const auto child = station->GetConnectedStation(i);
             out.write(reinterpret_cast<const char*>(&child), sizeof(ID_T));
         }
+
+        const auto trigger = this->station->GetTrigger();
+
+        if (trigger == nullptr) {
+            constexpr auto triggerType = TRIGGER_TYPE::NONE;
+            this->out.write(reinterpret_cast<const char*>(&triggerType), sizeof(TRIGGER_TYPE));
+        }
+        else {
+            const auto triggerSerializer = TriggerMapper::CreateTriggerSerializer(trigger->GetType(), this->out, this->in, this->context);
+            triggerSerializer->Serialize(trigger);
+        }
+
     }
 
     void StationSerializer::DeserializeBase(const STATION_TYPE type, Application* context) {
@@ -60,6 +72,17 @@ namespace SPI {
             this->station->PushId(childId);
         }
 
+        TRIGGER_TYPE triggerType;
+        this->in.read(reinterpret_cast<char*>(&triggerType), sizeof(TRIGGER_TYPE));
+
+        if (triggerType == TRIGGER_TYPE::NONE) {
+            this->station->SetTrigger(nullptr);
+            return;
+        }
+
+        const auto triggerSerializer = TriggerMapper::CreateTriggerSerializer(triggerType, this->out, this->in, context);
+        this->station->SetTrigger(triggerSerializer->Deserialize(triggerType));
+
     }
 
     void StationSerializer::Serialize(const StationPtr& station) {
@@ -69,7 +92,7 @@ namespace SPI {
     }
 
     StationPtr& StationSerializer::Deserialize(const STATION_TYPE type) {
-        this->DeserializeBase(type);
+        this->DeserializeBase(type, this->context);
         this->DeserializeBody();
 
         return this->station;

@@ -4,6 +4,7 @@
 
 #ifndef ITRIGGER_H
 #define ITRIGGER_H
+#include "../Types/TRIGGER_TYPE.h"
 
 namespace SPI {
 
@@ -13,12 +14,14 @@ namespace SPI {
 
     protected:
         Application* context = nullptr;
+        TRIGGER_TYPE type = TRIGGER_TYPE::NONE;
 
     public:
         explicit ITrigger(Application* context) : context(context) {}
         virtual ~ITrigger() = default;
 
-        virtual bool IsActive() const = 0;
+        virtual bool IsActive() = 0;
+        TRIGGER_TYPE GetType() const { return type; }
     };
 
 }

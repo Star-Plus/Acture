@@ -9,7 +9,7 @@
 #include <memory>
 #include <vector>
 
-#include "ITrigger.h"
+#include "../Triggers/ITrigger.h"
 #include "../Types/STATION_TYPE.h"
 #include "../Units/Verse.h"
 #include "../Core/Core.h"
@@ -62,6 +62,10 @@ namespace SPI {
 
         void SetTrigger(ITrigger* trigger) {
             this->trigger = trigger;
+        }
+
+        ITrigger* GetTrigger() const {
+            return trigger;
         }
 
         STATION_TYPE GetType() const { return type; }

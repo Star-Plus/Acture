@@ -3,13 +3,13 @@
 //
 
 #include "TimeTrigger.h"
-#include "../Application.h"
+#include "../../../Application.h"
 
 namespace SPI {
 
-    bool TimeTrigger::IsActive() const {
+    bool TimeTrigger::IsActive() {
         if (context == nullptr) {
-            return false; // Context is not set
+            return false;
         }
 
         const double currentTime = context->GetCurrentTime();
