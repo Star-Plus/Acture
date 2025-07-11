@@ -79,7 +79,7 @@ namespace SPI
             return &engineEvents;
         }
 
-        void OnUpdate(float deltaTime);
+        void OnUpdate(float deltaTime=0.0f);
         std::vector<std::shared_ptr<Clip>> DataToBind() const;
 
         void Play();
@@ -89,6 +89,8 @@ namespace SPI
         void Serialize();
         void Deserialize();
         void ScrubTime(float time) const;
+
+        std::shared_ptr<StationChannelSchema> ReceiveChannelData();
 
         friend class Editor;
     };

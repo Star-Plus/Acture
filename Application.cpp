@@ -75,4 +75,8 @@ namespace SPI {
         else
             timeService->SetTime(time);
     }
+
+    std::shared_ptr<StationChannelSchema> Application::ReceiveChannelData() {
+        return stationChannel.Receive();
+    }
 }
