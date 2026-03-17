@@ -49,3 +49,5 @@ cmake-build-*/
 .vs
 .vscode
 .idea
+
+cmake-build-*

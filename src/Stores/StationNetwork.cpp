@@ -126,7 +126,7 @@ namespace SPI {
         return 0;
     }
 
-    Verse* StationNetwork::GetVerseById(const ID_T id) {
+    std::shared_ptr<Verse> StationNetwork::GetVerseById(const ID_T id) {
 
         const auto ids = SMath::Decode2BitPack(id);
         const auto parentId = ids[0];

@@ -19,7 +19,7 @@ namespace SPI {
 
         ID_T AddStation(ID_T id, STATION_TYPE type, itime_t timelapse) const;
         ID_T AddStationToNetwork(STATION_TYPE type) const;
-        void InitializeVerse(Verse* verse, const std::string& mediaPath, float duration) const;
+        void InitializeVerse(std::shared_ptr<Verse> verse, const std::string& mediaPath, float duration) const;
 
         void AddStationInstance(ID_T parentId, const std::shared_ptr<Station>& station) const;
 

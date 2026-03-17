@@ -14,14 +14,15 @@ namespace SPI {
         ~EngineTravellingState() override = default;
 
         void OnEnter(Application& app) override {
-            std::cout << "EngineState: Entering travelling state." << std::endl;
-            std::cout << "Engine thread: " << app.GetCurrentThread() << std::endl;
             app.GetStationManager()->Travel(app.GetCurrentThread());
             const auto verse = app.GetStationManager()->getPrevStation()->GetConnectedVerse(app.GetCurrentThread());
             app.GetMediaBinder()->BindVerse(verse);
 
             app.GetTimeService()->ResetPlayingTime();
             app.GetTimeService()->SetLastTime(app.GetStationManager()->getPrevStation()->GetTimelapse());
+
+            const auto eventData = std::make_shared<unsigned int>(app.GetCurrentThread());
+            app.GetEngineEvents()->travelEvent.Dispatch(eventData);
 
             app.TranslateState(EngineState::RUNNING);
             app.SetCurrentThread(-1);

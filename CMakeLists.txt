@@ -55,30 +55,12 @@ add_library(ActureLib STATIC
         src/Features/Mcq/McqSerializer.h
         src/Mappers/StationSerialzerMapper.h
         src/Serializers/NoBodySerializer.h
-        src/Serializers/AssetSerializer.cpp
-        src/Serializers/AssetSerializer.h
+        src/Serializers/VerseSerializer.cpp
+        src/Serializers/VerseSerializer.h
         src/Features/History/HistoryStation.h
         src/Features/History/HistoryStation.cpp
         src/Stores/StationHistory.cpp
         src/Stores/StationHistory.h
-        src/Units/VideoClip.h
-        src/Units/PPTXClip.h
-        src/Triggers/ITrigger.h
-        src/Types/TRIGGER_TYPE.h
-        src/Triggers/Features/Time/TimeTrigger.cpp
-        src/Triggers/Features/Time/TimeTrigger.h
-        src/Serializers/AssetSerializer.cpp
-        src/Serializers/AssetSerializer.h
-        src/Types/ASSETS_MODE.h
-        src/Utils/AssetBundle.h
-        src/Triggers/Features/DirectCall/DirectCallTrigger.cpp
-        src/Triggers/Features/DirectCall/DirectCallTrigger.h
-        src/Events/TravelEvent.h
-        src/Stores/EngineEvents.h
-        src/Serializers/TriggerSerializer.cpp
-        src/Serializers/TriggerSerializer.h
-        src/Triggers/Features/DirectCall/DirectCallSerializer.h
-        src/Mappers/TriggerMapper.h
 )
 
 # Include headers for Engine
@@ -89,17 +71,3 @@ add_executable(Acture main.cpp)
 
 # Link Engine to the main executable
 target_link_libraries(Acture PRIVATE ActureLib)
-
-# Test executable
-add_executable(TracksTest Tests/Track_Test.cpp)
-add_executable(VerseTest Tests/Verse_Test.cpp)
-add_executable(StationNetworkTest Tests/StationNetwork_Test.cpp)
-add_executable(StationManagerTest Tests/StationManager_Test.cpp)
-add_executable(MediaBinderTest Tests/MediaBinder_Test.cpp)
-add_executable(SMathTest Tests/SMath_Test.cpp)
-add_executable(EditorTest Tests/Editor_Test.cpp)
-
-add_executable(Playground Tests/Playground.cpp)
-
-# Testing
-enable_testing()

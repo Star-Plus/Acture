@@ -10,7 +10,7 @@ namespace SPI {
 
     class NoBodySerializer final : public StationSerializer{
     public:
-        explicit NoBodySerializer(std::ostream &out, std::istream &in) : StationSerializer(out, in) {}
+        explicit NoBodySerializer(std::ostream &out, std::istream &in, Application* context) : StationSerializer(out, in, context) {}
 
         void SerializeBody() override {
         }

@@ -7,6 +7,7 @@
 #include "Managers/StationManager.h"
 #include "Managers/MediaBinder.h"
 #include "States/EngineStateBase.h"
+#include "Stores/EngineEvents.h"
 
 namespace SPI
 {
@@ -26,6 +27,8 @@ namespace SPI
 
         // Pipeline
         StationChannel stationChannel;
+
+        EngineEvents engineEvents;
 
     public:
 
@@ -71,8 +74,13 @@ namespace SPI
             return &stationChannel;
         }
 
-        void OnUpdate(float deltaTime);
-        std::vector<Clip> DataToBind() const;
+        EngineEvents* GetEngineEvents()
+        {
+            return &engineEvents;
+        }
+
+        void OnUpdate(float deltaTime=0.0f);
+        std::vector<std::shared_ptr<Clip>> DataToBind() const;
 
         void Play();
         void Pause();
@@ -81,6 +89,8 @@ namespace SPI
         void Serialize();
         void Deserialize();
         void ScrubTime(float time) const;
+
+        std::shared_ptr<StationChannelSchema> ReceiveChannelData();
 
         friend class Editor;
     };

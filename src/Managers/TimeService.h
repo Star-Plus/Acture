@@ -13,11 +13,7 @@ namespace SPI {
         double playerTimer = 0.0;
         double lastTime = 0.0;
 
-        static TimeService* instance;
-
     public:
-
-        static TimeService& Get() {return *instance;}
 
         TimeService();
         ~TimeService();

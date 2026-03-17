@@ -30,10 +30,9 @@ namespace SPI {
         void RemoveStationByIndex(size_t index);
 
         void CreateNewGate();
-        void SetGate(const std::string &gateId, const thread_t gateValue);
+        void SetGate(const std::string &gateId, const std::string& gateValue);
         thread_t GetGate(std::string gateId) const { return gates.find(gateId)->second; }
         std::map<std::string, thread_t> GetGates() const { return gates; }
-        void RemoveGate(const std::string& gateId);
         bool IsGateExist(const std::string& gateId) const { return gates.find(gateId) != gates.end(); }
 
         int AutoRoad() override;

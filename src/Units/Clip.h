@@ -5,19 +5,21 @@
 #ifndef INTRASTATION_CLIP_H
 #define INTRASTATION_CLIP_H
 
-#include <filesystem>
-
-#include "../Core/Core.h"
+#include <string>
+#include "Types/MEDIA_TYPE.h"
 
 namespace SPI {
 
     class Clip {
     public:
-        std::string mediaPath;
-        itime_t start = 0;
-        itime_t end = 0;
 
-        bool operator>(const Clip &other) const;
+        virtual ~Clip()= default;
+
+        MEDIA_TYPE mediaType = MEDIA_TYPE::UNKNOWN;
+        std::string mediaPath;
+
+        std::string externalRef;
+
         bool operator!() const;
     };
 

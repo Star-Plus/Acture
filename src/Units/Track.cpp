@@ -8,16 +8,20 @@
 #include <ranges>
 #include <functional>
 
+#include "VideoClip.h"
+
 namespace SPI {
 
     Track::Track() : length(0.0) {}
     Track::~Track() {
         for (auto& clip : clips) {
-            delete clip.second;
+            if (clip.second) {
+                clip.second.reset();
+            }
         }
     }
 
-    void Track::AddClip(itime_t position, Clip *clip) {
+    void Track::AddClip(itime_t position, const std::shared_ptr<Clip>& clip) {
         clips.insert({position, clip});
         CalculateLength();
     }
@@ -36,7 +40,7 @@ namespace SPI {
         CalculateLength();
     }
 
-    Clip* Track::GetClip(const itime_t position) const {
+    std::shared_ptr<Clip> Track::GetClip(const itime_t position) const {
         auto it = clips.find(position);
         if (it != clips.end()) {
             return it->second;
@@ -47,7 +51,13 @@ namespace SPI {
     itime_t Track::CalculateLength() {
         const auto lastClip = clips.rbegin();
 
-        length = lastClip->first + lastClip->second->end - lastClip->second->start;
+        if (lastClip->second->mediaType == MEDIA_TYPE::VIDEO) {
+            const auto videoClip = std::reinterpret_pointer_cast<VideoClip>(lastClip->second);
+            length = lastClip->first + videoClip->end - videoClip->start;
+        }
+        else {
+            length = -1;
+        }
 
         return length;
     }

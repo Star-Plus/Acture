@@ -1,3 +1,5 @@
+#include <iostream>
+#include <ctime>
 #include <Features/MCQStation.h>
 
 #include "Application.h"
@@ -5,7 +7,6 @@
 #include "Editor/Editor.h"
 #include "Schemas/McqChannelSchema.h"
 #include "Serializers/StationNetworkSerializer.h"
-#include "Triggers/Features/DirectCall/DirectCallTrigger.h"
 #include "Units/VideoClip.h"
 
 int main() {
@@ -16,10 +17,6 @@ int main() {
 
     const auto id = editor.AddStation(0, SPI::STATION_TYPE::MCQ, 3.0);
     const auto station = std::dynamic_pointer_cast<SPI::MCQStation>(app.GetStationNetwork()->GetStationById(id));
-
-    const auto directTrigger = new SPI::DirectCallTrigger(&app);
-
-    station->SetTrigger(directTrigger);
 
     const auto leafId1 = editor.AddStation(id, SPI::STATION_TYPE::LEAF, 6.0);
     const auto leafId2 = editor.AddStation(id, SPI::STATION_TYPE::LEAF, 6.0);
@@ -35,37 +32,61 @@ int main() {
     const auto verse = app.GetStationNetwork()->GetRoot()->GetConnectedVerse(0);
     const auto verse2 = station->GetConnectedVerse(0);
     const auto verse3 = station->GetConnectedVerse(1);
+    editor.InitializeVerse(verse, "C:/Users/Ahmed Mustafa/Downloads/Video/Gen-3 Alpha Turbo 1547404312, StarPlusWallpaperpn, M 5.mp4", 5);
+    editor.InitializeVerse(verse2, "C:/Users/Ahmed Mustafa/Downloads/Video/6973-197914400_medium.mp4", 6);
+    editor.InitializeVerse(verse3, "C:/Users/Ahmed Mustafa/Downloads/Video/Vanish.mp4", 24);
 
-    editor.InitializeVerse(verse, "1", 5);
-    editor.InitializeVerse(verse2, "2", 6);
-    editor.InitializeVerse(verse3, "3", 24);
+    float printTimer = 0.0f; // Timer to track printing interval
 
-    verse->tracks[0]->clips[0]->externalRef = "https://www.youtube.com/watch?v=YV8mPZ22xVM";
-    verse2->tracks[0]->clips[0]->externalRef = "https://www.youtube.com/watch?v=iZpMnTQb_ew";
-    verse3->tracks[0]->clips[0]->externalRef = "https://www.youtube.com/watch?v=8wo5ayPjAVE";
+    // SPI::StationNetworkSerializer serializer(&app);
+    //
+    // serializer.ExportSpiFile("test.spi");
+    //
+    // const auto buffer = serializer.ExportSpiBuffer();
+    //
+    // for (const auto& byte : buffer) {
+    //     std::cout << byte << " ";
+    // }
 
-    SPI::StationNetworkSerializer serializer(&app);
-    serializer.SetAssetMode(SPI::ASSETS_MODE::EXTERNAL_REF);
-
-    serializer.ExportSpiFile("test.spi");
-    serializer.ImportSpiFile("test.spi");
-
-    std::cout << app.GetStationNetwork()->Size() << std::endl;
-
-    const auto r = app.GetStationNetwork()->GetRoot();
-
-    std::cout << std::dynamic_pointer_cast<SPI::VideoClip>(r->GetConnectedVerse(0)->tracks[0]->clips[0])->mediaPath << std::endl;
-    std::cout << std::dynamic_pointer_cast<SPI::VideoClip>(app.GetStationNetwork()->GetStationById(r->GetConnectedStation(0))->GetConnectedVerse(0)->tracks[0]->clips[0])->mediaPath << std::endl;
+    // serializer.ImportSpiFile("test.spi");
 
     app.Play();
 
-    app.OnUpdate();
+    while (true) {
+        static clock_t lastTime = std::clock();
+        const clock_t now = std::clock();
+        const float deltaTime = static_cast<float>(now - lastTime) / CLOCKS_PER_SEC;
+        lastTime = now;
 
-    const auto channelData = app.ReceiveChannelData();
-    std::cout << *std::dynamic_pointer_cast<SPI::McqChannelSchema>(channelData) << std::endl;
-    std::cout << *std::dynamic_pointer_cast<SPI::McqChannelSchema>(channelData) << std::endl;
+        app.OnUpdate(deltaTime);
 
+        printTimer += deltaTime;
+
+        if (printTimer >= 1.0f) {
+            std::cout << "Delta Time: " << deltaTime << "  seconds" << std::endl;
+            std::cout << "Current Time: " << app.GetCurrentTime() << " seconds" << "\t\r" << std::flush << std::endl;
+            printTimer = 0.0f;
+        }
+
+        for (const auto clips = app.DataToBind(); const auto& clip : clips) {
+            if (!clip) continue;
+            auto videoClip = std::dynamic_pointer_cast<SPI::VideoClip>(clip);
+            std:: cout << "Clip: " << videoClip->mediaPath << " - " << videoClip->start << " to " << videoClip->end << std::endl;
+        }
+
+        if (app.GetCurrentState() == SPI::EngineState::STATIONED_PAUSE) {
+
+            if (const auto channelData = app.GetStationChannel()->Receive()) {
+                std::cout << *std::dynamic_pointer_cast<SPI::McqChannelSchema>(channelData) << std::endl;
+            }
+
+            int thread;
+            std::cin >> thread;
+            app.Travel(thread);
+            app.Rewind();
+            app.Play();
+        }
+    }
 
     return 0;
 }
-

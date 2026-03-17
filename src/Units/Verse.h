@@ -6,6 +6,7 @@
 #define INTRASTATION_VERSE_H
 
 #include "Track.h"
+#include <vector>
 #include "../Core/Core.h"
 
 namespace SPI {
@@ -17,7 +18,7 @@ namespace SPI {
 
     public:
 
-        std::vector<Track*> tracks;
+        std::vector<std::shared_ptr<Track>> tracks;
 
         Verse();
         ~Verse();

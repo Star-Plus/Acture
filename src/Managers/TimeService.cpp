@@ -8,15 +8,11 @@
 
 namespace SPI {
 
-    TimeService* TimeService::instance = nullptr;
 
     TimeService::TimeService() {
-        if (instance) throw std::runtime_error("TimeService instance already exists");
-        instance = this;
     }
 
     TimeService::~TimeService() {
-        if (instance == this) instance = nullptr;
     }
 
     void TimeService::SetTime(const double newTime) {

@@ -1,14 +1,9 @@
+#include "Core/Core.h"
+
 #include "Application.cpp"
 #include "Editor/Editor.cpp"
 
-// Utils
-#include "Utils/SMath.cpp"
-
-// Machines
-
 #include "Machines/Station.cpp"
-
-// Managers
 
 #include "Managers/MediaBinder.cpp"
 #include "Managers/StationManager.cpp"
@@ -27,6 +22,8 @@
 #include "Events/Event.h"
 #include "Events/StationCallEvent.h"
 
+#include "Utils/SMath.cpp"
+
 // Schemas
 #include "Schemas/StationChannelSchema.h"
 #include "Schemas/McqChannelSchema.h"
@@ -37,7 +34,7 @@
 // Serializers
 #include "Serializers/StationNetworkSerializer.cpp"
 #include "Serializers/StationSerializer.cpp"
-#include "Serializers/VerseSerializer.cpp"
+#include "Serializers/AssetSerializer.cpp"
 #include "Features/Mcq/McqSerializer.cpp"
 
 // Mappers
@@ -45,3 +42,8 @@
 
 // Stations
 #include "Features/History/HistoryStation.cpp"
+
+// Triggers
+#include "Triggers/Features/DirectCall/DirectCallTrigger.cpp"
+#include "Triggers/Features/Time/TimeTrigger.cpp"
+#include "Serializers/TriggerSerializer.cpp"

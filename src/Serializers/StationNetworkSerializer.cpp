@@ -6,8 +6,9 @@
 
 #include "StationNetworkSerializer.h"
 
-#include "VerseSerializer.h"
+#include "AssetSerializer.h"
 #include "../Mappers/StationSerialzerMapper.h"
+#include "../Units/VideoClip.h"
 
 
 namespace SPI {
@@ -32,14 +33,14 @@ namespace SPI {
 
     std::vector<uint8_t> StationNetworkSerializer::ExportSpiBuffer() {
         std::ostringstream oss;
-        this->SerializeNetwork(oss, false);
+        this->SerializeNetwork(oss);
         std::string str = oss.str();
         std::vector<uint8_t> buffer(str.begin(), str.end());
         return buffer;
     }
 
 
-    void StationNetworkSerializer::SerializeNetwork(std::ostream& out, const bool fileMode) {
+    void StationNetworkSerializer::SerializeNetwork(std::ostream& out) {
 
         const location_t location = 0;
         this->firstvideo_position = out.tellp();
@@ -47,12 +48,12 @@ namespace SPI {
         const auto nStations = network->Size();
         out.write(reinterpret_cast<const char*>(&nStations), sizeof(stations_size_t));
 
-        MapSerialize(out, false, fileMode);
-        MapSerialize(out, true, fileMode);
+        MapSerialize(out, false);
+        MapSerialize(out, true);
 
     }
 
-    void StationNetworkSerializer::MapSerialize(std::ostream& out, const bool verseMode, const bool fileMode) {
+    void StationNetworkSerializer::MapSerialize(std::ostream& out, const bool verseMode) {
         for (const auto& station : network->GetAllStations()) {
             if (!verseMode) {
                 const auto station_serializer = CreateStationSerializer(station->GetType(), out, this->fStream, app);
@@ -74,8 +75,8 @@ namespace SPI {
 
                     out.seekp(videoLocation);
 
-                    VerseSerializer verseSerializer (out);
-                    verseSerializer.Serialize(station->GetConnectedVerse(i), fileMode);
+                    AssetSerializer assetSerializer(out, this->assetMode);
+                    assetSerializer.Serialize(station->GetConnectedVerse(i)->tracks[0]->clips[0].get());
                 }
                 else {
                     location_t location = 0;
@@ -125,7 +126,6 @@ namespace SPI {
         this->fStream.read(reinterpret_cast<char*>(&firstVideoLocation), sizeof(location_t));
 
         this->firstvideo_position = firstVideoLocation;
-        std::cout << "First video position: " << firstVideoLocation << std::endl;
 
         network = MapDeserialize(fStream);
     }
@@ -136,14 +136,11 @@ namespace SPI {
 
         stations_size_t nStations;
         in.read(reinterpret_cast<char*>(&nStations), sizeof(stations_size_t));
-        std::cout << "Number of stations: " << nStations << std::endl;
 
         while (nStations--) {
             STATION_TYPE type;
             // Read the station type
             in.read(reinterpret_cast<char*>(&type), sizeof(uint8_t));
-
-            std::cout << "Station type: " << (int)type << std::endl;
 
             // Read the station data
             const auto station_serializer = CreateStationSerializer(type, this->fStream, in, app);
@@ -163,20 +160,27 @@ namespace SPI {
         }
 
         for (const auto& station : network->GetAllStations()) {
-            std::cout << "Station ID: " << station->GetId() << std::endl;
             for (auto i = 0; i < station->getThreadCount(); i++) {
                 const auto child = network->GetStationById(station->GetConnectedStation(i));
                 station->ConnectStation(i, child);
 
-                location_t video_pos;
-                in.read(reinterpret_cast<char*>(&video_pos), sizeof(location_t));
-                std::cout << "Video position: " << video_pos << std::endl;
+                const location_t video_pos = videos_positions.front();
+                videos_positions.pop();
+                in.seekg(video_pos, std::ios::beg);
 
                 const auto verse = station->GetConnectedVerse(i);
 
                 verse->CreateTrack();
-                const auto clip = new Clip{this->path+"/"+std::to_string(video_pos), 0, child->GetTimelapse()};
-                verse->tracks[0]->AddClip(0, clip);
+
+                uint32_t pathSize;
+                in.read(reinterpret_cast<char *>(&pathSize), sizeof(pathSize));
+                std::string path(pathSize, '\0');
+                in.read(&path[0], pathSize);
+
+                // const auto clip = VideoClip{this->path+"/"+std::to_string(video_pos), 0, child->GetTimelapse()};
+                const auto clip = VideoClip{path, 0, child->GetTimelapse()};
+
+                verse->tracks[0]->AddClip(0, std::make_shared<VideoClip>(clip));
 
             }
         }

@@ -25,11 +25,11 @@ namespace SPI {
         Track();
         ~Track();
 
-        void AddClip(itime_t position, Clip* clip);
+        void AddClip(itime_t position, const std::shared_ptr<Clip>& clip);
         void RemoveClip(itime_t position);
         void ClearClips();
 
-        Clip* GetClip(itime_t position) const;
+        std::shared_ptr<Clip> GetClip(itime_t position) const;
 
         itime_t GetLength() const {
             return length;
@@ -48,7 +48,7 @@ namespace SPI {
         }
 
 
-        std::map<itime_t, Clip*> clips;
+        std::map<itime_t, std::shared_ptr<Clip>> clips;
     };
 
 }

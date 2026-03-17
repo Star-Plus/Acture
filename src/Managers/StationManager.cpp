@@ -50,7 +50,7 @@ namespace SPI {
         nextStation = network->GetStationById(nextStation->GetConnectedStation(thread));
         threadHistory.push(thread);
 
-        CalculateNextTimelapse();
+        // CalculateNextTimelapse();
 
         stationHistory->SetChoiceOfStation(prevStation->GetId(), thread);
 
@@ -66,17 +66,11 @@ namespace SPI {
         threadHistory.pop();
     }
 
-    bool StationManager::CheckTimelapse(const double time) {
+    bool StationManager::CheckNextTrigger() const {
         if (nextStation == nullptr) return false;
-        if (time >= nextStation->GetTimelapse() - callingThreshold && !stationed) {
+        if (nextStation->trigger == nullptr) return false;
 
-            if (nextStation->GetType() == STATION_TYPE::LEAF) return false;
-
-            stationed = true;
-            return true;
-        }
-
-        return false;
+        return nextStation->trigger->IsActive() && !stationed;
     }
 
     

@@ -9,6 +9,7 @@
 
 #include "../Utils/SMath.h"
 #include "../Mappers/StationTypeMapper.h"
+#include "../Units/VideoClip.h"
 
 namespace SPI {
     Editor::Editor(Application& app) : app(app) {
@@ -46,10 +47,11 @@ namespace SPI {
         return createdId;
     }
 
-    void Editor::InitializeVerse(Verse* verse, const std::string& mediaPath, const float duration) const {
+    void Editor::InitializeVerse(std::shared_ptr<Verse> verse, const std::string& mediaPath, const float duration) const {
         verse->CreateTrack();
-        Clip* clip = new Clip{mediaPath, 0, duration};
-        verse->tracks[0]->AddClip(0, clip);
+        VideoClip clip {mediaPath, 0, duration};
+
+        verse->tracks[0]->AddClip(0, std::make_shared<VideoClip>(clip));
     }
 
     void Editor::AddStationInstance(const ID_T parentId, const std::shared_ptr<Station>& station) const {
@@ -63,7 +65,7 @@ namespace SPI {
     }
 
     Clip* Editor::CreateClip(std::string mediaPath, const itime_t start, const itime_t end) {
-        const auto clip = new Clip{std::move(mediaPath), start, end};
+        const auto clip = new VideoClip{mediaPath, start, end};
         return clip;
     }
 

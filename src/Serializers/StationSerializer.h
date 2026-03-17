@@ -5,10 +5,12 @@
 #ifndef STATIONSERIALIZER_H
 #define STATIONSERIALIZER_H
 
-#include <fstream>
 #include "../Stores/StationNetwork.h"
 
 namespace SPI {
+
+    class Application;
+
     class StationSerializer {
 
         void SerializeBase() const;
@@ -18,12 +20,13 @@ namespace SPI {
         StationPtr station;
         std::ostream& out;
         std::istream& in;
+        Application* context;
 
         virtual void SerializeBody() = 0;
         virtual void DeserializeBody() = 0;
 
     public:
-        StationSerializer(std::ostream& out, std::istream& in);
+        StationSerializer(std::ostream& out, std::istream& in, Application*);
         virtual ~StationSerializer() = default;
 
         void Serialize(const StationPtr& station);

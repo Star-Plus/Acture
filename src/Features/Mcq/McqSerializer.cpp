@@ -8,8 +8,8 @@
 
 namespace SPI {
 
-    McqSerializer::McqSerializer(std::ostream& out, std::istream& in)
-        : StationSerializer(out, in) {}
+    McqSerializer::McqSerializer(std::ostream& out, std::istream& in, Application* context)
+        : StationSerializer(out, in, context) {}
 
     void McqSerializer::SerializeBody() {
         const auto& mcq = std::dynamic_pointer_cast<MCQStation>(station);
@@ -38,8 +38,6 @@ namespace SPI {
         std::string question(questionSize, '\0');
         in.read(&question[0], questionSize);
 
-        std::cout << "Question: " << question << std::endl;
-
         mcq->setQuestion(question);
 
         uint32_t optionsCount;
@@ -51,8 +49,6 @@ namespace SPI {
 
             std::string option(optionSize, '\0');
             in.read(&option[0], optionSize);
-
-            std::cout << "Option " << i << ": " << option << std::endl;
             mcq->setOption(i, option);
         }
 

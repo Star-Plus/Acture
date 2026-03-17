@@ -5,9 +5,11 @@
 #ifndef INTRASTATION_STATION_H
 #define INTRASTATION_STATION_H
 
+#include <functional>
 #include <memory>
 #include <vector>
 
+#include "../Triggers/ITrigger.h"
 #include "../Types/STATION_TYPE.h"
 #include "../Units/Verse.h"
 #include "../Core/Core.h"
@@ -31,16 +33,21 @@ namespace SPI {
         itime_t timelapse = 0.0;
         lifetime_t lifetime = 0.0;
 
-        std::vector<Verse*> verses;
+        std::vector<std::shared_ptr<Verse>> verses;
         std::vector<ID_T> stations;
         std::vector<ID_T> parents;
 
         bool pause = true;
 
+        std::function<void*()> onHookCallback;
+        std::function<void*()> onUnhookCallback;
+
+        ITrigger* trigger = nullptr;
+
     public:
         Station(const STATION_TYPE type) : type(type) {}
 
-        Station(STATION_TYPE type, Application * context) : context(context), type(type) {}
+        Station(const STATION_TYPE type, Application * context) : context(context), type(type) {}
 
         virtual ~Station();
 
@@ -52,6 +59,14 @@ namespace SPI {
 
         ID_T GetId() const { return id; }
         void SetId(const ID_T id) { this->id = id; }
+
+        void SetTrigger(ITrigger* trigger) {
+            this->trigger = trigger;
+        }
+
+        ITrigger* GetTrigger() const {
+            return trigger;
+        }
 
         STATION_TYPE GetType() const { return type; }
 
@@ -65,14 +80,14 @@ namespace SPI {
         void SetLifetime(const lifetime_t lifetime) { this->lifetime = lifetime; }
 
         std::vector<ID_T> GetAllConnectedStations() const { return stations; }
-        std::vector<Verse*> GetAllConnectedVerses() const { return verses; }
+        std::vector<std::shared_ptr<Verse>> GetAllConnectedVerses() const { return verses; }
 
         ID_T GetConnectedStation(const thread_t thread) const {
             if (thread >= stations.size()) return 0;
             return stations[thread];
         }
 
-        Verse* GetConnectedVerse(const thread_t idx) const {
+        std::shared_ptr<Verse> GetConnectedVerse(const thread_t idx) const {
             if (idx >= verses.size()) return nullptr;
             return verses[idx];
         }
@@ -96,10 +111,9 @@ namespace SPI {
         virtual int AutoRoad() { return -1; }
 
         friend class StationNetwork;
+        friend class StationManager;
     };
 
 }
-
-
 
 #endif //INTRASTATION_STATION_H
