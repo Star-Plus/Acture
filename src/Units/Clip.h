@@ -6,7 +6,7 @@
 #define INTRASTATION_CLIP_H
 
 #include <string>
-#include "../Types/MEDIA_TYPE.h"
+#include "Types/MEDIA_TYPE.h"
 
 namespace SPI {
 
