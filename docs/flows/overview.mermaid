@@ -1,0 +1,44 @@
+sequenceDiagram
+    actor Watcher
+    participant Client
+    participant MiniEngine
+    participant BrowserCache
+    participant Server
+    participant Engine
+    participant Cache
+    participant NodeWorker
+    actor Developer
+    
+    
+    Developer ->> Client: Feeds with pipeline file
+    Watcher -->>+ Client: Interacts with asset
+
+    Client -->>+ MiniEngine: Check local execution availibility(sys_specs, pipeline_file)
+    MiniEngine -->>- Client: Tasks can be executed locally
+
+    Client -->>+ BrowserCache: Check asset cache
+    BrowserCache -->>- Client: Return if asset is available
+
+    alt Asset is not available on client
+
+        Client -->>+ Server: Request live asset + execution_key
+
+        Server -->>+ Cache: Check if asset with same execution_key available
+
+        alt Asset in same state not available
+            Server -->>+ Engine: Run pipeline
+            loop tasks in pipeline
+                Engine ->>+ NodeWorker: Launch a worker with the required node executable
+                NodeWorker ->>- Engine: Handout result of the node (type, data)
+            end
+            Engine -->>- Server: Return result
+        else
+            Server -->>+ Cache: Request asset in same state
+            Cache -->>- Server: Return asset
+        end
+            Server ->> Client: Stream blob
+
+    end
+
+
+    
