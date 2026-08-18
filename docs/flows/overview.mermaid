@@ -4,41 +4,61 @@ sequenceDiagram
     participant MiniEngine
     participant BrowserCache
     participant Server
-    participant Engine
     participant Cache
+    participant Engine
     participant NodeWorker
     actor Developer
-    
-    
-    Developer ->> Client: Feeds with pipeline file
-    Watcher -->>+ Client: Interacts with asset
 
-    Client -->>+ MiniEngine: Check local execution availibility(sys_specs, pipeline_file)
-    MiniEngine -->>- Client: Tasks can be executed locally
+    Developer ->> Client: Feeds pipeline file
 
-    Client -->>+ BrowserCache: Check asset cache
-    BrowserCache -->>- Client: Return if asset is available
+    Watcher -->>+ Client: Interacts with asset (playhead / seek time t)
 
-    alt Asset is not available on client
+    Client ->> Client: Resolve chunk grid<br/>(keyframe-aligned, ~10s)<br/>chunk_ids = [current, +prefetch window]
 
-        Client -->>+ Server: Request live asset + execution_key
+    Client -->>+ MiniEngine: Check local execution availability(sys_specs, pipeline_file)
+    MiniEngine -->>- Client: Node-level capability map (client-capable vs cloud-only)
 
-        Server -->>+ Cache: Check if asset with same execution_key available
+    loop for each needed chunk_id
+        Client -->>+ BrowserCache: Check chunk cache(asset_id, execution_key, chunk_id)
+        BrowserCache -->>- Client: hit / miss
 
-        alt Asset in same state not available
-            Server -->>+ Engine: Run pipeline
-            loop tasks in pipeline
-                Engine ->>+ NodeWorker: Launch a worker with the required node executable
-                NodeWorker ->>- Engine: Handout result of the node (type, data)
+        alt Chunk missing on client
+            Client -->>+ Server: Request chunk<br/>execution_key = hash(asset_id + params + chunk_id)
+
+            Server -->>+ Cache: Check chunk cache(execution_key)
+
+            alt Chunk not cached server-side
+                Server -->>+ Engine: Run pipeline for chunk_id
+
+                Engine ->> Engine: Classify nodes:<br/>stateless-per-chunk vs sequential-state-required
+
+                opt Node requires state from previous chunk
+                    Engine -->>+ Cache: Fetch trailing_state(chunk_id - 1)
+                    Cache -->>- Engine: trailing_state (or null if chunk 0 / cold start)
+                    Note over Engine: Process with overlap window,<br/>trim to chunk boundary,<br/>so parallel chunks stay possible<br/>on first-ever run
+                end
+
+                par Stateless nodes (parallel-safe)
+                    Engine ->>+ NodeWorker: Launch worker (node executable, chunk data)
+                    NodeWorker -->>- Engine: result (type, data)
+                and Sequential nodes (ordered)
+                    Engine ->>+ NodeWorker: Launch worker (node executable, chunk data, trailing_state)
+                    NodeWorker -->>- Engine: result (type, data) + new trailing_state
+                end
+
+                Engine -->>+ Cache: Store chunk result + trailing_state (keyed by execution_key)
+                Cache -->>- Engine: ack
+                Engine -->>- Server: Return chunk result (base track + mask/aux track)
+            else Chunk cached
+                Cache -->>- Server: Return cached chunk (base + mask/aux track)
             end
-            Engine -->>- Server: Return result
-        else
-            Server -->>+ Cache: Request asset in same state
-            Cache -->>- Server: Return asset
-        end
-            Server ->> Client: Stream blob
 
+            Server -->>- Client: Stream chunk manifest entry<br/>(base track + mask track, synced timestamps)
+            Client -->>+ BrowserCache: Store chunk<br/>Evict chunks outside LRU window (relative to playhead)
+            BrowserCache -->>- Client: ack
+        end
     end
 
-
-    
+    Client -->>+ MiniEngine: Composite client-side nodes per frame<br/>(e.g. color blend using base + mask textures)
+    MiniEngine -->>- Client: Rendered frame
+    Client -->>- Watcher: Display frame
